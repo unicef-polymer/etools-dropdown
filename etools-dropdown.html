@@ -26,6 +26,7 @@ Custom property | Description | Default
 `--etools-dropdown-floated-label-font-size` | Floated label font zize | `12px`
 `--etools-dropdown-text-color` | Input text color | `#333333`
 `--etools-dropdown-error-text-color` | Validation error message color | `#e51919`
+`--etools-dropdown-disabled-color` | Disabled color | `#d1d1d1`
 
 
 @demo demo/index.html 
@@ -52,6 +53,19 @@ Custom property | Description | Default
           --paper-input-container-label: {
             font-size: var(--etools-dropdown-font-size, 14px);
           };
+        }
+        paper-dropdown-menu[disabled] {
+          --paper-input-container-label: {
+            color: var(--etools-dropdown-disabled-color, #d1d1d1);
+          };
+          --paper-input-container-underline-disabled: {
+            border-color: var(--etools-dropdown-disabled-color, #d1d1d1);
+          };
+          --paper-input-container-disabled: {
+            opacity: 1;
+          };
+          --iron-icon-fill-color: var(--etools-dropdown-disabled-color, #d1d1d1);
+          --paper-input-container-input-color: var(--etools-dropdown-text-color, #d1d1d1);
         }
         paper-dropdown-menu.capitalize {
           --paper-input-container-label-floating: {

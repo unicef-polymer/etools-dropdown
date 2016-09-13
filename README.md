@@ -33,6 +33,7 @@ Custom property | Description | Default
 `--etools-dropdown-floated-label-font-size` | Floated label font zize | `12px`
 `--etools-dropdown-text-color` | Input text color | `#333333`
 `--etools-dropdown-error-text-color` | Validation error message color | `#e51919`
+`--etools-dropdown-disabled-color` | Disabled color | `#d1d1d1`
 
 ## Install
 ```bash
