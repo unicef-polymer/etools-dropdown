@@ -22,7 +22,7 @@ Available attributes:
 * dropdownValue: element value, the value property of the selected option object
 * isDisabled: Boolean, disabled state
 
-### Styling
+## Styling
 
 You can use defined variables to change element style.
 This options are based on paper-dropdown-menu styling.
