@@ -1,0 +1,19 @@
+{
+  "name": "etools-dropdown",
+  "description": "Dropdown created over polymer paper-dropdown-menu element to allow the use of objects with different values and labels as options. ",
+  "version": 1.0,
+  "license": "https://github.com/unicef-polymer/etools-dropdown/blob/master/LICENSE.md",
+  "main": "etools-dropdown.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0",
+    "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^1.4.0",
+    "paper-menu": "PolymerElements/paper-menu#^1.2.2",
+    "paper-item": "PolymerElements/paper-item#^1.2.1"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  }
+}

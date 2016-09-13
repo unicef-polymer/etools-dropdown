@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+  <title>etools-dropdown demo</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+
+  <link rel="import" href="etools-dropdown-demo-data.html">
+  <link rel="import" href="../etools-dropdown.html">
+
+  <style is="custom-style" include="demo-pages-shared-styles">
+    .vertical-section-container {
+      max-width: 900px;
+    }
+    etools-dropdown {
+      display: inline-block;
+      width: 150px;
+    }
+    etools-dropdown:not(:first-of-type) {
+      margin-left: 20px;
+    }
+  </style>
+
+
+</head>
+<body>
+  <!-- show demo code-->
+  <div class="vertical-section-container centered">
+    <h1>etools-dropdown demo</h1>
+    <p>This dropdown element allows you to pass an array with objects that have value and label properties to paper-dropdown-menu element.
+      For styling options check documentation page or readme file.</p>
+    <demo-snippet>
+      <template is="dom-bind">
+        <!-- get demo options data
+        demoOptions = [
+          {value: 0, label: 'Value One'},
+          {value: 1, label: 'Value Two'},
+          {value: 2, label: 'Value Three'}
+        ]
+        -->
+        <etools-dropdown-demo-data demo-options="{{demoOptions}}"></etools-dropdown-demo-data>
+
+        <!-- pass options demo data to dropdown element -->
+        <etools-dropdown label="Custom label" options="[[demoOptions]]"></etools-dropdown>
+
+        <!-- capitalize dropdown label -->
+        <etools-dropdown label="Capitalize label" options="[[demoOptions]]" label-text-transform="capitalize"></etools-dropdown>
+
+        <!-- uppercase dropdown label -->
+        <etools-dropdown label="Uppercase label" options="[[demoOptions]]" label-text-transform="uppercase"></etools-dropdown>
+
+        <!-- init dropdown with a selected value, for example second option value -->
+        <etools-dropdown label="Custom label" options="[[demoOptions]]" dropdown-value="1"></etools-dropdown>
+
+        <!-- disabled dropdown -->
+        <etools-dropdown label="Custom label" options="[[demoOptions]]" is-disabled="true"></etools-dropdown>
+      </template>
+    </demo-snippet>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../paper-menu/paper-menu.html">
+<link rel="import" href="../paper-item/paper-item.html">
+
+<!--
+`etools-dropdown`
+
+Dropdown created over polymer paper-dropdown-menu element to allow the use of objects with different values and labels as options.
+Example:
+```
+var options = [
+  {value: 'val1', label: 'Val 1 pretty label'},
+  {value: 'val2', label: 'Val 2 pretty label'}
+]
+```
+
+### Styling
+
+You can use defined variables to change element style.
+This options are based on paper-dropdown-menu styling.
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--etools-dropdown-font-size` | Input size | `14px`
+`--etools-dropdown-floated-label-font-size` | Floated label font zize | `12px`
+`--etools-dropdown-text-color` | Input text color | `#333333`
+`--etools-dropdown-error-text-color` | Validation error message color | `#e51919`
+`--etools-checkable-input-label` | Mixin applied to the label | `{}`
+
+
+@demo demo/index.html 
+-->
+
+<dom-module id="etools-dropdown">
+  <template>
+      <style>
+        paper-dropdown-menu {
+          width: 100%;
+          --paper-dropdown-menu: {
+            font-size: var(--etools-dropdown-font-size, 14px);
+          };
+          --paper-input-container-input: {
+            font-size: var(--etools-dropdown-font-size, 14px);
+          };
+          --paper-input-container-input-color: var(--etools-dropdown-text-color, #333333);
+          --paper-input-container-focus-color: var(--etools-dropdown-text-color, #333333);
+          --paper-input-container-invalid-color: var(--etools-dropdown-error-text-color, #e51919);
+          --paper-input-container-label-floating: {
+            transform: translateY(-78%);
+            font-size: var(--etools-dropdown-floated-label-font-size, 12px);
+          };
+          --paper-input-container-label: {
+            font-size: var(--etools-dropdown-font-size, 14px);
+          };
+        }
+        paper-dropdown-menu.capitalize {
+          --paper-input-container-label-floating: {
+            text-transform: capitalize;
+          }
+        }
+        paper-dropdown-menu.uppercase {
+          --paper-input-container-label-floating: {
+            text-transform: uppercase;
+          }
+        }
+
+        paper-item {
+          --paper-item: {
+            font-size: var(--etools-dropdown-font-size, 14px);
+          }
+        }
+      </style>
+      <paper-dropdown-menu id="dropdown" class$="[[labelTextTransform]]" label="[[label]]" disabled$="[[isDisabled]]">
+        <paper-menu class="dropdown-content" selected="{{_optionSelectedSelectedIndex}}"
+                    on-iron-select="_setDropdownValue">
+          <template is="dom-repeat" items="[[options]]" as="dropdownOption">
+            <paper-item>[[dropdownOption.label]]</paper-item>
+          </template>
+        </paper-menu>
+      </paper-dropdown-menu>
+
+    </template>
+
+    <script>
+      (function () {
+        'use strict';
+
+        Polymer({
+          is: 'etools-dropdown',
+
+          properties: {
+            dropdownValue: {
+              notify: true,
+              observer: '_dropDownValueChanged'
+            },
+            options: {
+              // the options must have be an array with objects with this format: {value: 'some value', label: 'Some label text'}
+              type: Array,
+              value: [],
+              observer: '_optionsChanged'
+            },
+            isDisabled: {
+              type: Boolean,
+              value: false
+            },
+            labelTextTransform: {
+              type: String,
+              value: ''
+            }
+          },
+          _setDropdownValue: function () {
+            this.dropdownValue = this.options[this._optionSelectedSelectedIndex].value;
+          },
+          _dropDownValueChanged: function (newDropdownVal) {
+            if (newDropdownVal === undefined || newDropdownVal === null) {
+              // reset dropdown
+              this.set('_optionSelectedSelectedIndex', null);
+              this.$.dropdown._setSelectedItem(null);
+            } else {
+              // init dropdown with provided value as selected
+              for (var i = 0; i < this.options.length; i++) {
+                if (this.options[i].value == newDropdownVal) {
+                  this.set('_optionSelectedSelectedIndex', i);
+                  break;
+                }
+              }
+            }
+          },
+          _optionsChanged: function() {
+            this._dropDownValueChanged(this.dropdownValue);
+          }
+        });
+      })();
+    </script>
+</dom-module>

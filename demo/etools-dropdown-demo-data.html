@@ -1,0 +1,32 @@
+<link rel="import" href="../../polymer/polymer.html">
+
+<dom-module id="etools-dropdown-demo-data">
+  <script>
+
+      Polymer({
+        is: 'etools-dropdown-demo-data',
+        properties: {
+          demoOptions: {
+            type: Array,
+            notify: true
+          }
+        },
+        ready: function() {
+          this.set('demoOptions', [{
+              value: 0,
+              label: "Value One"
+            },
+            {
+              value: 1,
+              label: "Value Two"
+            },
+            {
+              value: 2,
+              label: "Value Three"
+            }]
+          );
+        }
+      });
+
+  </script>
+</dom-module>
