@@ -12,6 +12,8 @@
   <link rel="import" href="etools-dropdown-demo-data.html">
   <link rel="import" href="../etools-dropdown.html">
 
+  <link rel="stylesheet" type="text/css" href="../../flag-icon-css/css/flag-icon.min.css">
+
   <style is="custom-style" include="demo-pages-shared-styles">
     .vertical-section-container {
       max-width: 900px;
@@ -42,10 +44,10 @@
           {value: 2, label: 'Value Three'}
         ]
         -->
-        <etools-dropdown-demo-data demo-options="{{demoOptions}}"></etools-dropdown-demo-data>
+        <etools-dropdown-demo-data demo-options="{{demoOptions}}" demo-options2="{{demoOptions2}}"></etools-dropdown-demo-data>
 
         <!-- pass options demo data to dropdown element -->
-        <etools-dropdown label="Custom label" options="[[demoOptions]]"></etools-dropdown>
+        <etools-dropdown label="Custom label" options="[[demoOptions]]" no-label-float="true"></etools-dropdown>
 
         <!-- capitalize dropdown label -->
         <etools-dropdown label="Capitalize label" options="[[demoOptions]]" label-text-transform="capitalize"></etools-dropdown>
@@ -58,6 +60,17 @@
 
         <!-- disabled dropdown -->
         <etools-dropdown label="Custom label" options="[[demoOptions]]" is-disabled="true"></etools-dropdown>
+
+        <!-- different demo options format:
+          demoOptions2 = [
+          {id: 1, country: 'US'},
+          {id: 2, country: 'Canada'},
+          {id: 3, country: 'Mexico'}
+        ]
+         -->
+        <div>
+          <etools-dropdown label="Countries" options="[[demoOptions2]]" options-label-key="country" options-value-key="id"></etools-dropdown>
+        </div>
       </template>
     </demo-snippet>
   </div>

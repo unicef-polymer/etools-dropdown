@@ -9,6 +9,10 @@
           demoOptions: {
             type: Array,
             notify: true
+          },
+          demoOptions2: {
+            type: Array,
+            notify: true
           }
         },
         ready: function() {
@@ -25,6 +29,12 @@
               label: "Value Three"
             }]
           );
+
+          this.set('demoOptions2', [
+            {id: 1, country: 'US', imgClass: 'flag-icon flag-icon-us'},
+            {id: 2, country: 'Canada', imgClass: 'flag-icon flag-icon-ca'},
+            {id: 3, country: 'Mexico', imgClass: ''}
+          ]);
         }
       });
 

@@ -27,6 +27,9 @@ Custom property | Description | Default
 `--etools-dropdown-text-color` | Input text color | `#333333`
 `--etools-dropdown-error-text-color` | Validation error message color | `#e51919`
 `--etools-dropdown-disabled-color` | Disabled color | `#d1d1d1`
+`--etools-dropdown-option-icon` | Mixin to style option icon | `{}`
+`--etools-dropdown-icon` | Mixin to style dropdown icon | `{}`
+`--etools-dropdown-with-icon-input` | Mixin to style the dropdown's input when it has icon | `{}`
 
 
 @demo demo/index.html 
@@ -34,116 +37,182 @@ Custom property | Description | Default
 
 <dom-module id="etools-dropdown">
   <template>
-      <style>
-        paper-dropdown-menu {
-          width: 100%;
-          --paper-dropdown-menu: {
-            font-size: var(--etools-dropdown-font-size, 14px);
-          };
-          --paper-input-container-input: {
-            font-size: var(--etools-dropdown-font-size, 14px);
-          };
-          --paper-input-container-input-color: var(--etools-dropdown-text-color, #333333);
-          --paper-input-container-focus-color: var(--etools-dropdown-text-color, #333333);
-          --paper-input-container-invalid-color: var(--etools-dropdown-error-text-color, #e51919);
-          --paper-input-container-label-floating: {
-            transform: translateY(-78%);
-            font-size: var(--etools-dropdown-floated-label-font-size, 12px);
-          };
-          --paper-input-container-label: {
-            font-size: var(--etools-dropdown-font-size, 14px);
-          };
-        }
-        paper-dropdown-menu[disabled] {
-          --paper-input-container-label: {
-            color: var(--etools-dropdown-disabled-color, #d1d1d1);
-          };
-          --paper-input-container-underline-disabled: {
-            border-color: var(--etools-dropdown-disabled-color, #d1d1d1);
-          };
-          --paper-input-container-disabled: {
-            opacity: 1;
-          };
-          --iron-icon-fill-color: var(--etools-dropdown-disabled-color, #d1d1d1);
-          --paper-input-container-input-color: var(--etools-dropdown-text-color, #d1d1d1);
-        }
-        paper-dropdown-menu.capitalize {
-          --paper-input-container-label-floating: {
-            text-transform: capitalize;
-          }
-        }
-        paper-dropdown-menu.uppercase {
-          --paper-input-container-label-floating: {
-            text-transform: uppercase;
-          }
-        }
+    <style>
+      paper-dropdown-menu {
+        width: 100%;
+        --paper-dropdown-menu: {
+          font-size: var(--etools-dropdown-font-size, 14px);
+        };
+        --paper-input-container-input: {
+          border-bottom: none;
+          font-size: var(--etools-dropdown-font-size, 14px);
+        };
+        --paper-input-container-input-color: var(--etools-dropdown-text-color, #333333);
+        --paper-input-container-focus-color: var(--etools-dropdown-text-color, #333333);
+        --paper-input-container-invalid-color: var(--etools-dropdown-error-text-color, #e51919);
+        --paper-input-container-label-floating: {
+          transform: translateY(-78%);
+          font-size: var(--etools-dropdown-floated-label-font-size, 12px);
+        };
+        --paper-input-container-label: {
+          font-size: var(--etools-dropdown-font-size, 14px);
+        };
+      }
 
-        paper-item {
-          --paper-item: {
-            font-size: var(--etools-dropdown-font-size, 14px);
-          }
+      paper-dropdown-menu[disabled] {
+        --paper-input-container-label: {
+          color: var(--etools-dropdown-disabled-color, #d1d1d1);
+        };
+        --paper-input-container-underline-disabled: {
+          border-color: var(--etools-dropdown-disabled-color, #d1d1d1);
+        };
+        --paper-input-container-disabled: {
+          opacity: 1;
+        };
+        --iron-icon-fill-color: var(--etools-dropdown-disabled-color, #d1d1d1);
+        --paper-input-container-input-color: var(--etools-dropdown-text-color, #d1d1d1);
+      }
+
+      paper-dropdown-menu.capitalize {
+        --paper-input-container-label-floating: {
+          text-transform: capitalize;
         }
-      </style>
-      <paper-dropdown-menu id="dropdown" class$="[[labelTextTransform]]" label="[[label]]" disabled$="[[isDisabled]]">
+      }
+
+      paper-dropdown-menu.uppercase {
+        --paper-input-container-label-floating: {
+          text-transform: uppercase;
+        }
+      }
+
+      paper-dropdown-menu.has-icon {
+        --paper-input-container-input: {
+          padding-left: 25px;
+          @apply(--etools-dropdown-with-icon-input);
+        };
+      }
+
+      paper-item {
+        --paper-item: {
+          font-size: var(--etools-dropdown-font-size, 14px);
+        }
+      }
+
+      .dropdown-wrapper {
+        position: relative;
+      }
+
+      .dropdown-icon {
+        position: absolute;
+        bottom: 14px;
+        @apply(--etools-dropdown-icon);
+      }
+
+      .option-icon {
+        margin-right: 10px;
+        @apply(--etools-dropdown-option-icon);
+      }
+    </style>
+    <div class="dropdown-wrapper">
+      <span class$="dropdown-icon [[selectedOptionIcon]]"></span>
+      <paper-dropdown-menu id="dropdown"
+                           class$="[[labelTextTransform]] [[_hasIcon]]"
+                           label="[[label]]"
+                           disabled$="[[isDisabled]]"
+                           no-label-float="[[noLabelFloat]]">
+
         <paper-menu class="dropdown-content" selected="{{_optionSelectedSelectedIndex}}"
                     on-iron-select="_setDropdownValue">
           <template is="dom-repeat" items="[[options]]" as="dropdownOption">
-            <paper-item>[[dropdownOption.label]]</paper-item>
+            <paper-item>
+              <span class$="option-icon [[_getOptionImgClass(dropdownOption)]]"></span>
+              [[_getLabel(dropdownOption)]]
+            </paper-item>
           </template>
         </paper-menu>
       </paper-dropdown-menu>
+    </div>
 
-    </template>
+  </template>
 
-    <script>
-      (function () {
-        'use strict';
+  <script>
+    (function() {
+      'use strict';
 
-        Polymer({
-          is: 'etools-dropdown',
+      Polymer({
+        is: 'etools-dropdown',
 
-          properties: {
-            dropdownValue: {
-              notify: true,
-              observer: '_dropDownValueChanged'
-            },
-            options: {
-              // the options must have be an array with objects with this format: {value: 'some value', label: 'Some label text'}
-              type: Array,
-              value: [],
-              observer: '_optionsChanged'
-            },
-            isDisabled: {
-              type: Boolean,
-              value: false
-            },
-            labelTextTransform: {
-              type: String,
-              value: ''
-            }
+        properties: {
+          dropdownValue: {
+            notify: true,
+            observer: '_dropDownValueChanged'
           },
-          _setDropdownValue: function () {
-            this.dropdownValue = this.options[this._optionSelectedSelectedIndex].value;
+          optionsValueKey: {
+            type: 'String',
+            value: 'value'
           },
-          _dropDownValueChanged: function (newDropdownVal) {
-            if (newDropdownVal === undefined || newDropdownVal === null) {
-              // reset dropdown
-              this.set('_optionSelectedSelectedIndex', null);
-              this.$.dropdown._setSelectedItem(null);
-            } else {
-              // init dropdown with provided value as selected
-              for (var i = 0; i < this.options.length; i++) {
-                if (this.options[i].value == newDropdownVal) {
-                  this.set('_optionSelectedSelectedIndex', i);
-                  break;
-                }
+          optionsLabelKey: {
+            type: 'String',
+            value: 'label'
+          },
+          options: {
+            // the options must have be an array with objects with this format: {value: 'some value', label: 'Some label text'}
+            type: Array,
+            value: [],
+            observer: '_optionsChanged'
+          },
+          isDisabled: {
+            type: Boolean,
+            value: false
+          },
+          labelTextTransform: {
+            type: String,
+            value: ''
+          },
+          noLabelFloat: {
+            type: Boolean,
+            value: false
+          }
+        },
+        _setDropdownValue: function() {
+          this.dropdownValue = this.options[this._optionSelectedSelectedIndex][this.optionsValueKey];
+          this.selectedOptionIcon = this._getOptionImgClass(this.options[this._optionSelectedSelectedIndex]);
+          if(this.selectedOptionIcon !== '') {
+            this._hasIcon = 'has-icon'
+          } else {
+            this._hasIcon = '';
+          }
+          this.updateStyles();
+        },
+        _dropDownValueChanged: function(newDropdownVal) {
+          if (newDropdownVal === undefined || newDropdownVal === null) {
+            // reset dropdown
+            this.set('_optionSelectedSelectedIndex', null);
+            this.$.dropdown._setSelectedItem(null);
+          } else {
+            // init dropdown with provided value as selected
+            for (var i = 0; i < this.options.length; i++) {
+              if (this.options[i][this.optionsValueKey] == newDropdownVal) {
+                this.set('_optionSelectedSelectedIndex', i);
+                break;
               }
             }
-          },
-          _optionsChanged: function() {
-            this._dropDownValueChanged(this.dropdownValue);
           }
-        });
-      })();
-    </script>
+        },
+        _optionsChanged: function() {
+          this._dropDownValueChanged(this.dropdownValue);
+        },
+        _getLabel: function(dropdownOption) {
+          return dropdownOption[this.optionsLabelKey];
+        },
+        _getOptionImgClass: function(dropdownOption) {
+          if (dropdownOption && dropdownOption.hasOwnProperty('imgClass')) {
+            return dropdownOption.imgClass;
+          }
+          return '';
+        },
+
+      });
+    })();
+  </script>
 </dom-module>
