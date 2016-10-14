@@ -93,6 +93,7 @@ Custom property | Description | Default
       }
 
       paper-item {
+        cursor: pointer;
         --paper-item: {
           font-size: var(--etools-dropdown-font-size, 14px);
         }
@@ -111,6 +112,9 @@ Custom property | Description | Default
       .option-icon {
         margin-right: 10px;
         @apply(--etools-dropdown-option-icon);
+      }
+      .hidden {
+        display: none;
       }
     </style>
     <div class="dropdown-wrapper">
@@ -177,7 +181,7 @@ Custom property | Description | Default
         _setDropdownValue: function() {
           this.dropdownValue = this.options[this._optionSelectedSelectedIndex][this.optionsValueKey];
           this.selectedOptionIcon = this._getOptionImgClass(this.options[this._optionSelectedSelectedIndex]);
-          if(this.selectedOptionIcon !== '') {
+          if(this.selectedOptionIcon !== '' && this.selectedOptionIcon !== 'hidden') {
             this._hasIcon = 'has-icon'
           } else {
             this._hasIcon = '';
@@ -206,10 +210,10 @@ Custom property | Description | Default
           return dropdownOption[this.optionsLabelKey];
         },
         _getOptionImgClass: function(dropdownOption) {
-          if (dropdownOption && dropdownOption.hasOwnProperty('imgClass')) {
+          if (dropdownOption && dropdownOption.hasOwnProperty('imgClass') && dropdownOption.imgClass !== '') {
             return dropdownOption.imgClass;
           }
-          return '';
+          return 'hidden';
         },
 
       });

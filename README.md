@@ -44,7 +44,64 @@ In this case you have to specify the properties that represent the value and the
 ```
 
 If you have a `imgClass` property (representing icon class) in your dropdown options the icon will be shown for each 
-option and also the dropdown will have an icon for selected option. 
+option and also the dropdown will have an icon for selected option. In this case you need to provide a `custom-style`
+to this element. Since this element separate from your app you will have to dynamically add images styles. 
+This can be done using a behavior. Example:
+ 
+```html
+<!-- dynamic-custom-style-behavior.html -->
+<script>
+var DynamicCustomStyleBehavior = {
+
+  addCustomStyle: function(styleModuleName, customElementRoot) {
+    var newCustomStyle = document.createElement('style', 'custom-style');
+    newCustomStyle.setAttribute('include', styleModuleName);
+    Polymer.dom(customElementRoot).insertBefore(newCustomStyle, Polymer.dom(customElementRoot).querySelector('style'));
+  }
+
+}
+</script>
+
+<!-- some-custom-element.html -->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/etools-dropdown/etools-dropdown.html">
+
+<link rel="import" href="behaviors/dynamic-custom-style-behavior.html">
+<link rel="import" href="styles/countries-flags-styles.html">
+
+<dom-module id="some-custom-element">
+  <template>
+    <etools-dropdown id="countriesDropdown"
+                         label="Countries"
+                         options="[[countriesData]]"
+                         options-label-key="name"
+                         options-value-key="id"
+                         no-label-float="true"></etools-dropdown>
+  </template>
+  <script>
+      (function() {
+        'use strict';
+  
+        Polymer({
+  
+          is: 'some-custom-element',
+  
+          behaviors: [DynamicCustomStyleBehavior],
+  
+          properties: {
+            
+          },
+  
+          ready: function() {
+            this.addCustomStyle('countries-flags-styles', this.$.countriesDropdown.root);
+          }
+  
+        });
+  
+      })();
+    </script>
+</dom-module>
+```
 
 ## Styling
 
