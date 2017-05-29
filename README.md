@@ -36,18 +36,18 @@ this.demoOptions = [
 ```
 In this case you have to specify the properties that represent the value and the label. Example:
 ```html
-<etools-dropdown label="Countries" 
-  options="[[demoOptions]]" 
-  options-label-key="country" 
-  options-value-key="id" 
+<etools-dropdown label="Countries"
+  options="[[demoOptions]]"
+  options-label-key="country"
+  options-value-key="id"
   no-label-float="true"></etools-dropdown>
 ```
 
-If you have a `imgClass` property (representing icon class) in your dropdown options the icon will be shown for each 
+If you have a `imgClass` property (representing icon class) in your dropdown options the icon will be shown for each
 option and also the dropdown will have an icon for selected option. In this case you need to provide a `custom-style`
-to this element. Since this element separate from your app you will have to dynamically add images styles. 
+to this element. Since this element separate from your app you will have to dynamically add images styles.
 This can be done using a behavior. Example:
- 
+
 ```html
 <!-- dynamic-custom-style-behavior.html -->
 <script>
@@ -81,23 +81,23 @@ var DynamicCustomStyleBehavior = {
   <script>
       (function() {
         'use strict';
-  
+
         Polymer({
-  
+
           is: 'some-custom-element',
-  
+
           behaviors: [DynamicCustomStyleBehavior],
-  
+
           properties: {
-            
+
           },
-  
+
           ready: function() {
             this.addCustomStyle('countries-flags-styles', this.$.countriesDropdown.root);
           }
-  
+
         });
-  
+
       })();
     </script>
 </dom-module>
@@ -127,6 +127,22 @@ $ bower install --save etools-dropdown
 ## Preview element locally
 Install needed dependencies by running: `$ bower install`.
 Make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `$ polymer serve` to serve your element application locally.
+
+## Linting the code
+
+Innstall local npm packages (run `npm install`)
+Then just run the linting task
+
+```bash
+$ npm run lint
+```
+You should also use polylint. If you don't have Polylint installed run `npm install -g polylint`.
+Then just run the linter on each file you wish to check like so
+
+```bash
+$ polylint -i filename.html
+```
+At the moment polylint crashes if it encounters a missing import. If that happens, temporarily comment out such imports and run the command again.
 
 ## Running Tests
 

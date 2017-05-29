@@ -32,7 +32,7 @@ Custom property | Description | Default
 `--etools-dropdown-with-icon-input` | Mixin to style the dropdown's input when it has icon | `{}`
 
 
-@demo demo/index.html 
+@demo demo/index.html
 -->
 
 <dom-module id="etools-dropdown">
@@ -160,7 +160,8 @@ Custom property | Description | Default
             value: 'label'
           },
           options: {
-            // the options must have be an array with objects with this format: {value: 'some value', label: 'Some label text'}
+            // the options must have be an array with objects with this format:
+            // {value: 'some value', label: 'Some label text'}
             type: Array,
             value: [],
             observer: '_optionsChanged'
@@ -176,13 +177,15 @@ Custom property | Description | Default
           noLabelFloat: {
             type: Boolean,
             value: false
-          }
+          },
+          label: String,
+          _optionSelectedSelectedIndex: Number,
         },
         _setDropdownValue: function() {
           this.dropdownValue = this.options[this._optionSelectedSelectedIndex][this.optionsValueKey];
           this.selectedOptionIcon = this._getOptionImgClass(this.options[this._optionSelectedSelectedIndex]);
           if(this.selectedOptionIcon !== '' && this.selectedOptionIcon !== 'hidden') {
-            this._hasIcon = 'has-icon'
+            this._hasIcon = 'has-icon';
           } else {
             this._hasIcon = '';
           }
