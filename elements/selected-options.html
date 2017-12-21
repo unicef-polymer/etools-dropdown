@@ -1,0 +1,113 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../../polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../polymer/lib/elements/dom-if.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../../paper-input/paper-input-container.html">
+<link rel="import" href="../../paper-input/paper-input-error.html">
+<link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+
+<dom-module id="esmm-selected-options">
+  <template>
+    <style>
+      *[hidden] {
+        display: none !important;
+      }
+
+      :host {
+        /* host CSS */
+      }
+
+      iron-icon {
+        @apply --esmm-icons;
+      }
+    </style>
+
+    <paper-input-container id="container"
+                           no-label-float="[[noLabelFloat]]"
+                           always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
+                           auto-validate$="[[autoValidate]]"
+                           disabled$="[[disabled]]"
+                           invalid="[[invalid]]">
+
+      <label hidden$="[[!label]]" aria-hidden="true" for="input" slot="label">[[label]]</label>
+
+      <div slot="input" class="paper-input-input">
+        <span class="placeholder"
+              hidden$="[[_hidePlaceholder]]">
+          [[placeholder]]
+        </span>
+        <div id="selected-items-wrapper"
+             hidden$="[[!_hidePlaceholder]]">
+
+          <template id="itemsListDisplay"
+                    is="dom-repeat"
+                    notify-dom-change
+                    on-dom-change="_selectedItemsDisplayHasChanged"
+                    items="[[selectedItems]]">
+            <span class="option-string">
+            {{_getLabel(item)}}
+            <span class="readonly-separator" hidden$=[[!readonly]]>|</span>
+            <paper-icon-button id="iconRemoveSelected"
+                               hidden$="[[disabled]]"
+                               icon="close"
+                               on-tap="_removeItem"></paper-icon-button>
+            </span>
+          </template>
+
+        </div>
+      </div>
+
+      <iron-icon icon="arrow-drop-down" slot="suffix"></iron-icon>
+
+      <template is="dom-if" if="[[errorMessage]]">
+        <paper-input-error aria-live="assertive" slot="add-on">[[errorMessage]]</paper-input-error>
+      </template>
+
+    </paper-input-container>
+
+  </template>
+  <script>
+    class EsmmSelectedOptions extends Polymer.GestureEventListeners(Polymer.Element) {
+
+      static get is() {
+        return 'esmm-selected-options';
+      }
+
+      static get properties() {
+        return {
+          label: String,
+          noLabelFloat: Boolean,
+          alwaysFloatLabel: Boolean,
+          placeholder: String,
+          autoValidate: Boolean,
+          disabled: Boolean,
+          invalid: Boolean,
+          errorMessage: String,
+          _hidePlaceholder: Boolean
+        };
+      }
+
+      _computeAlwaysFloatLabel(alwaysFloatLabel,placeholder) {
+        return alwaysFloatLabel || placeholder;
+      }
+
+      _selectedItemsDisplayHasChanged(e) {
+        e.stopImmediatePropagation();
+        // hide/show placeholder
+        if (this.selectedItems instanceof Array && this.selectedItems.length > 0) {
+          this.set('_hidePlaceholder', true);
+        } else {
+          this.set('_hidePlaceholder', false);
+        }
+      }
+
+      _removeItem(e) {
+        // fire remove event to parent
+      }
+
+    }
+
+    window.customElements.define(EsmmSelectedOptions.is, EsmmSelectedOptions);
+  </script>
+</dom-module>

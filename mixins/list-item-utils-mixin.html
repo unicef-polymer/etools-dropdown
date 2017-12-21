@@ -23,6 +23,10 @@
               type: Boolean,
               value: false,
               reflectToAttribute: true
+            },
+            noneOptionLabel: {
+              type: String,
+              value: '-- NONE --'
             }
           }
         }
@@ -32,6 +36,9 @@
         }
 
         getSecondaryLabel(label) {
+          if (label === this.noneOptionLabel) {
+            return 'Reset selected option';
+          }
           return label ? label.slice(label.indexOf('|')+1) : '';
         }
 
