@@ -1,0 +1,238 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-dropdown/iron-dropdown.html">
+<link rel="import" href="../neon-animation/web-animations.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-material/paper-material.html">
+
+<link rel="import" href="scripts/es6-polyfills.html">
+
+<link rel="import" href="mixins/common-mixin.html">
+<link rel="import" href="mixins/missing-options-mixin.html">
+<link rel="import" href="elements/searchbox-input.html">
+<link rel="import" href="elements/options-list.html">
+
+<link rel="import" href="styles/esmm-shared-styles.html">
+
+<dom-module id="etools-dropdown">
+  <template>
+    <style include="esmm-shared-styles">
+      :host {
+        --paper-input-suffix: {
+          display: block;
+          width: 24px;
+          height: 24px;
+        };
+
+        --paper-input-container-input: {
+          cursor: pointer;
+        }
+      }
+
+      :host([capitalize-input-shown]) .paper-input-input,
+      :host([capitalize-options]) paper-listbox paper-item {
+        text-transform: capitalize;
+      }
+
+    </style>
+
+    <!--<etools-ajax id="missingOptionsAjax"-->
+    <!--params="[[ajaxParams]]"-->
+    <!--on-success="_handleMissingOptionsReqResponse"-->
+    <!--on-fail="_handleMissingOptionsReqError"></etools-ajax>-->
+
+    <paper-input id="main"
+                 label="[[label]]"
+                 placeholder="[[placeholder]]"
+                 always-float-label="[[alwaysFloatLabel]]"
+                 no-label-float="[[noLabelFloat]]"
+                 value="[[_getLabel(selectedItem)]]"
+                 disabled$="[[disabled]]"
+                 invalid$="[[invalid]]"
+                 required="[[required]]"
+                 auto-validate="[[autoValidate]]"
+                 error-message="[[errorMessage]]"
+                 readonly
+                 on-focus="_onInputFocus"
+                 on-tap="_openMenu">
+      <iron-icon icon="arrow-drop-down" slot="suffix"></iron-icon>
+    </paper-input>
+
+    <iron-dropdown
+        id="dropdownMenu"
+        horizontal-align="right"
+        allow-outside-scroll="[[allowOutsideScroll]]"
+        dynamic-align="[[dynamicAlign]]"
+        on-iron-overlay-opened="_onDropdownOpen"
+        on-iron-overlay-closed="_onDropdownClose"
+        disabled="[[_menuBtnIsDisabled(disabled, readonly)]]">
+
+      <paper-material id="ironDrContent" elevation="1" slot="dropdown-content">
+        <esmm-searchbox-input id="searchbox"
+                              search="{{search}}"
+                              hidden$="{{hideSearch}}"></esmm-searchbox-input>
+
+        <esmm-options-list id="optionsList"
+                           shown-options="[[shownOptions]]"
+                           selected={{selected}}
+                           two-lines-label="[[twoLinesLabel]]"
+                           option-value="[[optionValue]]"
+                           option-label="[[optionLabel]]"
+                           show-no-search-results-warning="[[showNoSearchResultsWarning]]"
+                           show-limit-warning="[[showLimitWarning]]"
+                           no-options-available="[[noOptionsAvailable]]"></esmm-options-list>
+      </paper-material>
+
+    </iron-dropdown>
+
+  </template>
+
+  <script>
+    'use strict';
+    /**
+     * @polymer
+     * @mixinFunction
+     */
+    const DropdownRequiredMixins = EsmmMixins.MissingOptions(EsmmMixins.CommonFunctionality(
+        Polymer.GestureEventListeners(Polymer.Element)));
+
+    /**
+     * `etools-dropdown`
+     *
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class EtoolsDropdown extends DropdownRequiredMixins {
+      static get is() {
+        return 'etools-dropdown';
+      }
+
+      static get properties() {
+        return {
+          selected: {
+            type: Number,
+            notify: true,
+            observer: '_selectedChanged'
+          },
+          selectedItem: {
+            type: Object,
+            value: null,
+            notify: true
+          },
+          notFoundOption: {
+            type: String
+          },
+          title: {
+            type: String,
+            reflectToAttribute: true,
+            computed: '_getLabel(selectedItem)'
+          }
+        };
+      }
+
+      static get observers() {
+        return [
+          '_selectedAndOptionsChanged(selected, options)',
+          '_notFoundOptionAndUrlChanged(notFoundOption, url)'
+        ];
+      }
+
+      _selectedAndOptionsChanged(selected, options) {
+        this._setSelectedItem();
+      }
+
+      _setSelectedItem(selected, selectedItem) {
+        this.set('notFoundOption', null);
+        if (selectedItem) {
+          this.set('selectedItem', selectedItem);
+          return;
+        }
+
+        selected = selected || this.selected;
+
+        if (!selected && this._noOptions()) {
+          this.set('selectedItem', null);
+          return;
+        }
+
+        if (selected && this._noOptions()) {
+          this.set('notFoundOption', this.selected);
+          this.set('selectedItem', null);
+          return;
+        }
+
+        selectedItem = this._getItemFromOptions(selected);
+        if (!selectedItem) {
+          this.set('notFoundOption', this.selected);
+          this.set('selectedItem', null);
+        } else {
+          this.set('selectedItem', selectedItem);
+        }
+      }
+
+      _getItemFromOptions(value) {
+        if (this._noOptions()) {
+          return null;
+        }
+        return this.options.find((item) => item[this.optionValue] == value);
+      }
+
+      _notFoundOptionAndUrlChanged(notFoundOption, url) {
+        if (this.notFoundOption) {
+          this._handleSelectedNotFoundInOptions(this.notFoundOption);
+        }
+      }
+
+      _handleSelectedNotFoundInOptions(selected) {
+        this._requestMissingOptions([selected]);
+        // show console warning
+        let warnMsg = '[etools-esmm ' + this.label + '] Selected value ';
+
+        warnMsg += selected + ' not found in dropdown\'s options!';
+        // eslint-disable-next-line no-console
+        console.warn(warnMsg);
+      }
+
+      _updateAfterMissingOptionsReceived(detail) {
+        let selectedItem;
+        if (Array.isArray(detail) && detail.length) {
+          selectedItem = detail[0];
+        } else {
+          selectedItem = detail;
+        }
+        this._setSelectedItem(this.selected, selectedItem);
+      }
+
+      _onDropdownClose() {
+        if (this.autoValidate) {
+          this.validate(this.selected);
+        }
+      }
+
+      validate(selected) {
+        if (!this.hasAttribute('required') || this.readonly) {
+          this.set('invalid', false);
+          return true;
+        }
+        selected = selected || this.selected;
+        this.set('invalid', !selected);
+        return !!selected;
+      }
+
+      _selectedChanged(selected) {
+        if (this.autoValidate) {
+          this.validate(selected);
+        }
+        if (!selected) {
+          this.set('selectedItem', null);
+        }
+      }
+
+    }
+
+    window.customElements.define(EtoolsDropdown.is, EtoolsDropdown);
+  </script>
+</dom-module>

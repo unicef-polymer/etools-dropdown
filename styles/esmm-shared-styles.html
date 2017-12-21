@@ -1,0 +1,27 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<dom-module id="esmm-shared-styles">
+  <template>
+    <style>
+      *[hidden] {
+        display: none !important;
+      }
+
+      #main iron-icon {
+        color: var(--secondary-text-color);
+        cursor: pointer;
+      }
+
+      #ironDrContent {
+        background-color: var(--esmm-bg-color, #ffffff);
+        overflow: hidden;
+      }
+
+      #optionsList {
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+    </style>
+  </template>
+</dom-module>

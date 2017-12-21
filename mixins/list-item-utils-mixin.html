@@ -1,0 +1,53 @@
+<script>
+  'use strict';
+  window.EsmmMixins = window.EsmmMixins || {};
+  /*
+   * Item data utils mixin
+   * @polymer
+   * @mixinFunction
+   */
+  EsmmMixins.ListItemUtils = Polymer.dedupingMixin(
+      (superClass) => class extends superClass {
+
+        static get properties() {
+          return {
+            optionValue: {
+              type: String,
+              value: 'value'
+            },
+            optionLabel: {
+              type: String,
+              value: 'label'
+            },
+            twoLinesLabel: {
+              type: Boolean,
+              value: false,
+              reflectToAttribute: true
+            }
+          }
+        }
+
+        getPrimaryLabel(label) {
+          return label ? label.slice(0, label.indexOf('|')) : '';
+        }
+
+        getSecondaryLabel(label) {
+          return label ? label.slice(label.indexOf('|')+1) : '';
+        }
+
+        _getValue(item) {
+          return item ? item[this.optionValue] : null;
+        }
+
+        _getLabel(item) {
+          if (!item) {
+            return null;
+          }
+          if (this.twoLinesLabel) {
+            return this.getPrimaryLabel(item[this.optionLabel]);
+          }
+          return item[this.optionLabel];
+        }
+
+      });
+</script>

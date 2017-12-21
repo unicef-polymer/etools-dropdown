@@ -1,0 +1,60 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+
+<dom-module id="esmm-searchbox-input">
+  <template>
+    <style>
+      :host {
+        @apply --layout-horizontal;
+        @apply --layout-wrap;
+        padding: 8px 16px;
+        box-sizing: border-box;
+      }
+      iron-icon {
+        margin-right: 5px;
+      }
+      paper-input {
+        width: auto;
+
+        --paper-input-container-label: {
+          @apply --esmm-search-input-label;
+        }
+      }
+    </style>
+
+    <paper-input
+        id="searchInput"
+        no-label-float
+        placeholder="Search"
+        type="text"
+        value="{{search}}"
+        auto-focus
+        tabindex="0">
+      <iron-icon icon="search" slot="prefix"></iron-icon>
+    </paper-input>
+
+  </template>
+  <script>
+    'use strict';
+
+    class EsmmSearchboxInput extends Polymer.Element {
+
+      static get is() {
+        return 'esmm-searchbox-input';
+      }
+
+      static get properties() {
+        return {
+          search: {
+            type: String,
+            notify: true
+          }
+        };
+      }
+
+    }
+
+    window.customElements.define(EsmmSearchboxInput.is, EsmmSearchboxInput);
+  </script>
+</dom-module>

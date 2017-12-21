@@ -1,0 +1,147 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../paper-listbox/paper-listbox.html">
+<link rel="import" href="../../paper-item/paper-item.html">
+<link rel="import" href="../../paper-item/paper-icon-item.html">
+<link rel="import" href="../../paper-item/paper-item-body.html">
+<link rel="import" href="../../polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../polymer/lib/elements/dom-if.html">
+
+<link rel="import" href="../mixins/list-item-utils-mixin.html">
+
+<dom-module id="esmm-options-list">
+  <template>
+    <style>
+      :host {
+        display: block;
+
+        --paper-item-icon: {
+          width: auto;
+          margin-right: 8px;
+        };
+      }
+
+      paper-listbox {
+        width: 100%;
+        padding: 0;
+      }
+
+      paper-icon-item {
+        cursor: pointer;
+      }
+
+      :host([two-lines-label]) paper-icon-item {
+        padding-top: 8px;
+        padding-bottom: 8px;
+      }
+
+      paper-icon-item .tick-icon {
+        display: none;
+      }
+
+      paper-icon-item.iron-selected {
+        background: var(--esmm-list-item-selected-color, #dcdcdc);
+      }
+
+      paper-icon-item.iron-selected .tick-icon {
+        display: flex;
+      }
+
+      .warning {
+        font-family: Roboto;
+        font-size: 12px;
+        line-height: 16px;
+        color: rgba(0, 0, 0, 0.54);
+        background-color: #EEEEEE;
+        padding-top: 8px;
+        padding-bottom: 8px;
+      }
+    </style>
+
+    <paper-listbox attr-for-selected="internal-id"
+                   selected=[[selected]]>
+      <template is="dom-repeat" items="[[shownOptions]]">
+        <paper-icon-item
+            item=[[item]]
+            internal-id$="[[_getValue(item)]]"
+            on-tap="_itemSelected"
+            class$="[[item.cssClass]][[_getSelectedClass(item)]]"
+            title$="[[_getItemTitle(item)]]">
+
+          <iron-icon class="tick-icon" icon="check" slot="item-icon"></iron-icon>
+          <paper-item-body two-line="[[twoLinesLabel]]">
+
+            <template is="dom-if" if="[[twoLinesLabel]]">
+              <div>[[getPrimaryLabel(item.label)]]</div>
+              <div secondary>[[getSecondaryLabel(item.label)]]</div>
+            </template>
+
+            <template is="dom-if" if="[[!twoLinesLabel]]">
+              <span>[[_getLabel(item)]]</span>
+            </template>
+
+          </paper-item-body>
+
+        </paper-icon-item>
+
+      </template>
+
+      <paper-item hidden$="[[!showNoSearchResultsWarning]]"
+                  class="warning" disabled>
+        No results found. Try other keywords.
+      </paper-item>
+
+      <paper-item hidden$="[[!showLimitWarning]]" class="warning" disabled>
+        More than [[shownOptionsLimit]] items, use the search function to reveal more.
+      </paper-item>
+
+      <paper-item hidden$="[[!noOptionsAvailable]]" class="warning" disabled>
+        No options available.
+      </paper-item>
+    </paper-listbox>
+
+  </template>
+  <script>
+    'use strict';
+
+    class EsmmOptionsList extends EsmmMixins.ListItemUtils(Polymer.GestureEventListeners(Polymer.Element)) {
+
+      static get is() {
+        return 'esmm-options-list';
+      }
+
+      static get properties() {
+        return {
+          selected: {
+            type: String,
+            notify: true
+          },
+          shownOptions: Array,
+          showNoSearchResultsWarning: Boolean,
+          showLimitWarning: Boolean,
+          noOptionsAvailable: Boolean
+        };
+      }
+
+      _itemSelected(e) {
+        e.stopImmediatePropagation();
+        let selectedValue = e.model.item[this.optionValue];
+        console.log(e, selectedValue);
+        this.set('selected', selectedValue);
+      }
+
+      _getItemTitle(item) {
+        return item[this.optionLabel];
+      }
+
+      // Use of this method covers a corner case
+      _getSelectedClass(item) {
+        return ''; //(this.selected === item[this.optionValue]) ? 'iron-selected' : '';
+      }
+
+    }
+
+    window.customElements.define(EsmmOptionsList.is, EsmmOptionsList);
+  </script>
+</dom-module>

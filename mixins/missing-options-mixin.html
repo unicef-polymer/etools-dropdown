@@ -1,0 +1,129 @@
+<script>
+  'use strict';
+
+  window.EsmmMixins = window.EsmmMixins || {};
+
+  /*
+   * Missing options helper
+   * @polymer
+   * @mixinFunction
+   */
+  EsmmMixins.MissingOptions = Polymer.dedupingMixin((superClass) => class extends superClass {
+
+    static get properties() {
+      return {
+        url: String,
+        ajaxParams: Object
+      };
+    }
+
+    /**
+     * If there are no selected options that are not found in dropdown options then request them from server using
+     * url and ajaxParams(values property will contain missing values)
+     * ajaxParams = {
+      *    values: 1 // single value
+      * }
+     *
+     * ajaxParams = {
+      *    values: 1,2,3,4 // multiple values
+      * }
+     */
+    _requestMissingOptions(notFoundValues) {
+      if (!(notFoundValues instanceof Array && notFoundValues.length)) {
+        return;
+      }
+      if (!this._shouldRequestMissingOption(this.url)) {
+        return;
+      }
+      let etoolsAjax = this.$.missingOptionsAjax;
+      if (!etoolsAjax) {
+        return;
+      }
+      etoolsAjax.url = null;
+      let notFoundV = notFoundValues.join(',');
+      if (this.ajaxParams && typeof this.ajaxParams === 'object') {
+        this.ajaxParams.values = notFoundV;
+      } else {
+        this.ajaxParams = {
+          values: notFoundV
+        };
+      }
+      if (typeof this.ajaxParams.values === 'string' && this.ajaxParams.values !== '') {
+        etoolsAjax.url = this.url;
+      }
+    }
+
+    _handleMissingOptionsReqResponse(response) {
+      if (!(response.detail instanceof Array && response.detail.length)) {
+        return;
+      }
+      try {
+        if (this._isValidOption(response.detail[0])) {
+          // assuming all objects from response array have same properties
+          // we just need to make sure the first one is valid, no need to use a loop here
+          let responseOptions = this._prepareReceivedOptions(response.detail);
+          this.set('options', [...options, ...responseOptions]);
+
+          // TODO: remove this console.log
+          console.log(typeof this._updateAfterMissingOptionsReceived);
+          // TODO: find a way to not use _updateAfterMissingOptionsReceived defined in other element,
+          // maybe a callback as param
+          if (responseOptions.length && typeof this._updateAfterMissingOptionsReceived === 'function') {
+            this._updateAfterMissingOptionsReceived(responseOptions);
+          }
+          // eslint-disable-next-line no-console
+          console.warn('[etools-esmm ' + this.label + '] Valid missing options received', response.detail);
+        } else {
+          // eslint-disable-next-line no-console
+          console.warn('[etools-esmm ' + this.label + '] Missing options received(from ' + this.url +
+              ') are not valid(missing \'' + this.optionValue + '\' and \'' + this.optionLabel + '\' properties)');
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('[etools-esmm ' + this.label +
+            '] Error occurred on missing options request response handling', error);
+      }
+    }
+
+    _handleMissingOptionsReqError(errorResponse) {
+      // eslint-disable-next-line no-console
+      console.error('[etools-esmm ' + this.label + '] Missing options request failed!', errorResponse.detail);
+    }
+
+    _shouldRequestMissingOption(url) {
+      if (typeof url === 'string' && url !== '') {
+        return true;
+      }
+      return false;
+    }
+
+    _isValidOption(optionObj) {
+      return optionObj.constructor === Object && optionObj[this.optionValue] && optionObj[this.optionLabel];
+    }
+
+    _prepareReceivedOptions(receivedOptions) {
+      if (this.options instanceof Array && this.options.length > 0) {
+        let missingOptions = [];
+        let receivedOptionsValues = receivedOptions.map((receivedOption) => {
+          return receivedOption[this.optionValue];
+        });
+        receivedOptionsValues.forEach((optVal) => {
+          let option = this.options.find((option) => {
+            return option[this.optionValue] === optVal;
+          });
+          if (!option) {
+            // this option is not in the options array
+            missingOptions.push(receivedOptions.find((receivedOption) => {
+              return receivedOption[this.optionValue] === optVal;
+            }));
+          }
+        });
+        return missingOptions;
+      } else {
+        return receivedOptions;
+      }
+    }
+
+  });
+
+</script>
