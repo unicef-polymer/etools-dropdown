@@ -18,9 +18,7 @@
 <dom-module id="etools-dropdown">
   <template>
     <style include="esmm-shared-styles">
-      :host(:not([readonly])), :host(:not([disabled])) {
-        cursor: var(--esmm-select-cursor);
-      }
+
       :host {
         --paper-input-container-input: {
           cursor: var(--esmm-select-cursor);
@@ -30,11 +28,6 @@
       #main iron-icon {
         @apply --esmm-icons;
       }
-
-      /*:host([capitalize-input-shown]) .paper-input-input,*/
-      /*:host([capitalize-options]) paper-listbox paper-item {*/
-        /*text-transform: capitalize;*/
-      /*}*/
 
     </style>
 
@@ -49,8 +42,8 @@
                  always-float-label="[[alwaysFloatLabel]]"
                  no-label-float="[[noLabelFloat]]"
                  value="[[_getLabel(selectedItem)]]"
-                 disabled$="[[disabled]]"
-                 invalid$="[[invalid]]"
+                 disabled="[[disabled]]"
+                 invalid="[[invalid]]"
                  required="[[required]]"
                  auto-validate="[[autoValidate]]"
                  error-message="[[errorMessage]]"
@@ -83,7 +76,8 @@
                            show-no-search-results-warning="[[showNoSearchResultsWarning]]"
                            show-limit-warning="[[showLimitWarning]]"
                            no-options-available="[[noOptionsAvailable]]"
-                           none-option-label="[[noneOptionLabel]]"></esmm-options-list>
+                           none-option-label="[[noneOptionLabel]]"
+                           capitalize="[[capitalize]]"></esmm-options-list>
       </paper-material>
 
     </iron-dropdown>

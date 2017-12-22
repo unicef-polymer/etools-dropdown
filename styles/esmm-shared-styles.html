@@ -28,6 +28,10 @@
         min-width: 242px;
       }
 
+      :host(:not([readonly])), :host(:not([disabled])) {
+        cursor: var(--esmm-select-cursor);
+      }
+
       #ironDrContent {
         background-color: var(--esmm-bg-color, #ffffff);
         overflow: hidden;

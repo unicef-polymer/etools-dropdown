@@ -2,10 +2,13 @@
 <link rel="import" href="../../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../../polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="../../polymer/lib/elements/dom-if.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../iron-icons/iron-icons.html">
 <link rel="import" href="../../paper-input/paper-input-container.html">
 <link rel="import" href="../../paper-input/paper-input-error.html">
 <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="../mixins/list-item-utils-mixin.html">
 
 <dom-module id="esmm-selected-options">
   <template>
@@ -14,13 +17,51 @@
         display: none !important;
       }
 
-      :host {
-        /* host CSS */
-      }
-
       iron-icon {
         @apply --esmm-icons;
       }
+
+      .selected-item {
+        display: inline-block;
+        width: auto;
+        height: auto;
+        margin-right: 8px;
+        line-height: 24px;
+      }
+
+      :host([readonly]) .selected-item {
+        margin-right: 0;
+      }
+
+      .selected-item-body {
+        @apply --layout-horizontal;
+        @apply --layout-wrap;
+        @apply --layout-center;
+      }
+
+      :host([readonly]) .selected-item paper-icon-button,
+      :host([readonly]) .selected-item:last-of-type .readonly-separator {
+        display: none;
+      }
+
+      #selected-items-wrapper {
+        width: 100%;
+      }
+
+      .readonly-separator {
+        display: inline-block;
+        padding: 0 5px;
+        margin: 0;
+      }
+
+      .selected-item paper-icon-button {
+        color: var(--error-color);
+        padding: 0;
+        height: 18px;
+        width: 18px;
+        margin-top: -2px;
+      }
+
     </style>
 
     <paper-input-container id="container"
@@ -40,18 +81,19 @@
         <div id="selected-items-wrapper"
              hidden$="[[!_hidePlaceholder]]">
 
-          <template id="itemsListDisplay"
-                    is="dom-repeat"
+          <template is="dom-repeat"
                     notify-dom-change
                     on-dom-change="_selectedItemsDisplayHasChanged"
                     items="[[selectedItems]]">
-            <span class="option-string">
-            {{_getLabel(item)}}
-            <span class="readonly-separator" hidden$=[[!readonly]]>|</span>
-            <paper-icon-button id="iconRemoveSelected"
-                               hidden$="[[disabled]]"
-                               icon="close"
-                               on-tap="_removeItem"></paper-icon-button>
+            <span class="selected-item">
+              <span class="selected-item-body">
+                [[_getLabel(item)]]
+                <span class="readonly-separator" hidden$=[[!readonly]]>|</span>
+                <paper-icon-button id="iconRemoveSelected"
+                                   hidden$="[[disabled]]"
+                                   icon="close"
+                                   on-tap="_removeItem"></paper-icon-button>
+              </span>
             </span>
           </template>
 
@@ -68,7 +110,7 @@
 
   </template>
   <script>
-    class EsmmSelectedOptions extends Polymer.GestureEventListeners(Polymer.Element) {
+    class EsmmSelectedOptions extends EsmmMixins.ListItemUtils(Polymer.GestureEventListeners(Polymer.Element)) {
 
       static get is() {
         return 'esmm-selected-options';
@@ -76,11 +118,13 @@
 
       static get properties() {
         return {
+          selectedItems: Array,
           label: String,
           noLabelFloat: Boolean,
           alwaysFloatLabel: Boolean,
           placeholder: String,
           autoValidate: Boolean,
+          readonly: Boolean,
           disabled: Boolean,
           invalid: Boolean,
           errorMessage: String,
@@ -104,6 +148,11 @@
 
       _removeItem(e) {
         // fire remove event to parent
+        this.dispatchEvent(new CustomEvent('remove-selected-item', {
+          detail: e.model.item[this.optionValue],
+          bubbles: true,
+          composed: true
+        }));
       }
 
     }

@@ -27,19 +27,37 @@
             noneOptionLabel: {
               type: String,
               value: '-- NONE --'
+            },
+            capitalize: {
+              type: Boolean,
+              value: false
             }
           }
         }
 
         getPrimaryLabel(label) {
-          return label ? label.slice(0, label.indexOf('|')) : '';
+          let l = '';
+          if (label) {
+            l = label.slice(0, label.indexOf('|'));
+            if (this.capitalize) {
+              l = this._capitalizeString(l);
+            }
+          }
+          return l;
         }
 
         getSecondaryLabel(label) {
           if (label === this.noneOptionLabel) {
             return 'Reset selected option';
           }
-          return label ? label.slice(label.indexOf('|')+1) : '';
+          let sl = '';
+          if (label) {
+            sl = label.slice(label.indexOf('|')+1);
+            if (this.capitalize) {
+              sl = this._capitalizeString(sl);
+            }
+          }
+          return sl;
         }
 
         _getValue(item) {
@@ -47,13 +65,19 @@
         }
 
         _getLabel(item) {
-          if (!item) {
-            return null;
+          let label = null;
+          if (item) {
+            label = this.twoLinesLabel ? this.getPrimaryLabel(item[this.optionLabel]) : item[this.optionLabel];
+            if (this.capitalize && !this.twoLinesLabel) {
+              // capitalize label
+              label = this._capitalizeString(label);
+            }
           }
-          if (this.twoLinesLabel) {
-            return this.getPrimaryLabel(item[this.optionLabel]);
-          }
-          return item[this.optionLabel];
+          return label;
+        }
+
+        _capitalizeString(string) {
+          return string.split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
         }
 
       });
