@@ -110,6 +110,12 @@
 
   </template>
   <script>
+    'use strict';
+    /**
+     * @customElement
+     * @polymer
+     * @appliesMixin EsmmMixins.ListItemUtils
+     */
     class EsmmSelectedOptions extends EsmmMixins.ListItemUtils(Polymer.GestureEventListeners(Polymer.Element)) {
 
       static get is() {
@@ -132,10 +138,21 @@
         };
       }
 
+      /**
+       * @param alwaysFloatLabel
+       * @param placeholder
+       * @returns {*}
+       * @private
+       */
       _computeAlwaysFloatLabel(alwaysFloatLabel,placeholder) {
         return alwaysFloatLabel || placeholder;
       }
 
+      /**
+       * Show or hide placeholder
+       * @param e
+       * @private
+       */
       _selectedItemsDisplayHasChanged(e) {
         e.stopImmediatePropagation();
         // hide/show placeholder
@@ -146,6 +163,11 @@
         }
       }
 
+      /**
+       * @event remove-selected-item
+       * @param e
+       * @private
+       */
       _removeItem(e) {
         // fire remove event to parent
         this.dispatchEvent(new CustomEvent('remove-selected-item', {

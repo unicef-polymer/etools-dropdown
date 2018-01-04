@@ -37,7 +37,10 @@
   </template>
   <script>
     'use strict';
-
+    /**
+     * @customElement
+     * @polymer
+     */
     class EsmmSearchboxInput extends Polymer.Element {
 
       static get is() {
@@ -46,6 +49,7 @@
 
       static get properties() {
         return {
+          /** Search string property */
           search: {
             type: String,
             notify: true

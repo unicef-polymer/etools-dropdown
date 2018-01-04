@@ -1,12 +1,14 @@
 <script>
   'use strict';
 
+  // @namespace EsmmMixins
   window.EsmmMixins = window.EsmmMixins || {};
 
   /*
    * Missing options helper
    * @polymer
    * @mixinFunction
+   * @memberof EsmmMixins
    */
   EsmmMixins.MissingOptions = Polymer.dedupingMixin((superClass) => class extends superClass {
 
@@ -21,12 +23,15 @@
      * If there are no selected options that are not found in dropdown options then request them from server using
      * url and ajaxParams(values property will contain missing values)
      * ajaxParams = {
-      *    values: 1 // single value
-      * }
+     *    values: 1 // single value
+     * }
      *
      * ajaxParams = {
-      *    values: 1,2,3,4 // multiple values
-      * }
+     *    values: 1,2,3,4 // multiple values
+     * }
+     *
+     * @param {Array} notFoundValues
+     * @private
      */
     _requestMissingOptions(notFoundValues) {
       if (!(notFoundValues instanceof Array && notFoundValues.length)) {
@@ -53,6 +58,11 @@
       }
     }
 
+    /**
+     * Handle missing option request response
+     * @param response
+     * @private
+     */
     _handleMissingOptionsReqResponse(response) {
       if (!(response.detail instanceof Array && response.detail.length)) {
         return;
@@ -64,8 +74,6 @@
           let responseOptions = this._prepareReceivedOptions(response.detail);
           this.set('options', [...options, ...responseOptions]);
 
-          // TODO: remove this console.log
-          console.log(typeof this._updateAfterMissingOptionsReceived);
           // TODO: find a way to not use _updateAfterMissingOptionsReceived defined in other element,
           // maybe a callback as param
           if (responseOptions.length && typeof this._updateAfterMissingOptionsReceived === 'function') {
@@ -85,11 +93,22 @@
       }
     }
 
+    /**
+     * Handle missing options request error
+     * @param errorResponse
+     * @private
+     */
     _handleMissingOptionsReqError(errorResponse) {
       // eslint-disable-next-line no-console
       console.error('[etools-esmm ' + this.label + '] Missing options request failed!', errorResponse.detail);
     }
 
+    /**
+     * Check if request missing option functionality can be used
+     * @param url
+     * @returns {boolean}
+     * @private
+     */
     _shouldRequestMissingOption(url) {
       if (typeof url === 'string' && url !== '') {
         return true;
@@ -97,10 +116,22 @@
       return false;
     }
 
+    /**
+     * Check if option received from missing options request is valid
+     * @param optionObj
+     * @returns {boolean|*}
+     * @private
+     */
     _isValidOption(optionObj) {
       return optionObj.constructor === Object && optionObj[this.optionValue] && optionObj[this.optionLabel];
     }
 
+    /**
+     * Prepare new received options to add them to the current options list
+     * @param receivedOptions
+     * @returns {*}
+     * @private
+     */
     _prepareReceivedOptions(receivedOptions) {
       if (this.options instanceof Array && this.options.length > 0) {
         let missingOptions = [];

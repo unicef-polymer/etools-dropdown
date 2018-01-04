@@ -96,9 +96,9 @@
     /**
      * `etools-dropdown`
      *
-     *
      * @customElement
      * @polymer
+     * @appliesMixin DropdownRequiredMixins
      * @demo demo/index.html
      */
     class EtoolsDropdown extends DropdownRequiredMixins {
@@ -108,19 +108,23 @@
 
       static get properties() {
         return {
+          /** Dropdown selected value `optionValue` prop of the selected option */
           selected: {
             type: Number,
             notify: true,
             observer: '_selectedChanged'
           },
+          /** Selected option object */
           selectedItem: {
             type: Object,
             value: null,
             notify: true
           },
+          /** Selected value not found in options */
           notFoundOption: {
             type: String
           },
+          /** Element title attribute */
           title: {
             type: String,
             reflectToAttribute: true,
@@ -208,6 +212,11 @@
         }
       }
 
+      /**
+       * Validate dropdown selection
+       * @param selected
+       * @returns {boolean}
+       */
       validate(selected) {
         if (!this.hasAttribute('required') || this.readonly) {
           this.set('invalid', false);

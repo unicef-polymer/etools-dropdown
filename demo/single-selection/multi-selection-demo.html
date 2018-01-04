@@ -2,6 +2,8 @@
 <link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../../paper-button/paper-button.html">
 
+<link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
+
 <link rel="import" href="../mixins/test-data-mixin.html">
 <link rel="import" href="../../etools-dropdown-multi.html">
 
@@ -17,19 +19,28 @@
       }
     </style>
 
-    <etools-dropdown-multi class="demo-field"
-                     label="Multi selection"
-                     options="[[simpleOptions]]"></etools-dropdown-multi>
+    <demo-snippet>
+      <template>
+        <etools-dropdown-multi class="demo-field"
+                         label="Multi selection"
+                         options="[[simpleOptions]]"></etools-dropdown-multi>
 
-    <etools-dropdown-multi class="demo-field"
-                     label="Multi selection, multi-lines options"
-                     options="[[twoLineOptions]]"
-                     two-lines-label></etools-dropdown-multi>
+        <etools-dropdown-multi class="demo-field"
+                         label="Multi selection, multi-lines options"
+                         options="[[twoLineOptions]]"
+                         two-lines-label></etools-dropdown-multi>
+      </template>
+    </demo-snippet>
 
   </template>
   <script>
     'use strict';
 
+    /**
+     * @customElement
+     * @polymer
+     * @appliesMixin EsmmDemoHelpers.TestData
+     */
     class EsmmMultiSelectionDemo extends EsmmDemoHelpers.TestData(Polymer.Element) {
 
       static get is() {

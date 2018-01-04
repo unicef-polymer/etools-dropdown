@@ -93,7 +93,8 @@
      *
      * @customElement
      * @polymer
-     * @demo demo/index.html
+     * @appliesMixin MultiDropdownRequiredMixins
+     * @demo demo/index-multi.html
      */
     class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       static get is() {
@@ -102,23 +103,28 @@
 
       static get properties() {
         return {
+          /** Dropdown selected values */
           selectedValues: {
             type: Array,
             notify: true
           },
+          /** Selected options objects */
           selectedItems: {
             type: Array,
             value: [],
             notify: true
           },
+          /** Array of not found values (in options list) */
           notFoundOptions: {
             type: Array,
             value: []
           },
+          /** Flag to trigger `etools-selected-items-changed` event */
           triggerValueChangeEvent: {
             type: Boolean,
             value: false
           },
+          /** Element title attribute */
           title: {
             type: String,
             computed: '_getElementTitle(selectedItems)',
@@ -136,6 +142,9 @@
         ];
       }
 
+      /**
+       * @private
+       */
       connectedCallback() {
         super.connectedCallback();
         this.addEventListener('remove-selected-item', this._removeSelectedItem.bind(this));
@@ -153,8 +162,12 @@
         }
       }
 
-      // Can't use paper-listbox's on-selected-items-changed event ,
-      // because paper-lisbox doesn't cover the case when selectedItems are not in the shownOptions values
+      /**
+       * Can't use paper-listbox's on-selected-items-changed event ,
+       * because paper-lisbox doesn't cover the case when selectedItems are not in the shownOptions values
+       *
+       * @param {Array} selectedValues
+       */
       _setSelectedItems(selectedValues) {
         this.notFoundOptions = null;
         if (typeof selectedValues === 'undefined') {
@@ -194,6 +207,9 @@
         );
       }
 
+      /**
+       * @event etools-selected-items-changed
+       */
       _fireChangeEvent() {
         this.fire('etools-selected-items-changed', {selectedItems: this.selectedItems});
       }
@@ -231,8 +247,10 @@
         }
       }
 
-      // This observer makes sure request for missing option is triggered only after the url is set also.
-      // notFoundOption is actually this.selected
+      /**
+       * This observer makes sure request for missing option is triggered only after the url is set also.
+       * notFoundOption is actually this.selected
+       */
       _notFoundOptionsAndUrlChanged(notFoundOptions, url) {
         if (this._isUndefined(notFoundOptions) || this._isUndefined(url)) {
           return;
@@ -273,6 +291,11 @@
         }
       }
 
+      /**
+       * Validate multi selection
+       * @param selectedValues
+       * @returns {boolean}
+       */
       validate(selectedValues) {
         if (!this.hasAttribute('required') || this.readonly) {
           this.set('invalid', false);
@@ -287,6 +310,10 @@
         return !invalid;
       }
 
+      /**
+       * @param e
+       * @private
+       */
       _openMultiMenu(e) {
         if (e) {
           if (this._clickedOnX(e)) {
@@ -296,7 +323,12 @@
         this._openMenu();
       }
 
-      // Clicked on x to remove selected item
+      /**
+       * Tap on x to remove selected item
+       * @param e
+       * @returns {boolean}
+       * @private
+       */
       _clickedOnX(e) {
         let rootTarget = Polymer.dom(e).rootTarget;
         return rootTarget.id === 'icon';
