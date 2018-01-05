@@ -1,0 +1,62 @@
+<link rel="import" href="../../../polymer/polymer-element.html">
+<link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
+
+<link rel="import" href="../mixins/test-data-mixin.html">
+<link rel="import" href="demo-actions.html">
+<link rel="import" href="../../etools-dropdown-multi.html">
+
+<dom-module id="esmm-multi-selection-demo">
+  <template>
+    <style>
+      .demo-field + .demo-field {
+        margin-left: 24px;
+      }
+      div {
+        display: inline-block;
+        width: 100%;
+      }
+    </style>
+    <div>
+      <etools-dropdown-multi id="dropDown1"
+                             class="demo-field"
+                             label="Multi selection"
+                             options="[[simpleOptions]]"></etools-dropdown-multi>
+    </div>
+    <div>
+      <etools-dropdown-multi id="dropDown2"
+                             class="demo-field"
+                             label="Multi selection, multi-lines options"
+                             options="[[twoLineOptions]]"
+                             two-lines-label></etools-dropdown-multi>
+    </div>
+
+    <esmm-demo-actions id="demoActions"></esmm-demo-actions>
+  </template>
+  <script>
+    'use strict';
+
+    /**
+     * @customElement
+     * @polymer
+     * @appliesMixin EsmmDemoHelpers.TestData
+     */
+    class EsmmMultiSelectionDemo extends EsmmDemoHelpers.TestData(Polymer.Element) {
+
+      static get is() {
+        return 'esmm-multi-selection-demo';
+      }
+
+      static get properties() {
+        return {};
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        this.$.demoActions.set('dropdownsIds', [this.$.dropDown1, this.$.dropDown2]);
+      }
+
+    }
+
+    window.customElements.define(EsmmMultiSelectionDemo.is, EsmmMultiSelectionDemo);
+  </script>
+</dom-module>

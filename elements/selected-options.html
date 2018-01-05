@@ -17,6 +17,10 @@
         display: none !important;
       }
 
+      :host {
+        width: 100%;
+      }
+
       iron-icon {
         @apply --esmm-icons;
       }
@@ -50,7 +54,7 @@
 
       .readonly-separator {
         display: inline-block;
-        padding: 0 5px;
+        padding: 0 5px 0 8px;
         margin: 0;
       }
 
@@ -62,14 +66,20 @@
         margin-top: -2px;
       }
 
+      .placeholder {
+        color: var(--esmm-multi-placeholder-color, rgba(0, 0, 0, 0.54));
+      }
+
     </style>
 
     <paper-input-container id="container"
+                           tabindex="1"
                            no-label-float="[[noLabelFloat]]"
-                           always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
+                           always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel, placeholder)]]"
                            auto-validate$="[[autoValidate]]"
                            disabled$="[[disabled]]"
-                           invalid="[[invalid]]">
+                           invalid="[[invalid]]"
+                           on-focused-changed="onFocusChanged">
 
       <label hidden$="[[!label]]" aria-hidden="true" for="input" slot="label">[[label]]</label>
 
@@ -90,7 +100,8 @@
                 [[_getLabel(item)]]
                 <span class="readonly-separator" hidden$=[[!readonly]]>|</span>
                 <paper-icon-button id="iconRemoveSelected"
-                                   hidden$="[[disabled]]"
+                                   disabled$="[[disabled]]"
+                                   hidden$="[[readonly]]"
                                    icon="close"
                                    on-tap="_removeItem"></paper-icon-button>
               </span>
@@ -100,7 +111,7 @@
         </div>
       </div>
 
-      <iron-icon icon="arrow-drop-down" slot="suffix"></iron-icon>
+      <iron-icon icon="arrow-drop-down" slot="suffix" hidden$="[[readonly]]"></iron-icon>
 
       <template is="dom-if" if="[[errorMessage]]">
         <paper-input-error aria-live="assertive" slot="add-on">[[errorMessage]]</paper-input-error>
@@ -130,7 +141,10 @@
           alwaysFloatLabel: Boolean,
           placeholder: String,
           autoValidate: Boolean,
-          readonly: Boolean,
+          readonly: {
+            type: Boolean,
+            reflectToAttribute: true
+          },
           disabled: Boolean,
           invalid: Boolean,
           errorMessage: String,
@@ -175,6 +189,11 @@
           bubbles: true,
           composed: true
         }));
+      }
+
+      onFocusChanged(e) {
+        console.log(e);
+        // TODO
       }
 
     }

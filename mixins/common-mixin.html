@@ -9,6 +9,7 @@
    * Common functionality for single selection and multiple selection dropdown
    * @polymer
    * @mixinFunction
+   * @appliesMixin EsmmMixins.ListItemUtils
    * @memberof EsmmMixins
    */
   EsmmMixins.CommonFunctionality = (superClass) => class extends EsmmMixins.ListItemUtils(superClass) {
@@ -71,7 +72,7 @@
         },
         search: {
           type: String,
-          observer: '_searchValueChanged'
+          // observer: '_searchValueChanged'
         },
         /** Array of objects, dropdowns options used to compute shownOptions */
         options: {
@@ -138,13 +139,12 @@
       };
     }
 
-    /**
-     * @private
-     */
     connectedCallback() {
       super.connectedCallback();
 
-      this.addEventListener('blur', this._closeMenu.bind(this));
+      this.addEventListener('blur', () => {
+        this._closeMenu();
+      });
 
       this._setFitInto();
       this._setPositionTarget();
@@ -434,20 +434,21 @@
     }
 
     /**
+     * TODO: this might not be needed anymore. To be removed
      * Sometimes the dropdown doesn't resize when search is changed and we need to force the resize
      */
-    _searchValueChanged(search, oldSearch) {
-      if (this._isUndefined(search) || (this._isUndefined(oldSearch) && search === '')) {
-        // prevent resizing at search property init
-        return;
-      }
-
-      // this.resetIronDropdownSize();
+//    _searchValueChanged(search, oldSearch) {
+//      if (this._isUndefined(search) || (this._isUndefined(oldSearch) && search === '')) {
+//        // prevent resizing at search property init
+//        return;
+//      }
+//
+//      this.resetIronDropdownSize();
 //      this.notifyDropdownResize();
 //      this.async(function() {
 //        this._resizeOptionsListHeight();
 //      });
-    }
+//    }
 
     notifyDropdownResize() {
       let ironDropdown = this._getIronDropdown();
@@ -457,9 +458,8 @@
     /**
      * On focus received from a previous element (filds navigation in form using Tab)
      * @param e
-     * @private
      */
-    _onInputFocus(e) {
+    onInputFocus(e) {
       if (!e.relatedTarget) {
         // no previous focused element, invalid form focus change action
         return;

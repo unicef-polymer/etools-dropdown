@@ -1,38 +1,35 @@
 <link rel="import" href="../../../polymer/polymer-element.html">
 <link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../../../paper-button/paper-button.html">
-
-<link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
 
 <link rel="import" href="../mixins/test-data-mixin.html">
+<link rel="import" href="demo-actions.html">
 <link rel="import" href="../../etools-dropdown.html">
 
 <dom-module id="esmm-single-selection-demo">
   <template>
     <style>
-      :host {
-        @apply --layout-horizontal;
-      }
-
       .demo-field + .demo-field {
         margin-left: 24px;
       }
     </style>
 
-    <demo-snippet>
-      <template>
-        <etools-dropdown class="demo-field"
-                         label="Single selection"
-                         options="[[simpleOptions]]"
-                         enable-none-option></etools-dropdown>
+    <div>
+      <etools-dropdown id="dropDown1"
+                       class="demo-field"
+                       label="Single selection"
+                       options="[[simpleOptions]]"
+                       enable-none-option></etools-dropdown>
+    </div>
+    <div>
+      <etools-dropdown id="dropDown2"
+                       class="demo-field"
+                       label="Single selection, multi-lines options"
+                       options="[[twoLineOptions]]"
+                       two-lines-label
+                       enable-none-option></etools-dropdown>
+    </div>
 
-        <etools-dropdown class="demo-field"
-                         label="Single selection, multi-lines options"
-                         options="[[twoLineOptions]]"
-                         two-lines-label
-                         enable-none-option></etools-dropdown>
-      </template>
-    </demo-snippet>
+    <esmm-demo-actions id="demoActions"></esmm-demo-actions>
 
   </template>
   <script>
@@ -51,6 +48,11 @@
 
       static get properties() {
         return {};
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        this.$.demoActions.set('dropdownsIds', [this.$.dropDown1, this.$.dropDown2]);
       }
 
     }

@@ -31,13 +31,12 @@
      * }
      *
      * @param {Array} notFoundValues
-     * @private
      */
-    _requestMissingOptions(notFoundValues) {
+    requestMissingOptions(notFoundValues) {
       if (!(notFoundValues instanceof Array && notFoundValues.length)) {
         return;
       }
-      if (!this._shouldRequestMissingOption(this.url)) {
+      if (!this.shouldRequestMissingOption(this.url)) {
         return;
       }
       let etoolsAjax = this.$.missingOptionsAjax;
@@ -61,17 +60,16 @@
     /**
      * Handle missing option request response
      * @param response
-     * @private
      */
-    _handleMissingOptionsReqResponse(response) {
+    handleMissingOptionsReqResponse(response) {
       if (!(response.detail instanceof Array && response.detail.length)) {
         return;
       }
       try {
-        if (this._isValidOption(response.detail[0])) {
+        if (this.isValidOption(response.detail[0])) {
           // assuming all objects from response array have same properties
           // we just need to make sure the first one is valid, no need to use a loop here
-          let responseOptions = this._prepareReceivedOptions(response.detail);
+          let responseOptions = this.prepareReceivedOptions(response.detail);
           this.set('options', [...options, ...responseOptions]);
 
           // TODO: find a way to not use _updateAfterMissingOptionsReceived defined in other element,
@@ -96,9 +94,8 @@
     /**
      * Handle missing options request error
      * @param errorResponse
-     * @private
      */
-    _handleMissingOptionsReqError(errorResponse) {
+    handleMissingOptionsReqError(errorResponse) {
       // eslint-disable-next-line no-console
       console.error('[etools-esmm ' + this.label + '] Missing options request failed!', errorResponse.detail);
     }
@@ -107,9 +104,8 @@
      * Check if request missing option functionality can be used
      * @param url
      * @returns {boolean}
-     * @private
      */
-    _shouldRequestMissingOption(url) {
+    shouldRequestMissingOption(url) {
       if (typeof url === 'string' && url !== '') {
         return true;
       }
@@ -120,9 +116,8 @@
      * Check if option received from missing options request is valid
      * @param optionObj
      * @returns {boolean|*}
-     * @private
      */
-    _isValidOption(optionObj) {
+    isValidOption(optionObj) {
       return optionObj.constructor === Object && optionObj[this.optionValue] && optionObj[this.optionLabel];
     }
 
@@ -130,9 +125,8 @@
      * Prepare new received options to add them to the current options list
      * @param receivedOptions
      * @returns {*}
-     * @private
      */
-    _prepareReceivedOptions(receivedOptions) {
+    prepareReceivedOptions(receivedOptions) {
       if (this.options instanceof Array && this.options.length > 0) {
         let missingOptions = [];
         let receivedOptionsValues = receivedOptions.map((receivedOption) => {

@@ -20,19 +20,14 @@
 <dom-module id="etools-dropdown-multi">
   <template>
     <style include="esmm-shared-styles">
-      :host {
-
-      }
-
     </style>
 
     <!--<etools-ajax id="missingOptionsAjax"-->
     <!--params="[[ajaxParams]]"-->
-    <!--on-success="_handleMissingOptionsReqResponse"-->
-    <!--on-fail="_handleMissingOptionsReqError"></etools-ajax>-->
+    <!--on-success="handleMissingOptionsReqResponse"-->
+    <!--on-fail="handleMissingOptionsReqError"></etools-ajax>-->
 
     <esmm-selected-options id="main"
-                           tabindex="1"
                            selected-items="[[selectedItems]]"
                            label="[[label]]"
                            placeholder="[[placeholder]]"
@@ -44,7 +39,7 @@
                            disabled="[[disabled]]"
                            invalid="[[invalid]]"
                            error-message="[[errorMessage]]"
-                           on-focus="_onInputFocus"
+                           on-focused-changed="onFocusChanged"
                            on-tap="_openMultiMenu"></esmm-selected-options>
 
     <iron-dropdown
@@ -83,6 +78,9 @@
     /**
      * @polymer
      * @mixinFunction
+     * @appliesMixin EsmmMixins.MissingOptions
+     * @appliesMixin EsmmMixins.CommonFunctionality
+     * @appliesMixin Polymer.GestureEventListeners
      */
     const MultiDropdownRequiredMixins = EsmmMixins.MissingOptions(EsmmMixins.CommonFunctionality(
         Polymer.GestureEventListeners(Polymer.Element)));
@@ -129,7 +127,12 @@
             type: String,
             computed: '_getElementTitle(selectedItems)',
             reflectToAttribute: true
-          }
+          },
+//          tabindex: {
+//            type: Number,
+//            value: 1,
+//            reflectToAttribute: true
+//          }
         };
       }
 
@@ -142,12 +145,14 @@
         ];
       }
 
-      /**
-       * @private
-       */
       connectedCallback() {
         super.connectedCallback();
+        // this.addEventListener('focus', this.onInputFocus.bind(this));
         this.addEventListener('remove-selected-item', this._removeSelectedItem.bind(this));
+      }
+
+      onFocusChanged(e) {
+        console.log(e);
       }
 
       _selectedValuesOrOptionsChanged(selectedValuesOrLength, options) {
@@ -235,7 +240,7 @@
         });
 
         if (this._noSelectedItems(selectedItems)) {
-          this.selectedValues = null;
+          this.selectedValues = [];
           this.set('selectedItems', []);
         } else {
           this.selectedValues = this._getValuesFromItems(selectedItems);
@@ -261,7 +266,7 @@
       }
 
       _handleSelectedNotFoundInOptions(notFoundSelectedValues) {
-        this._requestMissingOptions(notFoundSelectedValues);
+        this.requestMissingOptions(notFoundSelectedValues);
         // show console warning
         let warnMsg = '[etools-esmm ' + this.label + '] Selected value ';
         let notFoundValues = (notFoundSelectedValues instanceof Array ? notFoundSelectedValues.join(', ')

@@ -151,6 +151,7 @@
       }
 
       /**
+       * @event close-etools-dropdown
        * @param e
        * @private
        */
@@ -159,6 +160,10 @@
           e.stopImmediatePropagation();
           let selectedValue = e.model.item[this.optionValue];
           this.set('selected', selectedValue);
+          this.dispatchEvent(new CustomEvent('close-etools-dropdown', {
+            bubbles: true,
+            composed: true
+          }));
         }
       }
 
