@@ -39,8 +39,8 @@
                            disabled="[[disabled]]"
                            invalid="[[invalid]]"
                            error-message="[[errorMessage]]"
-                           on-focused-changed="onFocusChanged"
-                           on-tap="_openMultiMenu"></esmm-selected-options>
+                           on-focus="onInputFocus"
+                           on-tap="_openMenu"></esmm-selected-options>
 
     <iron-dropdown
         id="dropdownMenu"
@@ -49,7 +49,8 @@
         dynamic-align="[[dynamicAlign]]"
         on-iron-overlay-opened="_onDropdownOpen"
         on-iron-overlay-closed="_onDropdownClose"
-        disabled="[[_menuBtnIsDisabled(disabled, readonly)]]">
+        disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
+        no-cancel-on-outside-click>
 
       <paper-material id="ironDrContent" elevation="1" slot="dropdown-content">
         <esmm-searchbox-input id="searchbox"
@@ -127,12 +128,7 @@
             type: String,
             computed: '_getElementTitle(selectedItems)',
             reflectToAttribute: true
-          },
-//          tabindex: {
-//            type: Number,
-//            value: 1,
-//            reflectToAttribute: true
-//          }
+          }
         };
       }
 
@@ -147,12 +143,7 @@
 
       connectedCallback() {
         super.connectedCallback();
-        // this.addEventListener('focus', this.onInputFocus.bind(this));
         this.addEventListener('remove-selected-item', this._removeSelectedItem.bind(this));
-      }
-
-      onFocusChanged(e) {
-        console.log(e);
       }
 
       _selectedValuesOrOptionsChanged(selectedValuesOrLength, options) {
@@ -313,30 +304,6 @@
         let invalid = (!selectedValues || !selectedValues.length);
         this.set('invalid', invalid);
         return !invalid;
-      }
-
-      /**
-       * @param e
-       * @private
-       */
-      _openMultiMenu(e) {
-        if (e) {
-          if (this._clickedOnX(e)) {
-            return; // Do not open
-          }
-        }
-        this._openMenu();
-      }
-
-      /**
-       * Tap on x to remove selected item
-       * @param e
-       * @returns {boolean}
-       * @private
-       */
-      _clickedOnX(e) {
-        let rootTarget = Polymer.dom(e).rootTarget;
-        return rootTarget.id === 'icon';
       }
 
       _getValuesFromItems(selectedItems) {

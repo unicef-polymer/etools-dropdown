@@ -423,14 +423,26 @@
     }
 
     _openMenu() {
-      let dr = this.$.dropdownMenu;
+      let dr = this._getIronDropdown();
       if (!dr.opened) {
-        this.$.dropdownMenu.open();
+        dr.open();
       }
     }
 
-    _closeMenu() {
-      this.$.dropdownMenu.close();
+    _closeMenu(e) {
+      let dr = this._getIronDropdown();
+      dr.close();
+    }
+
+    /**
+     * On focus received from a previous element (filds navigation in form using Tab)
+     * @param e
+     */
+    onInputFocus(e) {
+      if (this.disableOnFocusHandling) {
+        return;
+      }
+      this._openMenu();
     }
 
     /**
@@ -453,21 +465,6 @@
     notifyDropdownResize() {
       let ironDropdown = this._getIronDropdown();
       ironDropdown.notifyResize();
-    }
-
-    /**
-     * On focus received from a previous element (filds navigation in form using Tab)
-     * @param e
-     */
-    onInputFocus(e) {
-      if (!e.relatedTarget) {
-        // no previous focused element, invalid form focus change action
-        return;
-      }
-      if (this.disableOnFocusHandling) {
-        return;
-      }
-      this._openMenu();
     }
 
     /**

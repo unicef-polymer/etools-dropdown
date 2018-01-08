@@ -1,5 +1,6 @@
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../../polymer/lib/utils/debounce.html">
 <link rel="import" href="../../polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="../../polymer/lib/elements/dom-if.html">
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
@@ -78,8 +79,7 @@
                            always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel, placeholder)]]"
                            auto-validate$="[[autoValidate]]"
                            disabled$="[[disabled]]"
-                           invalid="[[invalid]]"
-                           on-focused-changed="onFocusChanged">
+                           invalid="[[invalid]]">
 
       <label hidden$="[[!label]]" aria-hidden="true" for="input" slot="label">[[label]]</label>
 
@@ -103,7 +103,8 @@
                                    disabled$="[[disabled]]"
                                    hidden$="[[readonly]]"
                                    icon="close"
-                                   on-tap="_removeItem"></paper-icon-button>
+                                   on-tap="_removeItem"
+                                   on-focus="_onXFocus"></paper-icon-button>
               </span>
             </span>
           </template>
@@ -168,7 +169,7 @@
        * @private
        */
       _selectedItemsDisplayHasChanged(e) {
-        e.stopImmediatePropagation();
+        this._stopEvent(e);
         // hide/show placeholder
         if (this.selectedItems instanceof Array && this.selectedItems.length > 0) {
           this.set('_hidePlaceholder', true);
@@ -184,6 +185,7 @@
        */
       _removeItem(e) {
         // fire remove event to parent
+        this._stopEvent(e);
         this.dispatchEvent(new CustomEvent('remove-selected-item', {
           detail: e.model.item[this.optionValue],
           bubbles: true,
@@ -191,9 +193,17 @@
         }));
       }
 
-      onFocusChanged(e) {
-        console.log(e);
-        // TODO
+      /**
+       * @param e
+       * @private
+       */
+      _onXFocus(e) {
+        this._stopEvent(e);
+      }
+
+      _stopEvent(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
       }
 
     }
