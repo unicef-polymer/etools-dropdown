@@ -6,6 +6,7 @@
 <link rel="import" href="../neon-animation/web-animations.html">
 <link rel="import" href="../paper-input/paper-input.html">
 <link rel="import" href="../paper-material/paper-material.html">
+<link rel="import" href="../etools-behaviors/etools-logs-mixin.html">
 
 <link rel="import" href="scripts/es6-polyfills.html">
 
@@ -96,10 +97,11 @@
      * @mixinFunction
      * @appliesMixin EsmmMixins.MissingOptions
      * @appliesMixin EsmmMixins.CommonFunctionality
+     * @appliedMixin EtoolsLogsMixin
      * @appliesMixin Polymer.GestureEventListeners
      */
     const DropdownRequiredMixins = EsmmMixins.MissingOptions(EsmmMixins.CommonFunctionality(
-        Polymer.GestureEventListeners(Polymer.Element)));
+        EtoolsLogsMixin(Polymer.GestureEventListeners(Polymer.Element))));
 
     /**
      * `etools-dropdown`
@@ -196,12 +198,10 @@
 
       _handleSelectedNotFoundInOptions(selected) {
         this.requestMissingOptions([selected]);
-        // show console warning
-        let warnMsg = '[etools-esmm ' + this.label + '] Selected value ';
-
+        // show warning
+        let warnMsg = 'Selected value ';
         warnMsg += selected + ' not found in dropdown\'s options!';
-        // eslint-disable-next-line no-console
-        console.warn(warnMsg);
+        this.logWarn(warnMsg, 'etools-esmm ' + this.label, null, true);
       }
 
       _updateAfterMissingOptionsReceived(detail) {
