@@ -1,11 +1,13 @@
 <script>
   'use strict';
+  // @namespace EsmmDemoHelpers
   window.EsmmDemoHelpers = window.EsmmDemoHelpers || {};
 
   /*
    * Dropdown test dummy data
    * @polymer
    * @mixinFunction
+   * @memberof EsmmDemoHelpers
    */
   EsmmDemoHelpers.TestData = (superClass) => class extends superClass {
     static get properties() {
@@ -15,7 +17,7 @@
           value: function() {
             let opt = [];
             for(let i = 1; i <= 150; i++) {
-              opt.push({value: i, label: 'Option ' + i});
+              opt.push({value: i, label: 'option ' + i});
             }
             return opt;
           },

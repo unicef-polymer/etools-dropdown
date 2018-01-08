@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../polymer/lib/utils/debounce.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-dropdown/iron-dropdown.html">
 <link rel="import" href="../neon-animation/web-animations.html">
@@ -18,29 +19,27 @@
 <dom-module id="etools-dropdown">
   <template>
     <style include="esmm-shared-styles">
-      :host {
-        --paper-input-suffix: {
-          display: block;
-          width: 24px;
-          height: 24px;
-        };
 
+      :host {
         --paper-input-container-input: {
-          cursor: pointer;
+          cursor: var(--esmm-select-cursor);
         }
       }
 
-      :host([capitalize-input-shown]) .paper-input-input,
-      :host([capitalize-options]) paper-listbox paper-item {
-        text-transform: capitalize;
+      #main {
+        width: 100%;
+      }
+
+      #main iron-icon {
+        @apply --esmm-icons;
       }
 
     </style>
 
     <!--<etools-ajax id="missingOptionsAjax"-->
     <!--params="[[ajaxParams]]"-->
-    <!--on-success="_handleMissingOptionsReqResponse"-->
-    <!--on-fail="_handleMissingOptionsReqError"></etools-ajax>-->
+    <!--on-success="handleMissingOptionsReqResponse"-->
+    <!--on-fail="handleMissingOptionsReqError"></etools-ajax>-->
 
     <paper-input id="main"
                  label="[[label]]"
@@ -48,15 +47,13 @@
                  always-float-label="[[alwaysFloatLabel]]"
                  no-label-float="[[noLabelFloat]]"
                  value="[[_getLabel(selectedItem)]]"
-                 disabled$="[[disabled]]"
-                 invalid$="[[invalid]]"
-                 required="[[required]]"
-                 auto-validate="[[autoValidate]]"
+                 disabled="[[disabled]]"
+                 invalid="[[invalid]]"
                  error-message="[[errorMessage]]"
                  readonly
-                 on-focus="_onInputFocus"
+                 on-focus="onInputFocus"
                  on-tap="_openMenu">
-      <iron-icon icon="arrow-drop-down" slot="suffix"></iron-icon>
+      <iron-icon icon="arrow-drop-down" slot="suffix" hidden$="[[readonly]]"></iron-icon>
     </paper-input>
 
     <iron-dropdown
@@ -66,7 +63,8 @@
         dynamic-align="[[dynamicAlign]]"
         on-iron-overlay-opened="_onDropdownOpen"
         on-iron-overlay-closed="_onDropdownClose"
-        disabled="[[_menuBtnIsDisabled(disabled, readonly)]]">
+        disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
+        no-cancel-on-outside-click>
 
       <paper-material id="ironDrContent" elevation="1" slot="dropdown-content">
         <esmm-searchbox-input id="searchbox"
@@ -81,7 +79,10 @@
                            option-label="[[optionLabel]]"
                            show-no-search-results-warning="[[showNoSearchResultsWarning]]"
                            show-limit-warning="[[showLimitWarning]]"
-                           no-options-available="[[noOptionsAvailable]]"></esmm-options-list>
+                           no-options-available="[[noOptionsAvailable]]"
+                           none-option-label="[[noneOptionLabel]]"
+                           capitalize="[[capitalize]]"
+                           on-close-etools-dropdown="_closeMenu"></esmm-options-list>
       </paper-material>
 
     </iron-dropdown>
@@ -93,6 +94,9 @@
     /**
      * @polymer
      * @mixinFunction
+     * @appliesMixin EsmmMixins.MissingOptions
+     * @appliesMixin EsmmMixins.CommonFunctionality
+     * @appliesMixin Polymer.GestureEventListeners
      */
     const DropdownRequiredMixins = EsmmMixins.MissingOptions(EsmmMixins.CommonFunctionality(
         Polymer.GestureEventListeners(Polymer.Element)));
@@ -100,9 +104,9 @@
     /**
      * `etools-dropdown`
      *
-     *
      * @customElement
      * @polymer
+     * @appliesMixin DropdownRequiredMixins
      * @demo demo/index.html
      */
     class EtoolsDropdown extends DropdownRequiredMixins {
@@ -112,19 +116,23 @@
 
       static get properties() {
         return {
+          /** Dropdown selected value `optionValue` prop of the selected option */
           selected: {
             type: Number,
             notify: true,
             observer: '_selectedChanged'
           },
+          /** Selected option object */
           selectedItem: {
             type: Object,
             value: null,
             notify: true
           },
+          /** Selected value not found in options */
           notFoundOption: {
             type: String
           },
+          /** Element title attribute */
           title: {
             type: String,
             reflectToAttribute: true,
@@ -187,7 +195,7 @@
       }
 
       _handleSelectedNotFoundInOptions(selected) {
-        this._requestMissingOptions([selected]);
+        this.requestMissingOptions([selected]);
         // show console warning
         let warnMsg = '[etools-esmm ' + this.label + '] Selected value ';
 
@@ -212,6 +220,11 @@
         }
       }
 
+      /**
+       * Validate dropdown selection
+       * @param selected
+       * @returns {boolean}
+       */
       validate(selected) {
         if (!this.hasAttribute('required') || this.readonly) {
           this.set('invalid', false);

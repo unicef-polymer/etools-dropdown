@@ -1,12 +1,12 @@
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../../polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../polymer/lib/elements/dom-if.html">
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../paper-listbox/paper-listbox.html">
 <link rel="import" href="../../paper-item/paper-item.html">
 <link rel="import" href="../../paper-item/paper-icon-item.html">
 <link rel="import" href="../../paper-item/paper-item-body.html">
-<link rel="import" href="../../polymer/lib/elements/dom-repeat.html">
-<link rel="import" href="../../polymer/lib/elements/dom-if.html">
 
 <link rel="import" href="../mixins/list-item-utils-mixin.html">
 
@@ -28,7 +28,7 @@
       }
 
       paper-icon-item {
-        cursor: pointer;
+        cursor: var(--esmm-select-cursor);
       }
 
       :host([two-lines-label]) paper-icon-item {
@@ -57,10 +57,16 @@
         padding-top: 8px;
         padding-bottom: 8px;
       }
+
+      paper-icon-item.esmm-none-option {
+        color: rgba(0, 0, 0, 0.38);
+      }
     </style>
 
-    <paper-listbox attr-for-selected="internal-id"
-                   selected=[[selected]]>
+    <paper-listbox multi="[[multi]]"
+                   attr-for-selected="internal-id"
+                   selected=[[selected]]
+                   selected-values={{selectedValues}}>
       <template is="dom-repeat" items="[[shownOptions]]">
         <paper-icon-item
             item=[[item]]
@@ -104,7 +110,11 @@
   </template>
   <script>
     'use strict';
-
+    /**
+     * @customElement
+     * @polymer
+     * @appliesMixin EsmmMixins.ListItemUtils
+     */
     class EsmmOptionsList extends EsmmMixins.ListItemUtils(Polymer.GestureEventListeners(Polymer.Element)) {
 
       static get is() {
@@ -113,31 +123,91 @@
 
       static get properties() {
         return {
+          /** Multi selection flag. If true `selectedValues` array will be used instead `selected` */
+          multi: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+          /** paper-listbox selected value is `multi` is false */
           selected: {
             type: String,
             notify: true
           },
+          /** paper-listbox selected values is `multi` is true */
+          selectedValues: {
+            type: Array,
+            notify: true
+          },
+          /** Array of options to be shown in dropdown */
           shownOptions: Array,
+          /** Flag used to show no search result found warning */
           showNoSearchResultsWarning: Boolean,
+          /** Flag to show the limit of options shown in dropdown */
           showLimitWarning: Boolean,
+          /** Flag to show a no options avaliable warning */
           noOptionsAvailable: Boolean
         };
       }
 
+      /**
+       * @event close-etools-dropdown
+       * @param e
+       * @private
+       */
       _itemSelected(e) {
-        e.stopImmediatePropagation();
-        let selectedValue = e.model.item[this.optionValue];
-        console.log(e, selectedValue);
-        this.set('selected', selectedValue);
+        if (!this.multi) {
+          e.stopImmediatePropagation();
+          let selectedValue = e.model.item[this.optionValue];
+          this.set('selected', selectedValue);
+          this.dispatchEvent(new CustomEvent('close-etools-dropdown', {
+            bubbles: true,
+            composed: true
+          }));
+        }
       }
 
+      /**
+       *
+       * @param item
+       * @returns {*}
+       * @private
+       */
       _getItemTitle(item) {
         return item[this.optionLabel];
       }
 
-      // Use of this method covers a corner case
+      /**
+       * Use of this method covers a corner case
+       * @param item
+       * @returns {*}
+       * @private
+       */
       _getSelectedClass(item) {
-        return ''; //(this.selected === item[this.optionValue]) ? 'iron-selected' : '';
+        return !this.multi ? this._getSelectedClassSingle(item) : this._getSelectedClassMulti(item);
+      }
+
+      /**
+       * Return `iron-selected` CSS class if needed
+       * @param item
+       * @returns {string}
+       * @private
+       */
+      _getSelectedClassSingle(item) {
+        return (this.selected === item[this.optionValue]) ? 'iron-selected' : '';
+      }
+
+      /**
+       * Return `iron-selected` CSS class if needed for multi selection dropdown
+       * @param item
+       * @returns {*}
+       * @private
+       */
+      _getSelectedClassMulti(item) {
+        if (this.selectedValues instanceof Array && this.selectedValues.length > 0) {
+          return this.selectedValues.indexOf(item[this.optionValue].toString()) > -1 ? 'iron-selected' : '';
+        }
+        return '';
       }
 
     }

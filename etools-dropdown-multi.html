@@ -1,63 +1,46 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../polymer/lib/utils/debounce.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-dropdown/iron-dropdown.html">
 <link rel="import" href="../neon-animation/web-animations.html">
-<link rel="import" href="../paper-input/paper-input.html">
 <link rel="import" href="../paper-material/paper-material.html">
 
 <link rel="import" href="scripts/es6-polyfills.html">
 
 <link rel="import" href="mixins/common-mixin.html">
 <link rel="import" href="mixins/missing-options-mixin.html">
+
+<link rel="import" href="elements/selected-options.html">
 <link rel="import" href="elements/searchbox-input.html">
 <link rel="import" href="elements/options-list.html">
 
 <link rel="import" href="styles/esmm-shared-styles.html">
 
-<dom-module id="etools-dropdown">
+<dom-module id="etools-dropdown-multi">
   <template>
     <style include="esmm-shared-styles">
-      :host {
-        --paper-input-suffix: {
-          display: block;
-          width: 24px;
-          height: 24px;
-        };
-
-        --paper-input-container-input: {
-          cursor: pointer;
-        }
-      }
-
-      :host([capitalize-input-shown]) .paper-input-input,
-      :host([capitalize-options]) paper-listbox paper-item {
-        text-transform: capitalize;
-      }
-
     </style>
 
     <!--<etools-ajax id="missingOptionsAjax"-->
     <!--params="[[ajaxParams]]"-->
-    <!--on-success="_handleMissingOptionsReqResponse"-->
-    <!--on-fail="_handleMissingOptionsReqError"></etools-ajax>-->
+    <!--on-success="handleMissingOptionsReqResponse"-->
+    <!--on-fail="handleMissingOptionsReqError"></etools-ajax>-->
 
-    <paper-input id="main"
-                 label="[[label]]"
-                 placeholder="[[placeholder]]"
-                 always-float-label="[[alwaysFloatLabel]]"
-                 no-label-float="[[noLabelFloat]]"
-                 value="[[_getLabel(selectedItem)]]"
-                 disabled$="[[disabled]]"
-                 invalid$="[[invalid]]"
-                 required="[[required]]"
-                 auto-validate="[[autoValidate]]"
-                 error-message="[[errorMessage]]"
-                 readonly
-                 on-focus="_onInputFocus"
-                 on-tap="_openMenu">
-      <iron-icon icon="arrow-drop-down" slot="suffix"></iron-icon>
-    </paper-input>
+    <esmm-selected-options id="main"
+                           selected-items="[[selectedItems]]"
+                           label="[[label]]"
+                           placeholder="[[placeholder]]"
+                           always-float-label="[[alwaysFloatLabel]]"
+                           no-label-float="[[noLabelFloat]]"
+                           two-lines-label="[[twoLinesLabel]]"
+                           capitalize="[[capitalize]]"
+                           readonly="[[readonly]]"
+                           disabled="[[disabled]]"
+                           invalid="[[invalid]]"
+                           error-message="[[errorMessage]]"
+                           on-focus="onInputFocus"
+                           on-tap="_openMenu"></esmm-selected-options>
 
     <iron-dropdown
         id="dropdownMenu"
@@ -66,7 +49,8 @@
         dynamic-align="[[dynamicAlign]]"
         on-iron-overlay-opened="_onDropdownOpen"
         on-iron-overlay-closed="_onDropdownClose"
-        disabled="[[_menuBtnIsDisabled(disabled, readonly)]]">
+        disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
+        no-cancel-on-outside-click>
 
       <paper-material id="ironDrContent" elevation="1" slot="dropdown-content">
         <esmm-searchbox-input id="searchbox"
@@ -75,13 +59,15 @@
 
         <esmm-options-list id="optionsList"
                            shown-options="[[shownOptions]]"
-                           selected={{selected}}
+                           multi
+                           selected-values={{selectedValues}}
                            two-lines-label="[[twoLinesLabel]]"
                            option-value="[[optionValue]]"
                            option-label="[[optionLabel]]"
                            show-no-search-results-warning="[[showNoSearchResultsWarning]]"
                            show-limit-warning="[[showLimitWarning]]"
-                           no-options-available="[[noOptionsAvailable]]"></esmm-options-list>
+                           no-options-available="[[noOptionsAvailable]]"
+                           capitalize="[[capitalize]]"></esmm-options-list>
       </paper-material>
 
     </iron-dropdown>
@@ -93,146 +79,274 @@
     /**
      * @polymer
      * @mixinFunction
+     * @appliesMixin EsmmMixins.MissingOptions
+     * @appliesMixin EsmmMixins.CommonFunctionality
+     * @appliesMixin Polymer.GestureEventListeners
      */
-    const DropdownRequiredMixins = EsmmMixins.MissingOptions(EsmmMixins.CommonFunctionality(
+    const MultiDropdownRequiredMixins = EsmmMixins.MissingOptions(EsmmMixins.CommonFunctionality(
         Polymer.GestureEventListeners(Polymer.Element)));
 
     /**
-     * `etools-dropdown`
+     * `etools-dropdown-multi`
      *
      *
      * @customElement
      * @polymer
-     * @demo demo/index.html
+     * @appliesMixin MultiDropdownRequiredMixins
+     * @demo demo/index-multi.html
      */
-    class EtoolsDropdown extends DropdownRequiredMixins {
+    class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       static get is() {
-        return 'etools-dropdown';
+        return 'etools-dropdown-multi';
       }
 
       static get properties() {
         return {
-          selected: {
-            type: Number,
-            notify: true,
-            observer: '_selectedChanged'
-          },
-          selectedItem: {
-            type: Object,
-            value: null,
+          /** Dropdown selected values */
+          selectedValues: {
+            type: Array,
             notify: true
           },
-          notFoundOption: {
-            type: String
+          /** Selected options objects */
+          selectedItems: {
+            type: Array,
+            value: [],
+            notify: true
           },
+          /** Array of not found values (in options list) */
+          notFoundOptions: {
+            type: Array,
+            value: []
+          },
+          /** Flag to trigger `etools-selected-items-changed` event */
+          triggerValueChangeEvent: {
+            type: Boolean,
+            value: false
+          },
+          /** Element title attribute */
           title: {
             type: String,
-            reflectToAttribute: true,
-            computed: '_getLabel(selectedItem)'
+            computed: '_getElementTitle(selectedItems)',
+            reflectToAttribute: true
           }
         };
       }
 
       static get observers() {
         return [
-          '_selectedAndOptionsChanged(selected, options)',
-          '_notFoundOptionAndUrlChanged(notFoundOption, url)'
+          '_selectedValuesOrOptionsChanged(selectedValues, options)',
+          '_selectedValuesOrOptionsChanged(selectedValues.length, options)',
+          '_notFoundOptionsAndUrlChanged(notFoundOptions, url)',
+          '_selectedItemsChanged(selectedItems, selectedItems.length)'
         ];
       }
 
-      _selectedAndOptionsChanged(selected, options) {
-        this._setSelectedItem();
+      connectedCallback() {
+        super.connectedCallback();
+        this.addEventListener('remove-selected-item', this._removeSelectedItem.bind(this));
       }
 
-      _setSelectedItem(selected, selectedItem) {
-        this.set('notFoundOption', null);
-        if (selectedItem) {
-          this.set('selectedItem', selectedItem);
+      _selectedValuesOrOptionsChanged(selectedValuesOrLength, options) {
+        if (this._isUndefined(selectedValuesOrLength) || this._isUndefined(options)) {
+          return;
+        }
+        this._selectedValuesToString();
+        this._setSelectedItems(this.selectedValues);
+
+        if (this.autoValidate && this.selectedValues !== undefined) {
+          this.validate(this.selectedValues);
+        }
+      }
+
+      /**
+       * Can't use paper-listbox's on-selected-items-changed event ,
+       * because paper-lisbox doesn't cover the case when selectedItems are not in the shownOptions values
+       *
+       * @param {Array} selectedValues
+       */
+      _setSelectedItems(selectedValues) {
+        this.notFoundOptions = null;
+        if (typeof selectedValues === 'undefined') {
+          selectedValues = this.selectedValues;
+        }
+        if (this._noSelectedValues(selectedValues) && this._noOptions()) {
+          this.set('selectedItems', []);
+          return;
+        }
+        if (!this._noSelectedValues(selectedValues) && this._noOptions()) {
+          this._setAnyNotFoundOptions(this.selectedItems, selectedValues);
+          return;
+        }
+        let selectedItems = this.options.filter((item) => {
+          return (selectedValues instanceof Array)
+              ? selectedValues.includes(item[this.optionValue].toString())
+              : false;
+        });
+
+        this._setAnyNotFoundOptions(selectedItems, selectedValues);
+        this.set('selectedItems', selectedItems);
+      }
+
+      _selectedItemsChanged(selectedItems) {
+        if (this._isUndefined(selectedItems)) {
+          return;
+        }
+        // trigger items change event check
+        if (!this.triggerValueChangeEvent) {
           return;
         }
 
-        selected = selected || this.selected;
+        this._debouncer = Polymer.Debouncer.debounce(
+            this._debouncer,
+            Polymer.Async.timeOut.after(10),
+            () => { this._fireChangeEvent(); }
+        );
+      }
 
-        if (!selected && this._noOptions()) {
-          this.set('selectedItem', null);
-          return;
+      /**
+       * @event etools-selected-items-changed
+       */
+      _fireChangeEvent() {
+        this.fire('etools-selected-items-changed', {selectedItems: this.selectedItems});
+      }
+
+      _setAnyNotFoundOptions(selectedItems, selectedValues) {
+        // prevent using non array variables
+        selectedItems = (selectedItems instanceof Array) ? selectedItems : [];
+        selectedValues = (selectedValues instanceof Array) ? selectedValues : [];
+        if (this._noSelectedItems(selectedItems)) {
+          this.notFoundOptions = selectedValues;
+        } else if (selectedItems.length < selectedValues.length) {
+          let selectedItemsValues = this._getValuesFromItems(selectedItems);
+          this.notFoundOptions = selectedValues.filter((value) => {
+            return !selectedItemsValues.includes(value);
+          });
         }
+      }
 
-        if (selected && this._noOptions()) {
-          this.set('notFoundOption', this.selected);
-          this.set('selectedItem', null);
-          return;
-        }
+      _removeSelectedItem(e) {
+        // Compute selectedItems without the removed item
+        let selectedItems = this.selectedItems.filter((item) => {
+          return item[this.optionValue] !== e.detail;
+        });
 
-        selectedItem = this._getItemFromOptions(selected);
-        if (!selectedItem) {
-          this.set('notFoundOption', this.selected);
-          this.set('selectedItem', null);
+        if (this._noSelectedItems(selectedItems)) {
+          this.selectedValues = [];
+          this.set('selectedItems', []);
         } else {
-          this.set('selectedItem', selectedItem);
+          this.selectedValues = this._getValuesFromItems(selectedItems);
+          this.set('selectedItems', selectedItems);
+        }
+
+        if (this.autoValidate) {
+          this.validate(this.selectedValues);
         }
       }
 
-      _getItemFromOptions(value) {
-        if (this._noOptions()) {
-          return null;
+      /**
+       * This observer makes sure request for missing option is triggered only after the url is set also.
+       * notFoundOption is actually this.selected
+       */
+      _notFoundOptionsAndUrlChanged(notFoundOptions, url) {
+        if (this._isUndefined(notFoundOptions) || this._isUndefined(url)) {
+          return;
         }
-        return this.options.find((item) => item[this.optionValue] == value);
+        if (this.notFoundOptions) {
+          this._handleSelectedNotFoundInOptions(this.notFoundOptions);
+        }
       }
 
-      _notFoundOptionAndUrlChanged(notFoundOption, url) {
-        if (this.notFoundOption) {
-          this._handleSelectedNotFoundInOptions(this.notFoundOption);
-        }
-      }
-
-      _handleSelectedNotFoundInOptions(selected) {
-        this._requestMissingOptions([selected]);
+      _handleSelectedNotFoundInOptions(notFoundSelectedValues) {
+        this.requestMissingOptions(notFoundSelectedValues);
         // show console warning
         let warnMsg = '[etools-esmm ' + this.label + '] Selected value ';
-
-        warnMsg += selected + ' not found in dropdown\'s options!';
+        let notFoundValues = (notFoundSelectedValues instanceof Array ? notFoundSelectedValues.join(', ')
+            : notFoundSelectedValues);
+        warnMsg += notFoundValues + ' not found in dropdown\'s options!';
         // eslint-disable-next-line no-console
         console.warn(warnMsg);
       }
 
       _updateAfterMissingOptionsReceived(detail) {
-        let selectedItem;
+        let selectedItems;
         if (Array.isArray(detail) && detail.length) {
-          selectedItem = detail[0];
+          selectedItems = detail;
         } else {
-          selectedItem = detail;
+          selectedItems = [detail];
         }
-        this._setSelectedItem(this.selected, selectedItem);
+        if (this.selectedItems) {
+          this.set('selectedItems', [...this.selectedItems, ...selectedItems]);
+        } else {
+          this.set('selectedItems', selectedItems);
+        }
       }
 
       _onDropdownClose() {
         if (this.autoValidate) {
-          this.validate(this.selected);
+          this.validate(this.selectedValues);
         }
       }
 
-      validate(selected) {
+      /**
+       * Validate multi selection
+       * @param selectedValues
+       * @returns {boolean}
+       */
+      validate(selectedValues) {
         if (!this.hasAttribute('required') || this.readonly) {
           this.set('invalid', false);
           return true;
         }
-        selected = selected || this.selected;
-        this.set('invalid', !selected);
-        return !!selected;
+
+        if (typeof selectedValues === 'undefined') {
+          selectedValues = this.selectedValues;
+        }
+        let invalid = (!selectedValues || !selectedValues.length);
+        this.set('invalid', invalid);
+        return !invalid;
       }
 
-      _selectedChanged(selected) {
-        if (this.autoValidate) {
-          this.validate(selected);
+      _getValuesFromItems(selectedItems) {
+        return (selectedItems && selectedItems.length > 0) ? selectedItems.map((item) => {
+          return item[this.optionValue].toString();
+        }) : null;
+      }
+
+      _noSelectedValues(selectedValues) {
+        if (typeof selectedValues === 'undefined') {
+          selectedValues = this.selectedValues;
         }
-        if (!selected) {
-          this.set('selectedItem', null);
+        return !selectedValues || !selectedValues.length;
+      }
+
+      _noSelectedItems(selectedItems) {
+        if (typeof selectedItems === 'undefined') {
+          selectedItems = this.selectedItems;
         }
+        return !selectedItems || !selectedItems.length;
+      }
+
+      _selectedValuesToString() {
+        if (this._noSelectedValues(this.selectedValues)) {
+          return;
+        }
+        this.selectedValues.forEach((value, index) => {
+          if (typeof value !== 'string') {
+            this.selectedValues[index] = value.toString();
+          }
+        });
+      }
+
+      _getElementTitle(selectedItems) {
+        let labels = selectedItems.map((item) => {
+          return this._getLabel(item);
+        });
+
+        return labels.join(' | ');
       }
 
     }
 
-    window.customElements.define(EtoolsDropdown.is, EtoolsDropdown);
+    window.customElements.define(EtoolsDropdownMulti.is, EtoolsDropdownMulti);
   </script>
 </dom-module>

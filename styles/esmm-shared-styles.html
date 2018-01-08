@@ -1,5 +1,22 @@
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+
+<custom-style>
+  <style>
+    /* esmm global styles */
+    html {
+
+      --esmm-icons: {
+        color: var(--secondary-text-color);
+        cursor: pointer;
+      };
+
+      --esmm-select-cursor: pointer;
+
+    }
+  </style>
+</custom-style>
+
 <dom-module id="esmm-shared-styles">
   <template>
     <style>
@@ -7,9 +24,13 @@
         display: none !important;
       }
 
-      #main iron-icon {
-        color: var(--secondary-text-color);
-        cursor: pointer;
+      :host {
+        @apply --layout-horizontal;
+        min-width: 242px;
+      }
+
+      :host(:not([readonly])), :host(:not([disabled])) {
+        cursor: var(--esmm-select-cursor);
       }
 
       #ironDrContent {

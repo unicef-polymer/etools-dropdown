@@ -1,17 +1,22 @@
 <link rel="import" href="list-item-utils-mixin.html">
 <script>
   'use strict';
+
+  // @namespace EsmmMixins
   window.EsmmMixins = window.EsmmMixins || {};
 
   /*
    * Common functionality for single selection and multiple selection dropdown
    * @polymer
    * @mixinFunction
+   * @appliesMixin EsmmMixins.ListItemUtils
+   * @memberof EsmmMixins
    */
   EsmmMixins.CommonFunctionality = (superClass) => class extends EsmmMixins.ListItemUtils(superClass) {
 
     static get properties() {
       return {
+        /** Dropdown label */
         label: {
           type: String
         },
@@ -56,24 +61,32 @@
           },
           reflectToAttribute: true
         },
+        /** Makes the dropdown to show top or bottom where it will fit better */
         dynamicAlign: {
           type: Boolean,
           value: true
         },
+        /** Allows scroll outside opened dropdown */
         allowOutsideScroll: {
           type: Boolean
         },
         search: {
           type: String,
-          observer: '_searchValueChanged'
+          // observer: '_searchValueChanged'
         },
+        /** Array of objects, dropdowns options used to compute shownOptions */
         options: {
           type: Array
         },
+        /** Options seen by user */
         shownOptions: {
           type: Array,
           computed: '_computeShownOptions(options, search, enableNoneOption, options.length)'
         },
+        /**
+         * Flag to show `None` option (first dropdown option)
+         * Used to reset single selection dropdown selected value
+         */
         enableNoneOption: {
           type: Boolean,
           value: false
@@ -82,25 +95,30 @@
           type: Boolean,
           value: false
         },
+        /** Limit displayed options */
         shownOptionsLimit: {
           type: Number,
           value: 50
         },
+        /** Flag to show a no options avaliable warning */
         noOptionsAvailable: {
           type: Boolean,
           value: true,
           computed: '_computeNoOptionsAvailable(options, options.length)'
         },
+        /** Flag to show the limit of options shown in dropdown */
         showLimitWarning: {
           type: Boolean,
           value: false,
           computed: '_computeShowLimitWarning(shownOptionsLimit, shownOptions)'
         },
+        /** Flag used to show no search result found warning */
         showNoSearchResultsWarning: {
           type: Boolean,
           value: false,
           computed: '_showNoSearchResultsWarning(noOptionsAvailable, shownOptions.length, options.length)'
         },
+        /** Stop autofocus from paper-dialog */
         disableOnFocusHandling: {
           type: Boolean,
           value: function() {
@@ -108,7 +126,12 @@
           },
           reflectToAttribute: true
         },
-        fitInto: Object, // element that will prevent dropdown to overflow outside it's margins
+        /**
+         * Element that will prevent dropdown to overflow outside it's margins
+         * @type HTMLElement
+         */
+        fitInto: Object,
+        /** Margin added if dropdown bottom is too close to the viewport bottom margin */
         viewportEdgeMargin: {
           type: Number,
           value: 20
@@ -119,7 +142,9 @@
     connectedCallback() {
       super.connectedCallback();
 
-//      this.addEventListener('blur', this._closeMenu.bind(this));
+      this.addEventListener('blur', () => {
+        this._closeMenu();
+      });
 
       this._setFitInto();
       this._setPositionTarget();
@@ -141,6 +166,9 @@
       }
     }
 
+    /**
+     * Reset dropdown size on close
+     */
     _setResetSizeHandler() {
       let ironDropdown = this._getIronDropdown();
       ironDropdown.addEventListener('iron-overlay-closed', this.resetIronDropdownSize.bind(this));
@@ -205,6 +233,9 @@
       this._attributeRepaintNeeded(newValue, oldValue);
     }
 
+    /**
+     * Force styles update
+     */
     _attributeRepaintNeeded(newValue, oldValue) {
       if (newValue !== undefined && newValue !== oldValue) {
         this.updateStyles();
@@ -226,9 +257,9 @@
       }
 
       if (enableNoneOption) {
-        let emptyOption = {cssClass: 'emptyValue'};
+        let emptyOption = {cssClass: 'esmm-none-option'};
         emptyOption[this.optionValue] = null;
-        emptyOption[this.optionLabel] = '-- None --';
+        emptyOption[this.optionLabel] = this.noneOptionLabel;
         shownOptions.unshift(emptyOption);
       }
       return shownOptions;
@@ -392,48 +423,54 @@
     }
 
     _openMenu() {
-      let dr = this.$.dropdownMenu;
+      let dr = this._getIronDropdown();
       if (!dr.opened) {
-        this.$.dropdownMenu.open();
+        dr.open();
       }
     }
 
-    _closeMenu() {
-      this.$.dropdownMenu.close();
+    _closeMenu(e) {
+      let dr = this._getIronDropdown();
+      dr.close();
     }
 
     /**
-     * Sometimes the dropdown doesn't resize when search is changed and we need to force the resize
+     * On focus received from a previous element (filds navigation in form using Tab)
+     * @param e
      */
-    _searchValueChanged(search, oldSearch) {
-      if (this._isUndefined(search) || (this._isUndefined(oldSearch) && search === '')) {
-        // prevent resizing at search property init
-        return;
-      }
-
-      // this.resetIronDropdownSize();
-//      this.notifyDropdownResize();
-//      this.async(function() {
-//        this._resizeOptionsListHeight();
-//      });
-    }
-
-    notifyDropdownResize() {
-      let ironDropdown = this._getIronDropdown();
-      ironDropdown.notifyResize();
-    }
-
-    _onInputFocus(e) {
-      if (!e.relatedTarget) {
-        // no previous focused element, invalid form focus change action
-        return;
-      }
+    onInputFocus(e) {
       if (this.disableOnFocusHandling) {
         return;
       }
       this._openMenu();
     }
 
+    /**
+     * TODO: this might not be needed anymore. To be removed
+     * Sometimes the dropdown doesn't resize when search is changed and we need to force the resize
+     */
+//    _searchValueChanged(search, oldSearch) {
+//      if (this._isUndefined(search) || (this._isUndefined(oldSearch) && search === '')) {
+//        // prevent resizing at search property init
+//        return;
+//      }
+//
+//      this.resetIronDropdownSize();
+//      this.notifyDropdownResize();
+//      this.async(function() {
+//        this._resizeOptionsListHeight();
+//      });
+//    }
+
+    notifyDropdownResize() {
+      let ironDropdown = this._getIronDropdown();
+      ironDropdown.notifyResize();
+    }
+
+    /**
+     * Checks for IE11 browser :)
+     * @returns {boolean}
+     */
     isIEBrowser() {
       let userAgent = window.navigator.userAgent;
       return userAgent.indexOf('Trident/') > -1;
