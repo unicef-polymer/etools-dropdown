@@ -63,7 +63,8 @@
         dynamic-align="[[dynamicAlign]]"
         on-iron-overlay-opened="_onDropdownOpen"
         on-iron-overlay-closed="_onDropdownClose"
-        disabled="[[_menuBtnIsDisabled(disabled, readonly)]]">
+        disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
+        no-cancel-on-outside-click>
 
       <paper-material id="ironDrContent" elevation="1" slot="dropdown-content">
         <esmm-searchbox-input id="searchbox"
@@ -93,6 +94,9 @@
     /**
      * @polymer
      * @mixinFunction
+     * @appliesMixin EsmmMixins.MissingOptions
+     * @appliesMixin EsmmMixins.CommonFunctionality
+     * @appliesMixin Polymer.GestureEventListeners
      */
     const DropdownRequiredMixins = EsmmMixins.MissingOptions(EsmmMixins.CommonFunctionality(
         Polymer.GestureEventListeners(Polymer.Element)));

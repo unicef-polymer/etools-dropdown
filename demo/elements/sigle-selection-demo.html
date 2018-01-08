@@ -18,7 +18,7 @@
                        class="demo-field"
                        label="Single selection"
                        options="[[simpleOptions]]"
-                       enable-none-option></etools-dropdown>
+                       enable-none-option on-iron-activate="_singleSelectionChanged"></etools-dropdown>
     </div>
     <div>
       <etools-dropdown id="dropDown2"
@@ -26,7 +26,7 @@
                        label="Single selection, multi-lines options"
                        options="[[twoLineOptions]]"
                        two-lines-label
-                       enable-none-option></etools-dropdown>
+                       enable-none-option on-iron-select="_singleSelectionChanged"></etools-dropdown>
     </div>
 
     <esmm-demo-actions id="demoActions"></esmm-demo-actions>
@@ -48,6 +48,10 @@
 
       static get properties() {
         return {};
+      }
+
+      _singleSelectionChanged(e) {
+        console.log('shit...', e);
       }
 
       connectedCallback() {
