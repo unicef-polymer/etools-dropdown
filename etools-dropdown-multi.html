@@ -5,6 +5,7 @@
 <link rel="import" href="../iron-dropdown/iron-dropdown.html">
 <link rel="import" href="../neon-animation/web-animations.html">
 <link rel="import" href="../paper-material/paper-material.html">
+<link rel="import" href="../etools-behaviors/etools-logs-mixin.html">
 
 <link rel="import" href="scripts/es6-polyfills.html">
 
@@ -81,10 +82,11 @@
      * @mixinFunction
      * @appliesMixin EsmmMixins.MissingOptions
      * @appliesMixin EsmmMixins.CommonFunctionality
+     * @appliedMixin EtoolsLogsMixin
      * @appliesMixin Polymer.GestureEventListeners
      */
     const MultiDropdownRequiredMixins = EsmmMixins.MissingOptions(EsmmMixins.CommonFunctionality(
-        Polymer.GestureEventListeners(Polymer.Element)));
+        EtoolsLogsMixin(Polymer.GestureEventListeners(Polymer.Element))));
 
     /**
      * `etools-dropdown-multi`
@@ -258,13 +260,12 @@
 
       _handleSelectedNotFoundInOptions(notFoundSelectedValues) {
         this.requestMissingOptions(notFoundSelectedValues);
-        // show console warning
-        let warnMsg = '[etools-esmm ' + this.label + '] Selected value ';
+        // show warning
+        let warnMsg = 'Selected value ';
         let notFoundValues = (notFoundSelectedValues instanceof Array ? notFoundSelectedValues.join(', ')
             : notFoundSelectedValues);
         warnMsg += notFoundValues + ' not found in dropdown\'s options!';
-        // eslint-disable-next-line no-console
-        console.warn(warnMsg);
+        this.logWarn(warnMsg, 'etools-esmm ' + this.label, null, true);
       }
 
       _updateAfterMissingOptionsReceived(detail) {
@@ -339,7 +340,7 @@
 
       _getElementTitle(selectedItems) {
         let labels = selectedItems.map((item) => {
-          return this._getLabel(item);
+          return this.getLabel(item);
         });
 
         return labels.join(' | ');

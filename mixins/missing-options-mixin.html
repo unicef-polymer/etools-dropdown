@@ -1,3 +1,4 @@
+<link rel="import" href="../../etools-behaviors/etools-logs-mixin.html">
 <script>
   'use strict';
 
@@ -8,9 +9,10 @@
    * Missing options helper
    * @polymer
    * @mixinFunction
+   * @appliedMixin EtoolsLogsMixin
    * @memberof EsmmMixins
    */
-  EsmmMixins.MissingOptions = Polymer.dedupingMixin((superClass) => class extends superClass {
+  EsmmMixins.MissingOptions = Polymer.dedupingMixin((superClass) => class extends EtoolsLogsMixin(superClass) {
 
     static get properties() {
       return {
@@ -77,17 +79,14 @@
           if (responseOptions.length && typeof this._updateAfterMissingOptionsReceived === 'function') {
             this._updateAfterMissingOptionsReceived(responseOptions);
           }
-          // eslint-disable-next-line no-console
-          console.warn('[etools-esmm ' + this.label + '] Valid missing options received', response.detail);
+          this.logWarn('Valid missing options received', 'etools-esmm ' + this.label, response.detail, true);
         } else {
-          // eslint-disable-next-line no-console
-          console.warn('[etools-esmm ' + this.label + '] Missing options received(from ' + this.url +
-              ') are not valid(missing \'' + this.optionValue + '\' and \'' + this.optionLabel + '\' properties)');
+          this.logWarn('Missing options received(from ' + this.url + ') are not valid(missing ' + this.optionValue +
+              'and ' + this.optionLabel + ' properties)', 'etools-esmm ' + this.label, null, true);
         }
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('[etools-esmm ' + this.label +
-            '] Error occurred on missing options request response handling', error);
+        this.logError('Error occurred on missing options request response handling', 'etools-esmm ' + this.label,
+            error, true);
       }
     }
 
@@ -96,8 +95,7 @@
      * @param errorResponse
      */
     handleMissingOptionsReqError(errorResponse) {
-      // eslint-disable-next-line no-console
-      console.error('[etools-esmm ' + this.label + '] Missing options request failed!', errorResponse.detail);
+      this.logError('Missing options request failed!', 'etools-esmm ' + this.label, errorResponse.detail, true);
     }
 
     /**

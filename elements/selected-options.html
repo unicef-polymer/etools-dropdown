@@ -97,7 +97,7 @@
                     items="[[selectedItems]]">
             <span class="selected-item">
               <span class="selected-item-body">
-                [[_getLabel(item)]]
+                [[getLabel(item)]]
                 <span class="readonly-separator" hidden$=[[!readonly]]>|</span>
                 <paper-icon-button id="iconRemoveSelected"
                                    disabled$="[[disabled]]"
@@ -127,6 +127,7 @@
      * @customElement
      * @polymer
      * @appliesMixin EsmmMixins.ListItemUtils
+     * @appliesMixin Polymer.GestureEventListeners
      */
     class EsmmSelectedOptions extends EsmmMixins.ListItemUtils(Polymer.GestureEventListeners(Polymer.Element)) {
 
