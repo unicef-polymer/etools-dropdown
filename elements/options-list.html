@@ -3,6 +3,7 @@
 <link rel="import" href="../../polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="../../polymer/lib/elements/dom-if.html">
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
 <link rel="import" href="../../paper-listbox/paper-listbox.html">
 <link rel="import" href="../../paper-item/paper-item.html">
 <link rel="import" href="../../paper-item/paper-icon-item.html">
@@ -69,14 +70,14 @@
                    selected-values={{selectedValues}}>
       <template is="dom-repeat" items="[[shownOptions]]">
         <paper-icon-item
-            item=[[item]]
-            internal-id$="[[_getValue(item)]]"
+            item$=[[item]]
+            internal-id$="[[getValue(item)]]"
             on-tap="_itemSelected"
-            class$="[[item.cssClass]][[_getSelectedClass(item)]]"
+            class$="[[item.cssClass]] [[_getSelectedClass(item)]]"
             title$="[[_getItemTitle(item)]]">
 
           <iron-icon class="tick-icon" icon="check" slot="item-icon"></iron-icon>
-          <paper-item-body two-line="[[twoLinesLabel]]">
+          <paper-item-body two-line$="[[twoLinesLabel]]">
 
             <template is="dom-if" if="[[twoLinesLabel]]">
               <div>[[getPrimaryLabel(item.label)]]</div>
@@ -84,7 +85,7 @@
             </template>
 
             <template is="dom-if" if="[[!twoLinesLabel]]">
-              <span>[[_getLabel(item)]]</span>
+              <span>[[getLabel(item)]]</span>
             </template>
 
           </paper-item-body>
@@ -114,6 +115,7 @@
      * @customElement
      * @polymer
      * @appliesMixin EsmmMixins.ListItemUtils
+     * @appliesMixin Polymer.GestureEventListeners
      */
     class EsmmOptionsList extends EsmmMixins.ListItemUtils(Polymer.GestureEventListeners(Polymer.Element)) {
 
@@ -146,7 +148,9 @@
           /** Flag to show the limit of options shown in dropdown */
           showLimitWarning: Boolean,
           /** Flag to show a no options avaliable warning */
-          noOptionsAvailable: Boolean
+          noOptionsAvailable: Boolean,
+
+          shownOptionsLimit: Number
         };
       }
 

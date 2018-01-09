@@ -82,9 +82,8 @@
          * Get current option value
          * @param item
          * @returns {null}
-         * @private
          */
-        _getValue(item) {
+        getValue(item) {
           return item ? item[this.optionValue] : null;
         }
 
@@ -92,9 +91,8 @@
          * Get option label
          * @param item
          * @returns {*}
-         * @private
          */
-        _getLabel(item) {
+        getLabel(item) {
           let label = null;
           if (item) {
             label = this.twoLinesLabel ? this.getPrimaryLabel(item[this.optionLabel]) : item[this.optionLabel];
@@ -110,7 +108,6 @@
          * Capitalize string
          * @param string
          * @returns {string}
-         * @private
          */
         _capitalizeString(string) {
           return string.split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');

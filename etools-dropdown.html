@@ -47,7 +47,7 @@
                  placeholder="[[placeholder]]"
                  always-float-label="[[alwaysFloatLabel]]"
                  no-label-float="[[noLabelFloat]]"
-                 value="[[_getLabel(selectedItem)]]"
+                 value="[[getLabel(selectedItem)]]"
                  disabled="[[disabled]]"
                  invalid="[[invalid]]"
                  error-message="[[errorMessage]]"
@@ -80,6 +80,7 @@
                            option-label="[[optionLabel]]"
                            show-no-search-results-warning="[[showNoSearchResultsWarning]]"
                            show-limit-warning="[[showLimitWarning]]"
+                           shown-options-limit="[[shownOptionsLimit]]"
                            no-options-available="[[noOptionsAvailable]]"
                            none-option-label="[[noneOptionLabel]]"
                            capitalize="[[capitalize]]"
@@ -138,7 +139,7 @@
           title: {
             type: String,
             reflectToAttribute: true,
-            computed: '_getLabel(selectedItem)'
+            computed: 'getLabel(selectedItem)'
           }
         };
       }

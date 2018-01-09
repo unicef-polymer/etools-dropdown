@@ -340,7 +340,7 @@
 
       _getElementTitle(selectedItems) {
         let labels = selectedItems.map((item) => {
-          return this._getLabel(item);
+          return this.getLabel(item);
         });
 
         return labels.join(' | ');
