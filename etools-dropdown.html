@@ -5,7 +5,7 @@
 <link rel="import" href="../iron-dropdown/iron-dropdown.html">
 <link rel="import" href="../neon-animation/web-animations.html">
 <link rel="import" href="../paper-input/paper-input.html">
-<link rel="import" href="../paper-material/paper-material.html">
+<link rel="import" href="../paper-styles/element-styles/paper-material-styles.html">
 <link rel="import" href="../etools-behaviors/etools-logs-mixin.html">
 
 <link rel="import" href="scripts/es6-polyfills.html">
@@ -19,7 +19,7 @@
 
 <dom-module id="etools-dropdown">
   <template>
-    <style include="esmm-shared-styles">
+    <style include="paper-material-styles esmm-shared-styles">
 
       :host {
         --paper-input-container-input: {
@@ -67,7 +67,7 @@
         disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
         no-cancel-on-outside-click>
 
-      <paper-material id="ironDrContent" elevation="1" slot="dropdown-content">
+      <div id="ironDrContent" class="paper-material" elevation="1" slot="dropdown-content">
         <esmm-searchbox-input id="searchbox"
                               search="{{search}}"
                               hidden$="{{hideSearch}}"></esmm-searchbox-input>
@@ -85,7 +85,7 @@
                            none-option-label="[[noneOptionLabel]]"
                            capitalize="[[capitalize]]"
                            on-close-etools-dropdown="_closeMenu"></esmm-options-list>
-      </paper-material>
+      </div>
 
     </iron-dropdown>
 
