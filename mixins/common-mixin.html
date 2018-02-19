@@ -95,7 +95,7 @@
           type: Boolean,
           value: false
         },
-        preventImmediateReOpening: {
+        dropdownIsClosing: {
           type: Boolean,
           value: false
         },
@@ -396,7 +396,7 @@
     }
 
     _onDropdownClose() {
-      this.preventImmediateReOpening = false;
+      this.dropdownIsClosing = false;
     }
 
     _setDropdownWidth() {
@@ -434,14 +434,14 @@
 
     _openMenu() {
       let dr = this._getIronDropdown();
-      if (!dr.opened && !this.preventImmediateReOpening) {
+      if (!dr.opened) {
         dr.open();
       }
     }
 
     _closeMenu(e) {
       let dr = this._getIronDropdown();
-      this.preventImmediateReOpening = true;
+      this.dropdownIsClosing = true;
       dr.close();
     }
 
@@ -450,7 +450,7 @@
      * @param e
      */
     onInputFocus(e) {
-      if (this.disableOnFocusHandling) {
+      if (this.disableOnFocusHandling || this.dropdownIsClosing) {
         return;
       }
       this._openMenu();
