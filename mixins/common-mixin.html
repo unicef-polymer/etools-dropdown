@@ -95,6 +95,10 @@
           type: Boolean,
           value: false
         },
+        preventImmediateReOpening: {
+          type: Boolean,
+          value: false
+        },
         /** Limit displayed options */
         shownOptionsLimit: {
           type: Number,
@@ -387,6 +391,8 @@
     _onDropdownOpen() {
       this._setDropdownWidth();
       this._resizeOptionsListHeight();
+      let dr = this._getIronDropdown();
+      dr.notifyResize();
     }
 
     _setDropdownWidth() {
@@ -424,14 +430,16 @@
 
     _openMenu() {
       let dr = this._getIronDropdown();
-      if (!dr.opened) {
+      if (!dr.opened && !this.preventImmediateReOpening) {
         dr.open();
       }
     }
 
     _closeMenu(e) {
       let dr = this._getIronDropdown();
+      this.preventImmediateReOpening = true;
       dr.close();
+      window.setTimeout(() => this.preventImmediateReOpening = false, 50);
     }
 
     /**
