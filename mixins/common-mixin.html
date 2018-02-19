@@ -391,6 +391,8 @@
     _onDropdownOpen() {
       this._setDropdownWidth();
       this._resizeOptionsListHeight();
+      // when inside a paper-dialog the dropdown opens somewhere in the background and
+      // we need to force repositioning
       let dr = this._getIronDropdown();
       dr.notifyResize();
     }
