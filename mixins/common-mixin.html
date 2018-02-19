@@ -395,6 +395,10 @@
       dr.notifyResize();
     }
 
+    _onDropdownClose() {
+      this.preventImmediateReOpening = false;
+    }
+
     _setDropdownWidth() {
       let ironDropdown = this._getIronDropdown();
       ironDropdown.style.width = this.offsetWidth + 'px';
@@ -439,7 +443,6 @@
       let dr = this._getIronDropdown();
       this.preventImmediateReOpening = true;
       dr.close();
-      window.setTimeout(() => this.preventImmediateReOpening = false, 50);
     }
 
     /**
