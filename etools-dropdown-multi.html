@@ -285,6 +285,7 @@
       }
 
       _onDropdownClose() {
+        super._onDropdownClose();
         if (this.autoValidate) {
           this.validate(this.selectedValues);
         }

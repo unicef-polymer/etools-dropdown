@@ -95,6 +95,10 @@
           type: Boolean,
           value: false
         },
+        dropdownIsClosing: {
+          type: Boolean,
+          value: false
+        },
         /** Limit displayed options */
         shownOptionsLimit: {
           type: Number,
@@ -387,6 +391,13 @@
     _onDropdownOpen() {
       this._setDropdownWidth();
       this._resizeOptionsListHeight();
+      // when inside a paper-dialog the dropdown opens somewhere in the background and
+      // we need to force repositioning
+      this.notifyDropdownResize();
+    }
+
+    _onDropdownClose() {
+      this.dropdownIsClosing = false;
     }
 
     _setDropdownWidth() {
@@ -431,6 +442,7 @@
 
     _closeMenu(e) {
       let dr = this._getIronDropdown();
+      this.dropdownIsClosing = true;
       dr.close();
     }
 
@@ -439,7 +451,7 @@
      * @param e
      */
     onInputFocus(e) {
-      if (this.disableOnFocusHandling) {
+      if (this.disableOnFocusHandling || this.dropdownIsClosing) {
         return;
       }
       this._openMenu();
