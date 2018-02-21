@@ -23,7 +23,8 @@
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
     "paper-button": "PolymerElements/paper-button#^2.0.0",
-    "iron-component-page": "^3.0.1"
+    "iron-component-page": "^3.0.1",
+    "etools-dialog": "6c243a3"
   },
   "resolutions": {
     "polymer": "^2.0.0"

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>etools-dropdown dialog demo</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+
+    <link rel="import" href="elements/demo-dialog.html">
+
+    <custom-style>
+      <style is="custom-style" include="demo-pages-shared-styles">
+        .vertical-section-container {
+          max-width: 900px;
+        }
+      </style>
+    </custom-style>
+
+    <script>
+      window.EtoolsLogsLevel = window.EtoolsLogsLevel || 'INFO';
+    </script>
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <h3>etools-dropdown: dialog demo</h3>
+      <dropdown-dialog-loader></dropdown-dialog-loader>
+    </div>
+  </body>
+  <script>
+  (() => {
+    let dropdownDialogDemo = document.createElement('dropdown-dialog-demo');
+    dropdownDialogDemo.setAttribute('id', 'dropdownDialogDemo');
+    document.querySelector('body').appendChild(dropdownDialogDemo);
+    dropdownDialogDemo.open();
+  })();
+  </script>
+</html>
+
