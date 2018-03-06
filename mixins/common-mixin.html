@@ -139,6 +139,14 @@
         viewportEdgeMargin: {
           type: Number,
           value: 20
+        },
+        /**
+        * By default the search string is reset when the dropdown closes
+        * This flag allows the search value to persist after the dropdown is closed
+        */
+        preserveSearchOnClose: {
+          type: Boolean,
+          value: false
         }
       };
     }
@@ -398,6 +406,9 @@
 
     _onDropdownClose() {
       this.dropdownIsClosing = false;
+      if (!this.preserveSearchOnClose) {
+        this.set('search', '');
+      }
     }
 
     _setDropdownWidth() {
