@@ -1,11 +1,11 @@
 # \<etools-dropdown\> and \<etools-dropdown-multi\>
 
-This is a new version of 
-[etools-searchable-multiselection-menu](https://github.com/unicef-polymer/etools-searchable-multiselection-menu) 
-built using Polymer 2. 
+This is a new version of
+[etools-searchable-multiselection-menu](https://github.com/unicef-polymer/etools-searchable-multiselection-menu)
+built using Polymer 2.
 
 `etools-dropdown` dropdown menu with search and single option selection
-When the `optionValue` property is `Number` (in the options array of objects), 
+When the `optionValue` property is `Number` (in the options array of objects),
 the type is preserved, it's not converted to string.
 
 `etools-dropdown-multi` dropdown menu with multi selection.
@@ -24,20 +24,23 @@ Most of the functionality it's common with `etools-dropdown`.
 
 ### etools-dropdown-multi specific properties
 
-* selectedValues - Array, notify 
+* selectedValues - Array, notify
     - the id/optionValue of the selected items
-    
+
 * selectedItems: Array = [], notify
     - Selected options objects
-    
-* notFoundOptions - Array = [] 
+
+* notFoundOptions - Array = []
     - populated in case `selectedValues` are not found in the options
-    
+
 * triggerValueChangeEvent - Boolean, default: `false`
     - it can be used to trigger `etools-selected-items-changed` event if needed
 
 
 ### Common properties
+* preserveSearchOnClose : Boolean
+    - By default the search string is reset when the dropdown closes; this flag allows the search value to persist after the dropdown is closed
+
 * ajaxParams: Object
     - Inherited from EsmmMixins.MissingOptions
 
@@ -97,7 +100,7 @@ Most of the functionality it's common with `etools-dropdown`.
 * noOptionsAvailable: boolean = truereadOnly
     - Inherited from EsmmMixins.CommonFunctionality
     - Flag to show a no options avaliable warning
-    
+
 * optionLabel: string = "label"
     - Inherited from EsmmMixins.ListItemUtils
     - Option object property to use as label
@@ -173,7 +176,7 @@ Single/multi selection, with search
 Single/multi selection, without search
 
 ```html
-<etools-dropdown 
+<etools-dropdown
      label="Options menu"
      options="[[realOptions]]"
      selected="{{selectedId}}"
@@ -238,7 +241,7 @@ Error messages and validations. You can use `invalid`, `auto-validate`, `require
         label="Searchable menu with validation manually triggered (in 5s)"
         error-message="You must select an option"
         auto-validate required
-        options="[[realOptions]]" 
+        options="[[realOptions]]"
         dynamic-align></etools-dropdown>
 
 ```
@@ -297,7 +300,7 @@ Custom property | Description | Default
 
 ```bash
 $ bower install --save etools-dropdown
-``` 
+```
 
 ## Install the Polymer-CLI
 
