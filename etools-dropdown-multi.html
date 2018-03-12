@@ -214,7 +214,11 @@
        * @event etools-selected-items-changed
        */
       _fireChangeEvent() {
-        this.fire('etools-selected-items-changed', {selectedItems: this.selectedItems});
+        this.dispatchEvent(new CustomEvent('etools-selected-items-changed', {
+          detail: {selectedItems: this.selectedItems},
+          bubbles: true,
+          composed: true
+        }));
       }
 
       _setAnyNotFoundOptions(selectedItems, selectedValues) {
