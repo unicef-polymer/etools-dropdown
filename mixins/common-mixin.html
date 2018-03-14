@@ -12,6 +12,7 @@
    * @appliesMixin EsmmMixins.ListItemUtils
    * @memberof EsmmMixins
    */
+  // eslint-disable-next-line
   EsmmMixins.CommonFunctionality = (superClass) => class extends EsmmMixins.ListItemUtils(superClass) {
 
     static get properties() {
@@ -71,7 +72,7 @@
           type: Boolean
         },
         search: {
-          type: String,
+          type: String
           // observer: '_searchValueChanged'
         },
         /** Array of objects, dropdowns options used to compute shownOptions */
@@ -147,6 +148,10 @@
         preserveSearchOnClose: {
           type: Boolean,
           value: false
+        },
+        elemAttached: {
+          type: Boolean,
+          value: false
         }
       };
     }
@@ -165,6 +170,7 @@
       this.notifyDropdownResize();
 
       this._setResetSizeHandler();
+      this.elemAttached = true;
     }
 
     _setFitInto() {
@@ -388,7 +394,7 @@
 
           // check if height is correctly calculated for IE11 and recalculate if needed
           listOptionsComputedHeight = this._recalculateOptionsListHeightForIE11(listOptionsComputedHeight,
-              openedDropdownCoord, searchboxHeight);
+            openedDropdownCoord, searchboxHeight);
 
           let optionsList = this._getOptionsList();
           optionsList.style.maxHeight = listOptionsComputedHeight + 'px';
@@ -472,18 +478,18 @@
      * TODO: this might not be needed anymore. To be removed
      * Sometimes the dropdown doesn't resize when search is changed and we need to force the resize
      */
-//    _searchValueChanged(search, oldSearch) {
-//      if (this._isUndefined(search) || (this._isUndefined(oldSearch) && search === '')) {
-//        // prevent resizing at search property init
-//        return;
-//      }
-//
-//      this.resetIronDropdownSize();
-//      this.notifyDropdownResize();
-//      this.async(function() {
-//        this._resizeOptionsListHeight();
-//      });
-//    }
+    // _searchValueChanged(search, oldSearch) {
+    //   if (this._isUndefined(search) || (this._isUndefined(oldSearch) && search === '')) {
+    //     // prevent resizing at search property init
+    //     return;
+    //   }
+
+    //   this.resetIronDropdownSize();
+    //   this.notifyDropdownResize();
+    //   this.async(function() {
+    //     this._resizeOptionsListHeight();
+    //   });
+    // }
 
     notifyDropdownResize() {
       let ironDropdown = this._getIronDropdown();
@@ -498,7 +504,6 @@
       let userAgent = window.navigator.userAgent;
       return userAgent.indexOf('Trident/') > -1;
     }
-
   };
 
 </script>
