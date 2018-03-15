@@ -87,9 +87,9 @@
      * @appliesMixin EtoolsLogsMixin
      * @appliesMixin Polymer.GestureEventListeners
      */
+    // eslint-disable-next-line
     const MultiDropdownRequiredMixins = EsmmMixins.MissingOptions(EsmmMixins.CommonFunctionality(
-        EtoolsLogsMixin(Polymer.GestureEventListeners(Polymer.Element))));
-
+        EtoolsLogsMixin(Polymer.GestureEventListeners(Polymer.Element)))); //eslint-disable-line
     /**
      * `etools-dropdown-multi`
      *
@@ -159,8 +159,8 @@
         }
         this._selectedValuesToString();
         this._setSelectedItems(this.selectedValues);
-
-        if (this.autoValidate && this.selectedValues !== undefined) {
+        // elemAttached condition is to prevent eager validation
+        if (this.autoValidate && this.elemAttached && this.selectedValues !== undefined) {
           this.validate(this.selectedValues);
         }
       }

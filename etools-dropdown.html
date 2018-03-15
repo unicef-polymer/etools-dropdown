@@ -101,8 +101,9 @@
      * @appliesMixin EtoolsLogsMixin
      * @appliesMixin Polymer.GestureEventListeners
      */
+    // eslint-disable-next-line
     const DropdownRequiredMixins = EsmmMixins.MissingOptions(EsmmMixins.CommonFunctionality(
-        EtoolsLogsMixin(Polymer.GestureEventListeners(Polymer.Element))));
+        EtoolsLogsMixin(Polymer.GestureEventListeners(Polymer.Element)))); // eslint-disable-line
 
     /**
      * `etools-dropdown`
@@ -238,14 +239,14 @@
       }
 
       _selectedChanged(selected) {
-        if (this.autoValidate) {
+        // elemAttached condition is to prevent eager validation
+        if (this.autoValidate && this.elemAttached) {
           this.validate(selected);
         }
         if (!selected) {
           this.set('selectedItem', null);
         }
       }
-
     }
 
     window.customElements.define(EtoolsDropdown.is, EtoolsDropdown);
