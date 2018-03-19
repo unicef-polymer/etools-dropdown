@@ -7,6 +7,7 @@
 <link rel="import" href="../paper-input/paper-input.html">
 <link rel="import" href="../paper-styles/element-styles/paper-material-styles.html">
 <link rel="import" href="../etools-behaviors/etools-logs-mixin.html">
+<link rel="import" href="../etools-ajax/etools-ajax.html">
 
 <link rel="import" href="scripts/es6-polyfills.html">
 
@@ -37,10 +38,10 @@
 
     </style>
 
-    <!--<etools-ajax id="missingOptionsAjax"-->
-    <!--params="[[ajaxParams]]"-->
-    <!--on-success="handleMissingOptionsReqResponse"-->
-    <!--on-fail="handleMissingOptionsReqError"></etools-ajax>-->
+    <etools-ajax id="missingOptionsAjax"
+                 params="[[ajaxParams]]"
+                 on-success="handleMissingOptionsReqResponse"
+                 on-fail="handleMissingOptionsReqError"></etools-ajax>
 
     <paper-input id="main"
                  label="[[label]]"
@@ -193,7 +194,7 @@
       }
 
       _notFoundOptionAndUrlChanged(notFoundOption, url) {
-        if (this.notFoundOption) {
+        if (this.notFoundOption && url) {
           this._handleSelectedNotFoundInOptions(this.notFoundOption);
         }
       }

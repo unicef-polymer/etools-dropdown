@@ -6,6 +6,7 @@
 <link rel="import" href="../neon-animation/web-animations.html">
 <link rel="import" href="../paper-styles/element-styles/paper-material-styles.html">
 <link rel="import" href="../etools-behaviors/etools-logs-mixin.html">
+<link rel="import" href="../etools-ajax/etools-ajax.html">
 
 <link rel="import" href="scripts/es6-polyfills.html">
 
@@ -23,10 +24,10 @@
     <style include="paper-material-styles esmm-shared-styles">
     </style>
 
-    <!--<etools-ajax id="missingOptionsAjax"-->
-    <!--params="[[ajaxParams]]"-->
-    <!--on-success="handleMissingOptionsReqResponse"-->
-    <!--on-fail="handleMissingOptionsReqError"></etools-ajax>-->
+    <etools-ajax id="missingOptionsAjax"
+                 params="[[ajaxParams]]"
+                 on-success="handleMissingOptionsReqResponse"
+                 on-fail="handleMissingOptionsReqError"></etools-ajax>
 
     <esmm-selected-options id="main"
                            selected-items="[[selectedItems]]"
