@@ -260,10 +260,7 @@
        * notFoundOption is actually this.selected
        */
       _notFoundOptionsAndUrlChanged(notFoundOptions, url) {
-        if (this._isUndefined(notFoundOptions) || this._isUndefined(url)) {
-          return;
-        }
-        if (this.notFoundOptions) {
+        if (url && this.arrayIsNotEmpty(notFoundOptions)) {
           this._handleSelectedNotFoundInOptions(this.notFoundOptions);
         }
       }
@@ -280,7 +277,7 @@
 
       _updateAfterMissingOptionsReceived(detail) {
         let selectedItems;
-        if (Array.isArray(detail) && detail.length) {
+        if (this.arrayIsNotEmpty(detail)) {
           selectedItems = detail;
         } else {
           selectedItems = [detail];

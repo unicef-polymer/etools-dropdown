@@ -194,7 +194,7 @@
       }
 
       _notFoundOptionAndUrlChanged(notFoundOption, url) {
-        if (this.notFoundOption && url) {
+        if (url && this.arrayIsNotEmpty(notFoundOptions)) {
           this._handleSelectedNotFoundInOptions(this.notFoundOption);
         }
       }
@@ -209,7 +209,7 @@
 
       _updateAfterMissingOptionsReceived(detail) {
         let selectedItem;
-        if (Array.isArray(detail) && detail.length) {
+        if (this.arrayIsNotEmpty(detail)) {
           selectedItem = detail[0];
         } else {
           selectedItem = detail;
