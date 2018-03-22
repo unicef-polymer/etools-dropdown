@@ -207,16 +207,6 @@
         this.logWarn(warnMsg, 'etools-esmm ' + this.label, null, true);
       }
 
-      _updateAfterMissingOptionsReceived(detail) {
-        let selectedItem;
-        if (this.arrayIsNotEmpty(detail)) {
-          selectedItem = detail[0];
-        } else {
-          selectedItem = detail;
-        }
-        this._setSelectedItem(this.selected, selectedItem);
-      }
-
       _onDropdownClose() {
         super._onDropdownClose();
         if (this.autoValidate) {

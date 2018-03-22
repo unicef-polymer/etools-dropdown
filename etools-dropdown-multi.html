@@ -275,22 +275,6 @@
         this.logWarn(warnMsg, 'etools-esmm ' + this.label, null, true);
       }
 
-      // TODO: check if this is still needed, _selectedValuesOrOptionsChanged observers triggers
-      //  when adding the missing values to the options list and sets selectedItems in the process
-      _updateAfterMissingOptionsReceived(detail) {
-        // let selectedItems;
-        // if (this.arrayIsNotEmpty(detail)) {
-        //   selectedItems = detail;
-        // } else {
-        //   selectedItems = [detail];
-        // }
-        // if (this.selectedItems) {
-        //   this.set('selectedItems', [...this.selectedItems, ...selectedItems]);
-        // } else {
-        //   this.set('selectedItems', selectedItems);
-        // }
-      }
-
       _onDropdownClose() {
         super._onDropdownClose();
         if (this.autoValidate) {
