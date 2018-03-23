@@ -6,6 +6,7 @@
 <link rel="import" href="../neon-animation/web-animations.html">
 <link rel="import" href="../paper-styles/element-styles/paper-material-styles.html">
 <link rel="import" href="../etools-behaviors/etools-logs-mixin.html">
+<link rel="import" href="../etools-ajax/etools-ajax.html">
 
 <link rel="import" href="scripts/es6-polyfills.html">
 
@@ -23,10 +24,10 @@
     <style include="paper-material-styles esmm-shared-styles">
     </style>
 
-    <!--<etools-ajax id="missingOptionsAjax"-->
-    <!--params="[[ajaxParams]]"-->
-    <!--on-success="handleMissingOptionsReqResponse"-->
-    <!--on-fail="handleMissingOptionsReqError"></etools-ajax>-->
+    <etools-ajax id="missingOptionsAjax"
+                 params="[[ajaxParams]]"
+                 on-success="handleMissingOptionsReqResponse"
+                 on-fail="handleMissingOptionsReqError"></etools-ajax>
 
     <esmm-selected-options id="main"
                            selected-items="[[selectedItems]]"
@@ -259,10 +260,7 @@
        * notFoundOption is actually this.selected
        */
       _notFoundOptionsAndUrlChanged(notFoundOptions, url) {
-        if (this._isUndefined(notFoundOptions) || this._isUndefined(url)) {
-          return;
-        }
-        if (this.notFoundOptions) {
+        if (url && this.arrayIsNotEmpty(notFoundOptions)) {
           this._handleSelectedNotFoundInOptions(this.notFoundOptions);
         }
       }
@@ -275,20 +273,6 @@
             : notFoundSelectedValues);
         warnMsg += notFoundValues + ' not found in dropdown\'s options!';
         this.logWarn(warnMsg, 'etools-esmm ' + this.label, null, true);
-      }
-
-      _updateAfterMissingOptionsReceived(detail) {
-        let selectedItems;
-        if (Array.isArray(detail) && detail.length) {
-          selectedItems = detail;
-        } else {
-          selectedItems = [detail];
-        }
-        if (this.selectedItems) {
-          this.set('selectedItems', [...this.selectedItems, ...selectedItems]);
-        } else {
-          this.set('selectedItems', selectedItems);
-        }
       }
 
       _onDropdownClose() {

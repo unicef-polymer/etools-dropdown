@@ -504,6 +504,10 @@
       let userAgent = window.navigator.userAgent;
       return userAgent.indexOf('Trident/') > -1;
     }
+
+    arrayIsNotEmpty(arr) {
+      return Array.isArray(arr) && arr.length;
+    }
   };
 
 </script>
