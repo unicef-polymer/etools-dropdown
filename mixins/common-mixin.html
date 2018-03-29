@@ -159,7 +159,8 @@
     connectedCallback() {
       super.connectedCallback();
 
-      this.addEventListener('blur', () => {
+      this.addEventListener('focusout', (e) => {
+        e.stopImmediatePropagation();
         this._closeMenu();
       });
 
