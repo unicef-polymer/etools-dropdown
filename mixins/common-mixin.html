@@ -509,8 +509,9 @@
       return Array.isArray(arr) && arr.length;
     }
 
+    // prevents the element from rendering an error message container when valid
     _getErrorMessage(message, invalid) {
-      return invalid? message: '';
+      return invalid ? message: '';
     }
   };
 
