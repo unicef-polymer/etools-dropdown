@@ -508,6 +508,10 @@
     arrayIsNotEmpty(arr) {
       return Array.isArray(arr) && arr.length;
     }
+
+    _getErrorMessage(message, invalid) {
+      return invalid? message: '';
+    }
   };
 
 </script>

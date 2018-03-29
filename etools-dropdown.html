@@ -51,7 +51,7 @@
                  value="[[getLabel(selectedItem)]]"
                  disabled="[[disabled]]"
                  invalid="[[invalid]]"
-                 error-message="[[errorMessage]]"
+                 error-message="[[_getErrorMessage(errorMessage, invalid)]]"
                  readonly
                  on-focus="onInputFocus"
                  on-tap="_openMenu">
