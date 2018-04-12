@@ -24,7 +24,7 @@
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
     "paper-button": "PolymerElements/paper-button#^2.0.0",
     "iron-component-page": "^3.0.1",
-    "etools-dialog": "6c243a3"
+    "etools-dialog": "e9ef5bed"
   },
   "resolutions": {
     "polymer": "^2.0.0"
