@@ -156,7 +156,7 @@
        */
       _itemSelected(e) {
         if (this.multi) {
-          if (this.selectedValues === null || typeof this.selectedValues === 'undefined') {
+          if (!this.selectedValues) {
             this.selectedValues = [];
           }
         } else {

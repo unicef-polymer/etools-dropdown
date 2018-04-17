@@ -156,7 +156,7 @@
         if (this._isUndefined(selectedValuesOrLength) || this._isUndefined(options)) {
           return;
         }
-        if (this.selectedValues === null || typeof this.selectedValues === 'undefined') {
+        if (!this.selectedValues) {
           this.selectedValues = [];
         }
         this._selectedValuesToString();
