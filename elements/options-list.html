@@ -155,7 +155,11 @@
        * @private
        */
       _itemSelected(e) {
-        if (!this.multi) {
+        if (this.multi) {
+          if (this.selectedValues === null || typeof this.selectedValues === 'undefined') {
+            this.selectedValues = [];
+          }
+        } else {
           e.stopImmediatePropagation();
           let selectedValue = e.model.item[this.optionValue];
           this.set('selected', selectedValue);
