@@ -110,6 +110,7 @@
           /** Dropdown selected values */
           selectedValues: {
             type: Array,
+            value: [],
             notify: true
           },
           /** Selected options objects */
@@ -155,7 +156,7 @@
         if (this._isUndefined(selectedValuesOrLength) || this._isUndefined(options)) {
           return;
         }
-        if (this.selectedValues === null) {
+        if (!this.selectedValues) {
           this.selectedValues = [];
         }
         this._selectedValuesToString();
