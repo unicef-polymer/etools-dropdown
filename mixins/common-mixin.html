@@ -12,7 +12,6 @@
    * @appliesMixin EsmmMixins.ListItemUtils
    * @memberof EsmmMixins
    */
-  // eslint-disable-next-line
   EsmmMixins.CommonFunctionality = (superClass) => class extends EsmmMixins.ListItemUtils(superClass) {
 
     static get properties() {
@@ -158,7 +157,7 @@
 
     connectedCallback() {
       super.connectedCallback();
- 
+
       // focusout is used because blur acts weirdly on IE
       this.addEventListener('focusout', (e) => {
         e.stopImmediatePropagation();
