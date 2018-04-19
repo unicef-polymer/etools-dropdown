@@ -12,7 +12,7 @@
   "rules": {
     "padded-blocks": "off",
     "brace-style": "off",
-    "new-cap": "off",
+    "new-cap": ["error", { "capIsNewExceptions": ["Polymer"], "capIsNewExceptionPattern": "^Etools.." }],
     "no-var": "off",
     "require-jsdoc": "off",
     "valid-jsdoc": "off",
