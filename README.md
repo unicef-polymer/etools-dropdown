@@ -14,7 +14,7 @@ Most of the functionality it's common with `etools-dropdown`.
 
 ### etools-dropdown specific properties
 * selected: number, notify
-    - Dropdown selected value optionValue prop of the selected option
+    - the id/optionValue of the selected item
 
 * selectedItem: Object = null, notify.
     - Selected option object
@@ -38,9 +38,6 @@ Most of the functionality it's common with `etools-dropdown`.
 
 
 ### Common properties
-* preserveSearchOnClose : Boolean
-    - By default the search string is reset when the dropdown closes; this flag allows the search value to persist after the dropdown is closed
-
 * ajaxParams: Object
     - Inherited from EsmmMixins.MissingOptions
 
@@ -115,6 +112,9 @@ Most of the functionality it's common with `etools-dropdown`.
 
 * placeholder: string = "—"
     - Inherited from EsmmMixins.CommonFunctionality
+
+* preserveSearchOnClose : Boolean
+    - By default the search string is reset when the dropdown closes; this flag allows the search value to persist after the dropdown is closed
 
 * readonly: boolean = false
     - Inherited from EsmmMixins.CommonFunctionality
