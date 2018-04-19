@@ -72,13 +72,8 @@
           // assuming all objects from response array have same properties
           // we just need to make sure the first one is valid, no need to use a loop here
           let responseOptions = this.prepareReceivedOptions(response.detail);
-          this.set('options', [...options, ...responseOptions]);
+          this.set('options', [...this.options, ...responseOptions]);
 
-          // TODO: find a way to not use _updateAfterMissingOptionsReceived defined in other element,
-          // maybe a callback as param
-          if (responseOptions.length && typeof this._updateAfterMissingOptionsReceived === 'function') {
-            this._updateAfterMissingOptionsReceived(responseOptions);
-          }
           this.logWarn('Valid missing options received', 'etools-esmm ' + this.label, response.detail, true);
         } else {
           this.logWarn('Missing options received(from ' + this.url + ') are not valid(missing ' + this.optionValue +

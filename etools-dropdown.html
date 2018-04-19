@@ -7,6 +7,7 @@
 <link rel="import" href="../paper-input/paper-input.html">
 <link rel="import" href="../paper-styles/element-styles/paper-material-styles.html">
 <link rel="import" href="../etools-behaviors/etools-logs-mixin.html">
+<link rel="import" href="../etools-ajax/etools-ajax.html">
 
 <link rel="import" href="scripts/es6-polyfills.html">
 
@@ -37,10 +38,10 @@
 
     </style>
 
-    <!--<etools-ajax id="missingOptionsAjax"-->
-    <!--params="[[ajaxParams]]"-->
-    <!--on-success="handleMissingOptionsReqResponse"-->
-    <!--on-fail="handleMissingOptionsReqError"></etools-ajax>-->
+    <etools-ajax id="missingOptionsAjax"
+                 params="[[ajaxParams]]"
+                 on-success="handleMissingOptionsReqResponse"
+                 on-fail="handleMissingOptionsReqError"></etools-ajax>
 
     <paper-input id="main"
                  label="[[label]]"
@@ -50,7 +51,7 @@
                  value="[[getLabel(selectedItem)]]"
                  disabled="[[disabled]]"
                  invalid="[[invalid]]"
-                 error-message="[[errorMessage]]"
+                 error-message="[[_getErrorMessage(errorMessage, invalid)]]"
                  readonly
                  on-focus="onInputFocus"
                  on-tap="_openMenu">
@@ -192,7 +193,7 @@
       }
 
       _notFoundOptionAndUrlChanged(notFoundOption, url) {
-        if (this.notFoundOption) {
+        if (url && notFoundOption) {
           this._handleSelectedNotFoundInOptions(this.notFoundOption);
         }
       }
@@ -203,16 +204,6 @@
         let warnMsg = 'Selected value ';
         warnMsg += selected + ' not found in dropdown\'s options!';
         this.logWarn(warnMsg, 'etools-esmm ' + this.label, null, true);
-      }
-
-      _updateAfterMissingOptionsReceived(detail) {
-        let selectedItem;
-        if (Array.isArray(detail) && detail.length) {
-          selectedItem = detail[0];
-        } else {
-          selectedItem = detail;
-        }
-        this._setSelectedItem(this.selected, selectedItem);
       }
 
       _onDropdownClose() {
@@ -238,14 +229,14 @@
       }
 
       _selectedChanged(selected) {
-        if (this.autoValidate) {
+        // elemAttached condition is to prevent eager validation
+        if (this.autoValidate && this.elemAttached) {
           this.validate(selected);
         }
         if (!selected) {
           this.set('selectedItem', null);
         }
       }
-
     }
 
     window.customElements.define(EtoolsDropdown.is, EtoolsDropdown);
