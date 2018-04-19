@@ -30,6 +30,7 @@
 
       paper-icon-item {
         cursor: var(--esmm-select-cursor);
+        height: 48px; /* for IE */
       }
 
       paper-icon-item .tick-icon {
@@ -155,7 +156,11 @@
        * @private
        */
       _itemSelected(e) {
-        if (!this.multi) {
+        if (this.multi) {
+          if (!this.selectedValues) {
+            this.selectedValues = [];
+          }
+        } else {
           e.stopImmediatePropagation();
           let selectedValue = e.model.item[this.optionValue];
           this.set('selected', selectedValue);
