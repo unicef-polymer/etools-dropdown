@@ -1,5 +1,4 @@
 <link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../polymer/lib/utils/debounce.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-dropdown/iron-dropdown.html">
@@ -54,7 +53,7 @@
                  error-message="[[_getErrorMessage(errorMessage, invalid)]]"
                  readonly
                  on-focus="onInputFocus"
-                 on-tap="_openMenu">
+                 on-click="_openMenu">
       <iron-icon icon="arrow-drop-down" slot="suffix" hidden$="[[readonly]]"></iron-icon>
     </paper-input>
 
@@ -100,10 +99,9 @@
      * @appliesMixin EsmmMixins.MissingOptions
      * @appliesMixin EsmmMixins.CommonFunctionality
      * @appliesMixin EtoolsLogsMixin
-     * @appliesMixin Polymer.GestureEventListeners
      */
     const DropdownRequiredMixins = EsmmMixins.MissingOptions(EsmmMixins.CommonFunctionality(
-        EtoolsLogsMixin(Polymer.GestureEventListeners(Polymer.Element))));
+        EtoolsLogsMixin(Polymer.Element)));
 
     /**
      * `etools-dropdown`
@@ -189,7 +187,7 @@
         if (this._noOptions()) {
           return null;
         }
-        return this.options.find((item) => item[this.optionValue] == value);
+        return this.options.find(item => item[this.optionValue] == value);
       }
 
       _notFoundOptionAndUrlChanged(notFoundOption, url) {

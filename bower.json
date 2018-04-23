@@ -16,7 +16,7 @@
     "iron-dropdown": "PolymerElements/iron-dropdown#^2.1.0",
     "paper-icon-button": "PolymerElements/paper-icon-button#^2.0.1",
     "paper-styles": "PolymerElements/paper-styles#^2.0.0",
-    "etools-ajax": ""^3.0.0"",
+    "etools-ajax": "^3.0.0",
     "etools-behaviors": "5a1b488"
   },
   "devDependencies": {

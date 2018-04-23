@@ -12,7 +12,13 @@
   "rules": {
     "padded-blocks": "off",
     "brace-style": "off",
-    "new-cap": ["error", { "capIsNewExceptions": ["Polymer"], "capIsNewExceptionPattern": "^Etools.." }],
+    "new-cap": [
+      "error",
+      {
+        "capIsNewExceptions": ["Polymer", "ListItemUtils", "MissingOptions", "CommonFunctionality"],
+        "capIsNewExceptionPattern": "^Etools.."
+      }
+    ],
     "no-var": "off",
     "require-jsdoc": "off",
     "valid-jsdoc": "off",
@@ -25,6 +31,7 @@
     "moment": true,
     "Promise": true,
     "Polymer": true,
-    "EtoolsLogsMixin": true
+    "EtoolsLogsMixin": true,
+    "EsmmMixins": true
   }
 }
