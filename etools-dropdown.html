@@ -187,7 +187,7 @@
         if (this._noOptions()) {
           return null;
         }
-        return this.options.find((item) => item[this.optionValue] == value);
+        return this.options.find(item => item[this.optionValue] == value);
       }
 
       _notFoundOptionAndUrlChanged(notFoundOption, url) {
