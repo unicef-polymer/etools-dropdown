@@ -1,0 +1,13 @@
+{
+  "name": "etools-dropdown",
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-google": "^0.7.0",
+    "eslint-plugin-html": "^2.0.0"
+  },
+  "scripts": {
+    "lint": "npm run lint:javascript && polymer lint && exit 0",
+    "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore && exit 0",
+    "test": "polymer test"
+  }
+}
