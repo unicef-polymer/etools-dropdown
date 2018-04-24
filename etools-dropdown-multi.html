@@ -1,5 +1,4 @@
 <link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../polymer/lib/utils/debounce.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-dropdown/iron-dropdown.html">
@@ -44,7 +43,7 @@
                            option-label="[[optionLabel]]"
                            error-message="[[_getErrorMessage(errorMessage, invalid)]]"
                            on-focus="onInputFocus"
-                           on-tap="_openMenu"></esmm-selected-options>
+                           on-click="_openMenu"></esmm-selected-options>
 
     <iron-dropdown
         id="dropdownMenu"
@@ -86,10 +85,10 @@
      * @appliesMixin EsmmMixins.MissingOptions
      * @appliesMixin EsmmMixins.CommonFunctionality
      * @appliesMixin EtoolsLogsMixin
-     * @appliesMixin Polymer.GestureEventListeners
      */
     const MultiDropdownRequiredMixins = EsmmMixins.MissingOptions(EsmmMixins.CommonFunctionality(
-        EtoolsLogsMixin(Polymer.GestureEventListeners(Polymer.Element))));
+        EtoolsLogsMixin(Polymer.Element)));
+
     /**
      * `etools-dropdown-multi`
      *
@@ -207,7 +206,9 @@
         this._debouncer = Polymer.Debouncer.debounce(
             this._debouncer,
             Polymer.Async.timeOut.after(10),
-            () => { this._fireChangeEvent(); }
+            () => {
+              this._fireChangeEvent();
+            }
         );
       }
 

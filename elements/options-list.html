@@ -1,5 +1,4 @@
 <link rel="import" href="../../polymer/polymer-element.html">
-<link rel="import" href="../../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../../polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="../../polymer/lib/elements/dom-if.html">
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
@@ -68,7 +67,7 @@
         <paper-icon-item
             item$=[[item]]
             internal-id$="[[getValue(item)]]"
-            on-tap="_itemSelected"
+            on-click="_itemSelected"
             class$="[[item.cssClass]] [[_getSelectedClass(item)]]"
             title$="[[_getItemTitle(item)]]">
 
@@ -111,9 +110,8 @@
      * @customElement
      * @polymer
      * @appliesMixin EsmmMixins.ListItemUtils
-     * @appliesMixin Polymer.GestureEventListeners
      */
-    class EsmmOptionsList extends EsmmMixins.ListItemUtils(Polymer.GestureEventListeners(Polymer.Element)) {
+    class EsmmOptionsList extends EsmmMixins.ListItemUtils(Polymer.Element) {
 
       static get is() {
         return 'esmm-options-list';

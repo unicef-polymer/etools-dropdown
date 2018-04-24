@@ -1,5 +1,4 @@
 <link rel="import" href="../../polymer/polymer-element.html">
-<link rel="import" href="../../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../../polymer/lib/utils/debounce.html">
 <link rel="import" href="../../polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="../../polymer/lib/elements/dom-if.html">
@@ -107,7 +106,7 @@
                                    disabled$="[[disabled]]"
                                    hidden$="[[readonly]]"
                                    icon="close"
-                                   on-tap="_removeItem"
+                                   on-click="_removeItem"
                                    on-focus="_onXFocus"></paper-icon-button>
               </span>
             </span>
@@ -128,12 +127,11 @@
   <script>
     'use strict';
     /**
-     * @customElement
      * @polymer
+     * @customElement
      * @appliesMixin EsmmMixins.ListItemUtils
-     * @appliesMixin Polymer.GestureEventListeners
      */
-    class EsmmSelectedOptions extends EsmmMixins.ListItemUtils(Polymer.GestureEventListeners(Polymer.Element)) {
+    class EsmmSelectedOptions extends EsmmMixins.ListItemUtils(Polymer.Element) {
 
       static get is() {
         return 'esmm-selected-options';
@@ -164,7 +162,7 @@
        * @returns {*}
        * @private
        */
-      _computeAlwaysFloatLabel(alwaysFloatLabel,placeholder) {
+      _computeAlwaysFloatLabel(alwaysFloatLabel, placeholder) {
         return alwaysFloatLabel || placeholder;
       }
 
