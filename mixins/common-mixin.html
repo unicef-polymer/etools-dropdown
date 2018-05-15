@@ -159,7 +159,7 @@
       super.connectedCallback();
 
       // focusout is used because blur acts weirdly on IE
-      this.$.dropdownMenu.addEventListener('focusout', (e) => {
+      this.addEventListener('focusout', (e) => {
         e.stopImmediatePropagation();
         this._closeMenu();
       });
