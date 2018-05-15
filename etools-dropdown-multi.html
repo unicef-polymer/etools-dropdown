@@ -282,12 +282,6 @@
         if (this.autoValidate) {
           this.validate(this.selectedValues);
         }
-
-        // Notifies paper-dialog to center its self
-        this.dispatchEvent(new CustomEvent('iron-resize', {
-          bubbles: true,
-          composed: true
-        }));
       }
 
       /**
