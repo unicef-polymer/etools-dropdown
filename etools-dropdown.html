@@ -251,7 +251,7 @@
 
       _fireChangeEvent() {
         this.dispatchEvent(new CustomEvent('etools-selected-item-changed', {
-          detail: {selectedItem: this.selected},
+          detail: {selectedItem: this.selectedItem},
           bubbles: true,
           composed: true
         }));
