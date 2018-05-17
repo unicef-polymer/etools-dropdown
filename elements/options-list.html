@@ -65,7 +65,7 @@
                    selected-values={{selectedValues}}>
       <template is="dom-repeat" items="[[shownOptions]]">
         <paper-icon-item
-            item$=[[item]]
+            item=[[item]]
             internal-id$="[[getValue(item)]]"
             on-click="_itemSelected"
             class$="[[item.cssClass]] [[_getSelectedClass(item)]]"
