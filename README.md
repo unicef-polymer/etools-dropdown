@@ -212,8 +212,9 @@ Note: `etools-dropdown-multi` cannot use `enableNoneOption`.
 
 Change event examples:
 
-`etools-dropdown` has `etools-selected-item-changed` event, fired if `triggerValueChangeEvent = true`,
-the `event.details` will contain the `selectedItem` object
+`on-iron-select` - fires whenever the selected value is changed from dropdown or from code
+
+The event parameter of the method (_singleSelectionChanged) holds info about the item that was selected in: `event.detail.item.item`
 
 `etools-dropdown-multi` has `etools-selected-items-changed` event, fired if `triggerValueChangeEvent = true`,
 the `event.details` will contain `selectedItems` array
@@ -222,8 +223,7 @@ the `event.details` will contain `selectedItems` array
 <etools-dropdown
     label="Single searchable menu"
     options="[[realOptions]]"
-    trigger-value-change-event
-    on-etools-selected-item-changed="_selectedItemChanged"></etools-dropdown>
+    on-iron-select="_singleSelectionChanged"></etools-dropdown>
 
 <etools-dropdown-multi
     label="Multi searchable menu"
