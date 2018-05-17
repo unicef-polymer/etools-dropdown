@@ -234,6 +234,27 @@
         if (!selected) {
           this.set('selectedItem', null);
         }
+
+        // trigger item change event check
+        if (!this.triggerValueChangeEvent) {
+          return;
+        }
+
+        this._debouncer = Polymer.Debouncer.debounce(
+          this._debouncer,
+          Polymer.Async.timeOut.after(10),
+          () => {
+            this._fireChangeEvent();
+          }
+        );
+      }
+
+      _fireChangeEvent() {
+        this.dispatchEvent(new CustomEvent('etools-selected-item-changed', {
+          detail: {selectedItem: this.selected},
+          bubbles: true,
+          composed: true
+        }));
       }
     }
 
