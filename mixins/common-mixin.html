@@ -12,7 +12,7 @@
    * @appliesMixin EsmmMixins.ListItemUtils
    * @memberof EsmmMixins
    */
-  EsmmMixins.CommonFunctionality = superClass => class extends EsmmMixins.ListItemUtils(superClass) {
+  EsmmMixins.CommonFunctionality = (superClass) => class extends EsmmMixins.ListItemUtils(superClass) {
 
     static get properties() {
       return {
@@ -134,7 +134,10 @@
          * Element that will prevent dropdown to overflow outside it's margins
          * @type HTMLElement
          */
-        fitInto: Object,
+        fitInto: {
+          type: Object,
+          observer: '_setFitInto'
+        },
         /** Margin added if dropdown bottom is too close to the viewport bottom margin */
         viewportEdgeMargin: {
           type: Number,
@@ -182,10 +185,9 @@
     _setFitInto() {
       let ironDropdown = this._getIronDropdown();
       // fitInto element will not let the dropdown to overlap it's margins
-      if (!this.fitInto) {
-        this.fitInto = window.EtoolsEsmmFitIntoEl;
-      }
-      if (this.fitInto) {
+      if (!this.fitInto && window.EtoolsEsmmFitIntoEl) {
+        ironDropdown.set('fitInto', window.EtoolsEsmmFitIntoEl);
+      } else if (this.fitInto) {
         ironDropdown.set('fitInto', this.fitInto);
       }
     }
