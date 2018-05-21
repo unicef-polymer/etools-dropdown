@@ -187,8 +187,7 @@
       // fitInto element will not let the dropdown to overlap it's margins
       if (!this.fitInto && window.EtoolsEsmmFitIntoEl) {
         ironDropdown.set('fitInto', window.EtoolsEsmmFitIntoEl);
-      }
-      if (this.fitInto) {
+      } else if (this.fitInto) {
         ironDropdown.set('fitInto', this.fitInto);
       }
     }
