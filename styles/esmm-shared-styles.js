@@ -1,7 +1,9 @@
-<link rel="import" href="../../polymer/polymer-element.html">
-<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+import '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
+const $_documentContainer = document.createElement('template');
+$_documentContainer.setAttribute('style', 'display: none;');
 
-<custom-style>
+$_documentContainer.innerHTML = `<custom-style>
   <style>
     /* esmm global styles */
     html {
@@ -15,9 +17,7 @@
 
     }
   </style>
-</custom-style>
-
-<dom-module id="esmm-shared-styles">
+</custom-style><dom-module id="esmm-shared-styles">
   <template>
     <style>
       *[hidden] {
@@ -46,4 +46,6 @@
 
     </style>
   </template>
-</dom-module>
+</dom-module>`;
+
+document.head.appendChild($_documentContainer.content);
