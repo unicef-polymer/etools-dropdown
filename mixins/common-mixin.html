@@ -168,6 +168,10 @@
           type: String,
           value: ''
         },
+        minWidth: {
+          type: String,
+          value: ''
+        },
         horizontalAlign: {
           type: String,
           value: 'right'
@@ -443,6 +447,9 @@
       let ironDropdown = this._getIronDropdown();
       if (!this.autoWidth) {
         ironDropdown.style.width = this.offsetWidth + 'px';
+      }
+      if (this.minWidth && this.minWidth !== '') {
+        ironDropdown.style.minWidth = this.minWidth;
       }
       if (this.maxWidth && this.maxWidth !== '') {
         ironDropdown.style.maxWidth = this.maxWidth;
