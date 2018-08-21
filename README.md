@@ -62,9 +62,9 @@ Most of the functionality it's common with `etools-dropdown`.
     - Inherited from EsmmMixins.CommonFunctionality
     - Stop autofocus from paper-dialog
 
-* dynamicAlign: boolean = true
+* noDynamicAlign: boolean = false
     - Inherited from EsmmMixins.CommonFunctionality
-    - Makes the dropdown to show top or bottom where it will fit better
+    - By default, dropdown is shown top or bottom where it will fit better. This flag can disable this behavior.
 
 * enableNoneOption: boolean = false
     - Inherited from EsmmMixins.CommonFunctionality

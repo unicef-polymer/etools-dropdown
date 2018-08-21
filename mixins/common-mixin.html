@@ -61,10 +61,10 @@
           },
           reflectToAttribute: true
         },
-        /** Makes the dropdown to show top or bottom where it will fit better */
-        dynamicAlign: {
+        /** Makes the dropdown to show top or bottom (or left - right) where it will fit better */
+        noDynamicAlign: {
           type: Boolean,
-          value: true
+          value: false
         },
         /** Allows scroll outside opened dropdown */
         allowOutsideScroll: {
@@ -159,6 +159,18 @@
         elemAttached: {
           type: Boolean,
           value: false
+        },
+        autoWidth: {
+          type: Boolean,
+          value: false
+        },
+        maxWidth: {
+          type: String,
+          value: ''
+        },
+        horizontalAlign: {
+          type: String,
+          value: 'right'
         }
       };
     }
@@ -411,7 +423,9 @@
     }
 
     _onDropdownOpen() {
-      this._setDropdownWidth();
+      if (!this.autoWidth) {
+        this._setDropdownWidth();
+      }
       this._resizeOptionsListHeight();
       // when inside a paper-dialog the dropdown opens somewhere in the background and
       // we need to force repositioning
@@ -427,7 +441,14 @@
 
     _setDropdownWidth() {
       let ironDropdown = this._getIronDropdown();
-      ironDropdown.style.width = this.offsetWidth + 'px';
+      if (!this.autoWidth) {
+        ironDropdown.style.width = this.offsetWidth + 'px';
+      }
+      if (this.maxWidth && this.maxWidth !== '') {
+        ironDropdown.style.maxWidth = this.maxWidth;
+      } else {
+        ironDropdown.style.maxWidth = '90%';
+      }
     }
 
     _setFocusTarget() {
