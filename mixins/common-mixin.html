@@ -320,6 +320,8 @@
       if (this._isUndefined(limit) || this._isUndefined(shownOptions)) {
         return false;
       }
+      console.log('limit', limit);
+      console.log('shownOptions', shownOptions);
       return shownOptions.length > limit;
     }
 
