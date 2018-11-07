@@ -30,7 +30,9 @@
       }
 
       .selected-item {
-        display: inline-block;
+        @apply --layout-horizontal;
+        @apply --layout-wrap;
+        @apply --layout-center;
         width: auto;
         height: auto;
         margin-right: 8px;
@@ -39,12 +41,6 @@
 
       :host([readonly]) .selected-item {
         margin-right: 0;
-      }
-
-      .selected-item-body {
-        @apply --layout-horizontal;
-        @apply --layout-wrap;
-        @apply --layout-center;
       }
 
       :host([readonly]) .selected-item paper-icon-button,
