@@ -296,7 +296,6 @@
 
       if (search) {
         shownOptions = options.filter(this._itemContainsSearchString.bind(this));
-        this.set('searchedOptions', shownOptions);
         shownOptions = this._trimByShownOptionsLimit(shownOptions);
       } else if (options.length > this.shownOptionsLimit) {
         shownOptions = this._trimByShownOptionsLimit(options);
@@ -314,6 +313,7 @@
     }
 
     _trimByShownOptionsLimit(options) {
+      this.set('searchedOptions', options);
       return options.slice(0, Math.min(this.shownOptionsLimit, options.length));
     }
 
