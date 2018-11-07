@@ -84,8 +84,8 @@
           type: Array,
           computed: '_computeShownOptions(options, search, enableNoneOption, options.length)'
         },
-        searchedOptions: {
-          type: Array
+        searchedOptionsLength: {
+          type: Number
         },
         /**
          * Flag to show `None` option (first dropdown option)
@@ -118,7 +118,7 @@
         showLimitWarning: {
           type: Boolean,
           value: false,
-          computed: '_computeShowLimitWarning(shownOptionsLimit, searchedOptions)'
+          computed: '_computeShowLimitWarning(shownOptionsLimit, searchedOptionsLength)'
         },
         /** Flag used to show no search result found warning */
         showNoSearchResultsWarning: {
@@ -314,7 +314,7 @@
     }
 
     _trimByShownOptionsLimit(options) {
-      this.set('searchedOptions', options);
+      this.set('searchedOptionsLength', options);
       return options.slice(0, Math.min(this.shownOptionsLimit, options.length));
     }
 
@@ -323,11 +323,11 @@
           item[this.optionLabel].toString().toLowerCase().indexOf(this.search.toLowerCase()) > -1;
     }
 
-    _computeShowLimitWarning(limit, searchedOptions) {
-      if (this._isUndefined(limit) || this._isUndefined(searchedOptions)) {
+    _computeShowLimitWarning(limit, searchedOptionsLength) {
+      if (this._isUndefined(limit) || this._isUndefined(searchedOptionsLength)) {
         return false;
       }
-      return searchedOptions.length > limit;
+      return searchedOptionsLength > limit;
     }
 
     _showNoSearchResultsWarning(noOptionsAvailable, shownOptionsLength, optionsLength) {
