@@ -83,6 +83,9 @@
           type: Array,
           computed: '_computeShownOptions(options, search, enableNoneOption, options.length)'
         },
+        searchedOptions: {
+          type: Array
+        },
         /**
          * Flag to show `None` option (first dropdown option)
          * Used to reset single selection dropdown selected value
@@ -102,7 +105,7 @@
         /** Limit displayed options */
         shownOptionsLimit: {
           type: Number,
-          value: 50
+          value: 30
         },
         /** Flag to show a no options avaliable warning */
         noOptionsAvailable: {
@@ -114,7 +117,7 @@
         showLimitWarning: {
           type: Boolean,
           value: false,
-          computed: '_computeShowLimitWarning(shownOptionsLimit, shownOptions)'
+          computed: '_computeShowLimitWarning(shownOptionsLimit, searchedOptions)'
         },
         /** Flag used to show no search result found warning */
         showNoSearchResultsWarning: {
@@ -144,9 +147,9 @@
           value: 20
         },
         /**
-        * By default the search string is reset when the dropdown closes
-        * This flag allows the search value to persist after the dropdown is closed
-        */
+         * By default the search string is reset when the dropdown closes
+         * This flag allows the search value to persist after the dropdown is closed
+         */
         preserveSearchOnClose: {
           type: Boolean,
           value: false
@@ -298,16 +301,19 @@
         shownOptions = this._trimByShownOptionsLimit(options);
       }
 
+
       if (enableNoneOption) {
         let emptyOption = {cssClass: 'esmm-none-option'};
         emptyOption[this.optionValue] = null;
         emptyOption[this.optionLabel] = this.noneOptionLabel;
         shownOptions.unshift(emptyOption);
       }
+
       return shownOptions;
     }
 
     _trimByShownOptionsLimit(options) {
+      this.set('searchedOptions', options);
       return options.slice(0, Math.min(this.shownOptionsLimit, options.length));
     }
 
@@ -316,11 +322,11 @@
           item[this.optionLabel].toString().toLowerCase().indexOf(this.search.toLowerCase()) > -1;
     }
 
-    _computeShowLimitWarning(limit, shownOptions) {
-      if (this._isUndefined(limit) || this._isUndefined(shownOptions)) {
+    _computeShowLimitWarning(limit, searchedOptions) {
+      if (this._isUndefined(limit) || this._isUndefined(searchedOptions)) {
         return false;
       }
-      return shownOptions.length > limit;
+      return searchedOptions.length > limit;
     }
 
     _showNoSearchResultsWarning(noOptionsAvailable, shownOptionsLength, optionsLength) {
@@ -418,7 +424,7 @@
 
           // check if height is correctly calculated for IE11 and recalculate if needed
           listOptionsComputedHeight = this._recalculateOptionsListHeightForIE11(listOptionsComputedHeight,
-            openedDropdownCoord, searchboxHeight);
+              openedDropdownCoord, searchboxHeight);
 
           let optionsList = this._getOptionsList();
           optionsList.style.maxHeight = listOptionsComputedHeight + 'px';
