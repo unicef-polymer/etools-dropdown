@@ -60,12 +60,12 @@
     <iron-dropdown
         id="dropdownMenu"
         horizontal-align="[[horizontalAlign]]"
-        allow-outside-scroll="[[allowOutsideScroll]]"
+        allow-outside-scroll="[[!disableOutsideScroll]]"
         dynamic-align="[[!noDynamicAlign]]"
         on-iron-overlay-opened="_onDropdownOpen"
         on-iron-overlay-closed="_onDropdownClose"
         disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
-        no-cancel-on-outside-click>
+        no-cancel-on-outside-click allow-click-trough>
 
       <div id="ironDrContent" class="paper-material" elevation="1" slot="dropdown-content">
         <esmm-searchbox-input id="searchbox"
