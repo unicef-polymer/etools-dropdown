@@ -314,7 +314,7 @@
     }
 
     _trimByShownOptionsLimit(options) {
-      this.set('searchedOptionsLength', options);
+      this.set('searchedOptionsLength', options.length);
       return options.slice(0, Math.min(this.shownOptionsLimit, options.length));
     }
 
