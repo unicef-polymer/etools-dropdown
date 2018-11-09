@@ -192,13 +192,13 @@
         this._closeMenu();
       });
 
-      this._setFitInto();
-      this._setPositionTarget();
-      this._setFocusTarget();
-      this._setDropdownWidth();
-      this.notifyDropdownResize();
-
-      this._setResetSizeHandler();
+      // this._setFitInto();
+      // this._setPositionTarget();
+      // this._setFocusTarget();
+      // this._setDropdownWidth();
+      // this.notifyDropdownResize();
+      //
+      // this._setResetSizeHandler();
       this.elemAttached = true;
     }
 
@@ -494,16 +494,18 @@
     }
 
     _openMenu() {
-      let dr = this._getIronDropdown();
-      if (!dr.opened) {
-        dr.open();
-      }
+      this.set('opened', true);
+      // let dr = this._getIronDropdown();
+      // if (!dr.opened) {
+      //   dr.open();
+      // }
     }
 
     _closeMenu(e) {
-      let dr = this._getIronDropdown();
-      this.dropdownIsClosing = true;
-      dr.close();
+      this.set('opened', false);
+      // let dr = this._getIronDropdown();
+      // this.dropdownIsClosing = true;
+      // dr.close();
     }
 
     /**

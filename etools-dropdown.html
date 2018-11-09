@@ -22,6 +22,7 @@
     <style include="paper-material-styles esmm-shared-styles">
 
       :host {
+        position: relative;
         --paper-input-container-input: {
           cursor: var(--esmm-select-cursor);
         }
@@ -33,6 +34,21 @@
 
       #main iron-icon {
         @apply --esmm-icons;
+      }
+
+      #ironDrContent {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #ffffff;
+        z-index: 301;
+        padding-bottom: 8px;
+      }
+
+      :host([opened]) #ironDrContent {
+        display: block;
       }
 
     </style>
@@ -57,15 +73,15 @@
       <iron-icon icon="arrow-drop-down" slot="suffix" hidden$="[[readonly]]"></iron-icon>
     </paper-input>
 
-    <iron-dropdown
-        id="dropdownMenu"
-        horizontal-align="[[horizontalAlign]]"
-        allow-outside-scroll="[[!disableOutsideScroll]]"
-        dynamic-align="[[!noDynamicAlign]]"
-        on-iron-overlay-opened="_onDropdownOpen"
-        on-iron-overlay-closed="_onDropdownClose"
-        disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
-        no-cancel-on-outside-click allow-click-through>
+    <!--<iron-dropdown-->
+        <!--id="dropdownMenu"-->
+        <!--horizontal-align="[[horizontalAlign]]"-->
+        <!--allow-outside-scroll="[[!disableOutsideScroll]]"-->
+        <!--dynamic-align="[[!noDynamicAlign]]"-->
+        <!--on-iron-overlay-opened="_onDropdownOpen"-->
+        <!--on-iron-overlay-closed="_onDropdownClose"-->
+        <!--disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"-->
+        <!--no-cancel-on-outside-click allow-click-through>-->
 
       <div id="ironDrContent" class="paper-material" elevation="1" slot="dropdown-content">
         <esmm-searchbox-input id="searchbox"
@@ -87,7 +103,7 @@
                            on-close-etools-dropdown="_closeMenu"></esmm-options-list>
       </div>
 
-    </iron-dropdown>
+    <!--</iron-dropdown>-->
 
   </template>
 
@@ -139,6 +155,11 @@
             type: String,
             reflectToAttribute: true,
             computed: 'getLabel(selectedItem)'
+          },
+          opened: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
           }
         };
       }

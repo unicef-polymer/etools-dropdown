@@ -14,7 +14,10 @@
   <template>
     <style>
       :host {
-        display: block;
+        @apply --layout-vertical;
+        max-height: 90vh;
+        overflow: auto;
+        box-sizing: border-box;
 
         --paper-item-icon: {
           width: auto;
@@ -30,6 +33,10 @@
       paper-icon-item {
         cursor: var(--esmm-select-cursor);
         height: 48px; /* for IE */
+      }
+
+      :host([two-lines-label]) paper-icon-item {
+        min-height: 72px;
       }
 
       paper-icon-item .tick-icon {
@@ -145,7 +152,13 @@
           /** Flag to show a no options avaliable warning */
           noOptionsAvailable: Boolean,
 
-          shownOptionsLimit: Number
+          shownOptionsLimit: Number,
+
+          twoLinesLabel: {
+            type: Boolean,
+            value: false,
+            reflectPropertyToAttribute: true
+          }
         };
       }
 
