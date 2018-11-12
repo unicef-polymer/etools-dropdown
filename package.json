@@ -40,10 +40,10 @@
     "@polymer/paper-styles": "^3.0.0-pre.18",
     "@polymer/polymer": "^3.0.0",
     "web-animations-js": "^2.3.1",
-    "@bower_components/etools-ajax": "unicef-polymer/etools-ajax#1991c96a652cc807fcf7acc7985ddcdbfd62ca56",
-    "@bower_components/etools-behaviors": "unicef-polymer/etools-behaviors#575692750251f8b592630b470a34d254fc212bd8",
-    "@bower_components/etools-dialog": "unicef-polymer/etools-dialog#2a081d06adf6dc8ec237ef60d74ba0eb36744437",
-    "@bower_components/etools-loading": "unicef-polymer/etools-loading#dd8c083b85aa44ad809349878a426977dc89698d"
+    "etools-behaviors": "git+https://github.com/unicef-polymer/etools-behaviors.git#upgrade-to-polymer3",
+    "etools-dialog": "git+https://github.com/unicef-polymer/etools-dialog.git#upgrade-to-polymer3",
+    "etools-loading": "git+https://github.com/unicef-polymer/etools-loading.git#upgrade-to-polymer3",
+    "etools-ajax": "git+https://github.com/unicef-polymer/etools-ajax.git#update-to-polymer3"
   },
   "engines": {
     "yarn": ">= 1.0.0"
