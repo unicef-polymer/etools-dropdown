@@ -69,7 +69,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
                      selected-values="{{selectedValues}}">
         <template is="dom-repeat" items="[[shownOptions]]">
           <paper-icon-item disabled\$="[[item.disableSelection]]" item\$="[[item]]" internal-id\$="[[getValue(item)]]"
-                           on-click="_itemSelected" class\$="[[item.cssClass]] [[_getSelectedClass(item)]]"
+                           on-tap="_itemSelected" class\$="[[item.cssClass]] [[_getSelectedClass(item)]]"
                            title\$="[[_getItemTitle(item)]]">
 
             <iron-icon class="tick-icon" icon="check" slot="item-icon"></iron-icon>

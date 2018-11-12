@@ -61,12 +61,12 @@ class EtoolsDropdown extends DropdownRequiredMixins {
       <paper-input id="main" label="[[label]]" placeholder="[[placeholder]]" always-float-label="[[alwaysFloatLabel]]"
                    no-label-float="[[noLabelFloat]]" value="[[getLabel(selectedItem)]]" disabled="[[disabled]]"
                    invalid="[[invalid]]" error-message="[[_getErrorMessage(errorMessage, invalid)]]" readonly=""
-                   on-focus="onInputFocus" on-click="_openMenu">
+                   on-focus="onInputFocus" on-tap="_openMenu">
         <iron-icon icon="arrow-drop-down" slot="suffix" hidden\$="[[readonly]]"></iron-icon>
       </paper-input>
 
-      <iron-dropdown id="dropdownMenu" horizontal-align="right" allow-outside-scroll="[[allowOutsideScroll]]"
-                     dynamic-align="[[dynamicAlign]]" on-iron-overlay-opened="_onDropdownOpen"
+      <iron-dropdown id="dropdownMenu" horizontal-align="[[horizontalAlign]]" allow-outside-scroll="[[allowOutsideScroll]]"
+                     dynamic-align="[[!noDynamicAlign]]" on-iron-overlay-opened="_onDropdownOpen"
                      on-iron-overlay-closed="_onDropdownClose" disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
                      no-cancel-on-outside-click="">
 

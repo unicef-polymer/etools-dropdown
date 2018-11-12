@@ -52,10 +52,10 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
                              capitalize="[[capitalize]]" readonly="[[readonly]]" disabled="[[disabled]]"
                              invalid="[[invalid]]" option-value="[[optionValue]]" option-label="[[optionLabel]]"
                              error-message="[[_getErrorMessage(errorMessage, invalid)]]" on-focus="onInputFocus"
-                             on-click="_openMenu"></esmm-selected-options>
+                             on-tap="_openMenu"></esmm-selected-options>
 
-      <iron-dropdown id="dropdownMenu" horizontal-align="right" allow-outside-scroll="[[allowOutsideScroll]]"
-                     dynamic-align="[[dynamicAlign]]" on-iron-overlay-opened="_onDropdownOpen"
+      <iron-dropdown id="dropdownMenu" horizontal-align="[[horizontalAlign]]" allow-outside-scroll="[[allowOutsideScroll]]"
+                     dynamic-align="[[!noDynamicAlign]]" on-iron-overlay-opened="_onDropdownOpen"
                      on-iron-overlay-closed="_onDropdownClose" disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
                      no-cancel-on-outside-click="">
 

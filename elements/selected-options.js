@@ -101,7 +101,7 @@ class EsmmSelectedOptions extends ListItemUtils(PolymerElement) {
                 [[getLabel(item)]]
                 <span class="readonly-separator" hidden\$="[[!readonly]]">|</span>
                 <paper-icon-button id="iconRemoveSelected" disabled\$="[[disabled]]" hidden\$="[[readonly]]"
-                                   icon="close" on-click="_removeItem" on-focus="_onXFocus"></paper-icon-button>
+                                   icon="close" on-tap="_removeItem" on-focus="_onXFocus"></paper-icon-button>
               </span>
             </span>
             </template>

@@ -55,10 +55,10 @@ export const CommonFunctionality = (superClass) => class extends ListItemUtils(s
         },
         reflectToAttribute: true
       },
-      /** Makes the dropdown to show top or bottom where it will fit better */
-      dynamicAlign: {
+      /** Makes the dropdown to show top or bottom (or left - right) where it will fit better */
+      noDynamicAlign: {
         type: Boolean,
-        value: true
+        value: false
       },
       /** Allows scroll outside opened dropdown */
       allowOutsideScroll: {
@@ -153,6 +153,22 @@ export const CommonFunctionality = (superClass) => class extends ListItemUtils(s
       elemAttached: {
         type: Boolean,
         value: false
+      },
+      autoWidth: {
+        type: Boolean,
+        value: false
+      },
+      maxWidth: {
+        type: String,
+        value: ''
+      },
+      minWidth: {
+        type: String,
+        value: ''
+      },
+      horizontalAlign: {
+        type: String,
+        value: 'right'
       }
     };
   }
@@ -405,7 +421,9 @@ export const CommonFunctionality = (superClass) => class extends ListItemUtils(s
   }
 
   _onDropdownOpen() {
-    this._setDropdownWidth();
+    if (!this.autoWidth) {
+      this._setDropdownWidth();
+    }
     this._resizeOptionsListHeight();
     // when inside a paper-dialog the dropdown opens somewhere in the background and
     // we need to force repositioning
@@ -421,7 +439,20 @@ export const CommonFunctionality = (superClass) => class extends ListItemUtils(s
 
   _setDropdownWidth() {
     let ironDropdown = this._getIronDropdown();
-    ironDropdown.style.width = this.offsetWidth + 'px';
+    // ironDropdown.style.width = this.offsetWidth + 'px';
+    if (!this.autoWidth) {
+      ironDropdown.style.width = this.offsetWidth + 'px';
+    }
+    
+    if (this.minWidth && this.minWidth !== '') {
+      ironDropdown.style.minWidth = this.minWidth;
+    }
+
+    if (this.maxWidth && this.maxWidth !== '') {
+      ironDropdown.style.maxWidth = this.maxWidth;
+    }else {
+      ironDropdown.style.maxWidth = '90%';
+    }
   }
 
   _setFocusTarget() {

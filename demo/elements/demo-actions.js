@@ -30,31 +30,31 @@ class EsmmDemoActions extends PolymerElement {
       </style>
 
       <div>
-        <paper-button raised="" on-click="validateDropdowns">Validate</paper-button>
-        <paper-button raised="" class\$="[[autoValidateActiveClass]]" on-click="activateAutoValidation">Enable auto
+        <paper-button raised="" on-tap="validateDropdowns">Validate</paper-button>
+        <paper-button raised="" class\$="[[autoValidateActiveClass]]" on-tap="activateAutoValidation">Enable auto
           validation
         </paper-button>
-        <paper-button raised="" on-click="deactivateAutoValidation">Disable auto validation</paper-button>
+        <paper-button raised="" on-tap="deactivateAutoValidation">Disable auto validation</paper-button>
       </div>
       <div>
-        <paper-button raised="" on-click="makeDropdownsRequired" class\$="[[requiredActiveClass]]">
+        <paper-button raised="" on-tap="makeDropdownsRequired" class\$="[[requiredActiveClass]]">
           Make dropdowns required
         </paper-button>
-        <paper-button raised="" on-click="makeDropdownsNotRequired">Make dropdowns NOT required</paper-button>
+        <paper-button raised="" on-tap="makeDropdownsNotRequired">Make dropdowns NOT required</paper-button>
       </div>
       <div>
-        <paper-button raised="" on-click="makeDropdownsReadonly" class\$="[[readonlyActiveClass]]">Make dropdowns
+        <paper-button raised="" on-tap="makeDropdownsReadonly" class\$="[[readonlyActiveClass]]">Make dropdowns
           readonly
         </paper-button>
-        <paper-button raised="" on-click="removeReadonlyState">Make dropdowns editable</paper-button>
+        <paper-button raised="" on-tap="removeReadonlyState">Make dropdowns editable</paper-button>
       </div>
       <div>
-        <paper-button raised="" on-click="activateInvalidState">Activate invalid state</paper-button>
-        <paper-button raised="" on-click="deactivateInvalidState">Hide invalid state</paper-button>
+        <paper-button raised="" on-tap="activateInvalidState">Activate invalid state</paper-button>
+        <paper-button raised="" on-tap="deactivateInvalidState">Hide invalid state</paper-button>
       </div>
       <div>
-        <paper-button raised="" on-click="disableDropdowns" class\$="[[disabledActiveClass]]">Disable</paper-button>
-        <paper-button raised="" on-click="enableDropdowns">Enable</paper-button>
+        <paper-button raised="" on-tap="disableDropdowns" class\$="[[disabledActiveClass]]">Disable</paper-button>
+        <paper-button raised="" on-tap="enableDropdowns">Enable</paper-button>
       </div>
     `;
   }
