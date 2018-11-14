@@ -453,7 +453,7 @@
       this._resizeOptionsListHeight();
       // when inside a paper-dialog the dropdown opens somewhere in the background and
       // we need to force repositioning
-      // this.notifyDropdownResize();
+      this.notifyDropdownResize();
     }
 
     _onDropdownClose() {
@@ -465,13 +465,9 @@
 
     _setDropdownWidth() {
       let ironDropdown = this._getIronDropdown();
-      let ironDrContent = this._getIronDropdownContent();
-      console.log(this.offsetWidth, this.offsetLeft);
       ironDropdown.style.left = this.offsetLeft + 'px';
       if (!this.autoWidth) {
         ironDropdown.style.width = this.offsetWidth + 'px';
-        ironDrContent.style.width = this.offsetWidth + 'px';
-        ironDrContent.style.maxWidth = this.offsetWidth + 'px';
       }
       if (this.minWidth && this.minWidth !== '') {
         ironDropdown.style.minWidth = this.minWidth;
@@ -479,7 +475,7 @@
       if (this.maxWidth && this.maxWidth !== '') {
         ironDropdown.style.maxWidth = this.maxWidth;
       } else {
-        ironDropdown.style.maxWidth = '90%';
+        ironDropdown.style.maxWidth = '100%';
       }
     }
 

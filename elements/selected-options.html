@@ -93,14 +93,14 @@
                     on-dom-change="_selectedItemsDisplayHasChanged"
                     items="[[selectedItems]]">
             <span class="selected-item">
-                <span>[[getLabel(item)]]</span>
-                <span class="readonly-separator" hidden$=[[!readonly]]>|</span>
-                <paper-icon-button id="iconRemoveSelected"
-                                   disabled$="[[disabled]]"
-                                   hidden$="[[readonly]]"
-                                   icon="close"
-                                   on-click="_removeItem"
-                                   on-focus="_onXFocus"></paper-icon-button>
+              <span>[[getLabel(item)]]</span>
+              <span class="readonly-separator" hidden$=[[!readonly]]>|</span>
+              <paper-icon-button id="iconRemoveSelected"
+                                 disabled$="[[disabled]]"
+                                 hidden$="[[readonly]]"
+                                 icon="close"
+                                 on-click="_removeItem"
+                                 on-focus="_onXFocus"></paper-icon-button>
             </span>
           </template>
 
@@ -118,6 +118,7 @@
   </template>
   <script>
     'use strict';
+
     /**
      * @polymer
      * @customElement
