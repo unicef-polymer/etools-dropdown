@@ -1,4 +1,5 @@
 <link rel="import" href="list-item-utils-mixin.html">
+<link rel="import" href="../../etools-behaviors/etools-logs-mixin.html">
 <script>
   'use strict';
 
@@ -9,10 +10,11 @@
    * Common functionality for single selection and multiple selection dropdown
    * @polymer
    * @mixinFunction
+   * @appliesMixin EtoolsLogsMixin
    * @appliesMixin EsmmMixins.ListItemUtils
    * @memberof EsmmMixins
    */
-  EsmmMixins.CommonFunctionality = (superClass) => class extends EsmmMixins.ListItemUtils(superClass) {
+  EsmmMixins.CommonFunctionality = (superClass) => class extends EtoolsLogsMixin(EsmmMixins.ListItemUtils(superClass)) {
 
     static get properties() {
       return {
@@ -211,7 +213,12 @@
     }
 
     _getDialogContent(d) {
-      return d.shadowRoot.querySelector('#dialogContent');
+      const drContent = d.shadowRoot.querySelector('#dialogContent');
+      if (drContent) {
+        return drContent;
+      } else {
+        throw new Error('Element with id="dialogContent" not found in etools-dialog');
+      }
     }
 
     _setFitInto(fitInto) {
@@ -222,26 +229,31 @@
       }
 
       if (fitInto === 'etools-dialog') {
-        let rootNodeHost = this.getRootNode().host;
-        let dialogContent = null;
-        while (dialogContent === null && rootNodeHost) {
-          let hostTagName = rootNodeHost.tagName.toLowerCase();
-          // case 1: rootNodeHost is etools-dialog (unlikely, but...)
-          if (hostTagName === 'etools-dialog') {
-            dialogContent = this._getDialogContent(rootNodeHost);
-          } else {
-            // case 2: rootNodeHost is not etools-dialog, but it might contain it
-            let d = rootNodeHost.shadowRoot.querySelector('etools-dialog');
-            if (d instanceof Element) {
-              // etools-dialog found
-              dialogContent = this._getDialogContent(d);
+        try {
+          let rootNodeHost = this.getRootNode().host;
+          let dialogContent = null;
+          while (dialogContent === null && rootNodeHost) {
+            let hostTagName = rootNodeHost.tagName.toLowerCase();
+            // case 1: rootNodeHost is etools-dialog (unlikely, but...)
+            if (hostTagName === 'etools-dialog') {
+              dialogContent = this._getDialogContent(rootNodeHost);
             } else {
-              // etools-dialog not found, repeat
-              rootNodeHost = rootNodeHost.getRootNode().host;
+              // case 2: rootNodeHost is not etools-dialog, but it might contain it
+              let d = rootNodeHost.shadowRoot.querySelector('etools-dialog');
+              if (d instanceof Element) {
+                // etools-dialog found
+                dialogContent = this._getDialogContent(d);
+              } else {
+                // etools-dialog not found, repeat
+                rootNodeHost = rootNodeHost.getRootNode().host;
+              }
             }
           }
+          fitInto = dialogContent;
+        } catch(e) {
+          this.logWarn('Cannot find etools-dialog content element.', 'etools-dropdown', e);
+          fitInto = null;
         }
-        fitInto = dialogContent;
       }
 
       if (fitInto && fitInto instanceof Element) {
