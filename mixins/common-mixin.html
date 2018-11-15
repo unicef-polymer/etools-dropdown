@@ -1,4 +1,5 @@
 <link rel="import" href="list-item-utils-mixin.html">
+<link rel="import" href="../../etools-behaviors/etools-logs-mixin.html">
 <script>
   'use strict';
 
@@ -9,10 +10,11 @@
    * Common functionality for single selection and multiple selection dropdown
    * @polymer
    * @mixinFunction
+   * @appliesMixin EtoolsLogsMixin
    * @appliesMixin EsmmMixins.ListItemUtils
    * @memberof EsmmMixins
    */
-  EsmmMixins.CommonFunctionality = (superClass) => class extends EsmmMixins.ListItemUtils(superClass) {
+  EsmmMixins.CommonFunctionality = (superClass) => class extends EtoolsLogsMixin(EsmmMixins.ListItemUtils(superClass)) {
 
     static get properties() {
       return {
@@ -63,11 +65,6 @@
         },
         /** Makes the dropdown to show top or bottom (or left - right) where it will fit better */
         noDynamicAlign: {
-          type: Boolean,
-          value: false
-        },
-        /** Allows scroll outside opened dropdown */
-        disableOutsideScroll: {
           type: Boolean,
           value: false
         },
@@ -187,28 +184,81 @@
       super.connectedCallback();
 
       // focusout is used because blur acts weirdly on IE
-      this.addEventListener('focusout', (e) => {
-        e.stopImmediatePropagation();
-        this._closeMenu();
-      });
+      this._onFocusOut = this._onFocusOut.bind(this);
+      this.addEventListener('focusout', this._onFocusOut);
 
-      // this._setFitInto();
+      // this._setFitInto(this.fitInto);
       // this._setPositionTarget();
       // this._setFocusTarget();
       // this._setDropdownWidth();
+      // this._disableScrollAction();
       // this.notifyDropdownResize();
-      //
       // this._setResetSizeHandler();
       this.elemAttached = true;
     }
 
-    _setFitInto() {
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      this.removeEventListener('focusout', this._onFocusOut);
+    }
+
+    _onFocusOut(e) {
+      e.stopImmediatePropagation();
+      this._closeMenu();
+    }
+
+    _disableScrollAction() {
+      let ironDropdown = this._getIronDropdown();
+      ironDropdown.set('scrollAction', null);
+    }
+
+    _getDialogContent(d) {
+      const drContent = d.shadowRoot.querySelector('#dialogContent');
+      if (drContent) {
+        return drContent;
+      } else {
+        throw new Error('Element with id="dialogContent" not found in etools-dialog');
+      }
+    }
+
+    _setFitInto(fitInto) {
       let ironDropdown = this._getIronDropdown();
       // fitInto element will not let the dropdown to overlap it's margins
-      if (!this.fitInto && window.EtoolsEsmmFitIntoEl) {
+      if (!fitInto && window.EtoolsEsmmFitIntoEl) {
         ironDropdown.set('fitInto', window.EtoolsEsmmFitIntoEl);
-      } else if (this.fitInto) {
-        ironDropdown.set('fitInto', this.fitInto);
+      }
+
+      if (fitInto === 'etools-dialog') {
+        try {
+          let rootNodeHost = this.getRootNode().host;
+          let dialogContent = null;
+          while (dialogContent === null && rootNodeHost) {
+            let hostTagName = rootNodeHost.tagName.toLowerCase();
+            // case 1: rootNodeHost is etools-dialog (unlikely, but...)
+            if (hostTagName === 'etools-dialog') {
+              dialogContent = this._getDialogContent(rootNodeHost);
+            } else {
+              // case 2: rootNodeHost is not etools-dialog, but it might contain it
+              let d = rootNodeHost.shadowRoot.querySelector('etools-dialog');
+              if (d instanceof Element) {
+                // etools-dialog found
+                dialogContent = this._getDialogContent(d);
+              } else {
+                // etools-dialog not found, repeat
+                rootNodeHost = rootNodeHost.getRootNode().host;
+              }
+            }
+          }
+          fitInto = dialogContent;
+        } catch(e) {
+          this.logWarn('Cannot find etools-dialog content element.', 'etools-dropdown', e);
+          fitInto = null;
+        }
+      }
+
+      if (fitInto && fitInto instanceof Element) {
+        fitInto.style.position = 'relative';
+        ironDropdown.set('fitInto', fitInto);
       }
     }
 
@@ -452,6 +502,7 @@
 
     _setDropdownWidth() {
       let ironDropdown = this._getIronDropdown();
+      ironDropdown.style.left = this.offsetLeft + 'px';
       if (!this.autoWidth) {
         ironDropdown.style.width = this.offsetWidth + 'px';
       }
@@ -461,7 +512,7 @@
       if (this.maxWidth && this.maxWidth !== '') {
         ironDropdown.style.maxWidth = this.maxWidth;
       } else {
-        ironDropdown.style.maxWidth = '90%';
+        ironDropdown.style.maxWidth = '100%';
       }
     }
 
