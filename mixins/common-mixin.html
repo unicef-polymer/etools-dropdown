@@ -185,7 +185,7 @@
       this._onFocusOut = this._onFocusOut.bind(this);
       this.addEventListener('focusout', this._onFocusOut);
 
-      this._setFitInto();
+      this._setFitInto(this.fitInto);
       this._setPositionTarget();
       this._setFocusTarget();
       this._setDropdownWidth();
@@ -210,13 +210,44 @@
       ironDropdown.set('scrollAction', null);
     }
 
-    _setFitInto() {
+    _getDialogContent(d) {
+      return d.shadowRoot.querySelector('#dialogContent');
+    }
+
+    _setFitInto(fitInto) {
       let ironDropdown = this._getIronDropdown();
       // fitInto element will not let the dropdown to overlap it's margins
-      if (!this.fitInto && window.EtoolsEsmmFitIntoEl) {
+      if (!fitInto && window.EtoolsEsmmFitIntoEl) {
         ironDropdown.set('fitInto', window.EtoolsEsmmFitIntoEl);
-      } else if (this.fitInto) {
-        ironDropdown.set('fitInto', this.fitInto);
+      }
+
+      if (fitInto === 'etools-dialog') {
+        let rootNodeHost = this.getRootNode().host;
+        let dialogContent = null;
+        while (dialogContent === null && rootNodeHost) {
+          let hostTagName = rootNodeHost.tagName.toLowerCase();
+          // case 1: rootNodeHost is etools-dialog (unlikely, but...)
+          if (hostTagName === 'etools-dialog') {
+            dialogContent = this._getDialogContent(rootNodeHost);
+          } else {
+            // case 2: rootNodeHost is not etools-dialog, but it might contain it
+            let d = rootNodeHost.shadowRoot.querySelector('etools-dialog');
+            if (d instanceof Element) {
+              // etools-dialog found
+              dialogContent = this._getDialogContent(d);
+            } else {
+              // etools-dialog not found, repeat
+              rootNodeHost = rootNodeHost.getRootNode().host;
+            }
+          }
+        }
+        fitInto = dialogContent;
+      }
+
+      if (fitInto && fitInto instanceof Element) {
+        fitInto.style.position = 'relative';
+        ironDropdown.set('fitInto', fitInto);
+        console.log(ironDropdown, fitInto, ironDropdown.fitInto);
       }
     }
 
