@@ -8,6 +8,15 @@
 <dom-module id="esmm-single-selection-demo">
   <template>
     <style>
+
+      :host {
+        height: 2000px;
+      }
+
+      .page-bottom {
+        margin-top: 100%;
+      }
+
       .demo-field + .demo-field {
         margin-left: 24px;
       }
@@ -32,6 +41,16 @@
     </div>
 
     <esmm-demo-actions id="demoActions"></esmm-demo-actions>
+
+    <div class="page-bottom">
+      <etools-dropdown id="dropDown3"
+                       class="demo-field"
+                       label="Single selection"
+                       options="[[simpleOptions]]"
+                       show-limit-warning
+                       shown-options-limit="10"
+                       enable-none-option></etools-dropdown>
+    </div>
 
   </template>
   <script>
