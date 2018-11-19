@@ -30,7 +30,6 @@
       }
 
       .selected-item {
-        display: inline-block;
         width: auto;
         height: auto;
         margin-right: 8px;
@@ -41,12 +40,6 @@
         margin-right: 0;
       }
 
-      .selected-item-body {
-        @apply --layout-horizontal;
-        @apply --layout-wrap;
-        @apply --layout-center;
-      }
-
       :host([readonly]) .selected-item paper-icon-button,
       :host([readonly]) .selected-item:last-of-type .readonly-separator {
         display: none;
@@ -54,6 +47,7 @@
 
       #selected-items-wrapper {
         width: 100%;
+        display: inline;
       }
 
       .readonly-separator {
@@ -84,7 +78,7 @@
                            disabled$="[[disabled]]"
                            invalid="[[invalid]]">
 
-      <label hidden$="[[!label]]" aria-hidden="true" for="input" slot="label">[[label]]</label>
+      <label hidden$="[[!label]]" aria-hidden="true" for="selected-items-wrapper" slot="label">[[label]]</label>
 
       <div slot="input" class="paper-input-input">
         <span class="placeholder"
@@ -99,16 +93,14 @@
                     on-dom-change="_selectedItemsDisplayHasChanged"
                     items="[[selectedItems]]">
             <span class="selected-item">
-              <span class="selected-item-body">
-                [[getLabel(item)]]
-                <span class="readonly-separator" hidden$=[[!readonly]]>|</span>
-                <paper-icon-button id="iconRemoveSelected"
-                                   disabled$="[[disabled]]"
-                                   hidden$="[[readonly]]"
-                                   icon="close"
-                                   on-click="_removeItem"
-                                   on-focus="_onXFocus"></paper-icon-button>
-              </span>
+              <span>[[getLabel(item)]]</span>
+              <span class="readonly-separator" hidden$=[[!readonly]]>|</span>
+              <paper-icon-button id="iconRemoveSelected"
+                                 disabled$="[[disabled]]"
+                                 hidden$="[[readonly]]"
+                                 icon="close"
+                                 on-click="_removeItem"
+                                 on-focus="_onXFocus"></paper-icon-button>
             </span>
           </template>
 
@@ -126,6 +118,7 @@
   </template>
   <script>
     'use strict';
+
     /**
      * @polymer
      * @customElement
