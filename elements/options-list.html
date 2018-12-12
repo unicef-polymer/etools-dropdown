@@ -66,7 +66,6 @@
       <template is="dom-repeat" items="[[shownOptions]]">
         <paper-icon-item
             disabled$="[[item.disableSelection]]"
-            item$="[[item]]"
             internal-id$="[[getValue(item)]]"
             on-click="_itemSelected"
             class$="[[item.cssClass]] [[_getSelectedClass(item)]]"
@@ -197,7 +196,7 @@
        * @private
        */
       _getSelectedClassSingle(item) {
-        return (this.selected === item[this.optionValue]) ? 'iron-selected' : '';
+        return (this.selected && this.selected === item[this.optionValue]) ? 'iron-selected' : '';
       }
 
       /**
