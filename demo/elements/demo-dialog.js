@@ -1,5 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
-import '../../../etools-dialog/etools-dialog.js';
+import 'etools-dialog/etools-dialog.js';
 import './multi-selection-demo.js';
 import './single-selection-demo.js';
 
