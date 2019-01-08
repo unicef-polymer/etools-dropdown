@@ -38,6 +38,10 @@ $_documentContainer.innerHTML = `<custom-style>
         position: absolute !important;
       }
 
+      #dropdownMenu {
+        position: absolute !important;
+      }
+
       #ironDrContent {
         background-color: var(--esmm-bg-color, #ffffff);
         overflow: hidden;
