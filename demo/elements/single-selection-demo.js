@@ -22,7 +22,7 @@ class EsmmSingleSelectionDemo extends TestData(PolymerElement) {
 
       <div>
         <etools-dropdown id="dropDown1" class="demo-field" label="Single selection" options="[[simpleOptions]]"
-                         enable-none-option=""></etools-dropdown>
+                         enable-none-option show-limit-warning shown-options-limit="6"></etools-dropdown>
       </div>
       <div>
         <etools-dropdown id="dropDown2" class="demo-field" label="Single selection, multi-lines options"

@@ -1,12 +1,13 @@
 import {ListItemUtils} from './list-item-utils-mixin.js';
-
+import EtoolsLogsMixin from 'etools-behaviors/etools-logs-mixin.js';
 /*
  * Common functionality for single selection and multiple selection dropdown
  * @polymer
  * @mixinFunction
+ * @appliesMixin EtoolsLogsMixin
  * @appliesMixin EsmmMixins.ListItemUtils
  */
-export const CommonFunctionality = (superClass) => class extends ListItemUtils(superClass) {
+export const CommonFunctionality = (superClass) => class extends EtoolsLogsMixin(ListItemUtils(superClass)) {
 
   static get properties() {
     return {
@@ -60,10 +61,6 @@ export const CommonFunctionality = (superClass) => class extends ListItemUtils(s
         type: Boolean,
         value: false
       },
-      /** Allows scroll outside opened dropdown */
-      allowOutsideScroll: {
-        type: Boolean
-      },
       search: {
         type: String
         // observer: '_searchValueChanged'
@@ -76,6 +73,9 @@ export const CommonFunctionality = (superClass) => class extends ListItemUtils(s
       shownOptions: {
         type: Array,
         computed: '_computeShownOptions(options, search, enableNoneOption, options.length)'
+      },
+      searchedOptionsLength: {
+        type: Number
       },
       /**
        * Flag to show `None` option (first dropdown option)
@@ -96,7 +96,7 @@ export const CommonFunctionality = (superClass) => class extends ListItemUtils(s
       /** Limit displayed options */
       shownOptionsLimit: {
         type: Number,
-        value: 50
+        value: 30
       },
       /** Flag to show a no options avaliable warning */
       noOptionsAvailable: {
@@ -108,7 +108,7 @@ export const CommonFunctionality = (superClass) => class extends ListItemUtils(s
       showLimitWarning: {
         type: Boolean,
         value: false,
-        computed: '_computeShowLimitWarning(shownOptionsLimit, shownOptions)'
+        computed: '_computeShowLimitWarning(shownOptionsLimit, searchedOptionsLength)'
       },
       /** Flag used to show no search result found warning */
       showNoSearchResultsWarning: {
@@ -177,28 +177,78 @@ export const CommonFunctionality = (superClass) => class extends ListItemUtils(s
     super.connectedCallback();
 
     // focusout is used because blur acts weirdly on IE
-    this.addEventListener('focusout', (e) => {
-      e.stopImmediatePropagation();
-      this._closeMenu();
-    });
+    this._onFocusOut = this._onFocusOut.bind(this);
+    this.addEventListener('focusout', this._onFocusOut);
 
-    this._setFitInto();
+    this._setFitInto(this.fitInto);
     this._setPositionTarget();
     this._setFocusTarget();
     this._setDropdownWidth();
+    this._disableScrollAction();
     this.notifyDropdownResize();
 
     this._setResetSizeHandler();
     this.elemAttached = true;
   }
 
-  _setFitInto() {
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('focusout', this._onFocusOut);
+  }
+
+  _onFocusOut(e) {
+    e.stopImmediatePropagation();
+    this._closeMenu();
+  }
+  _disableScrollAction() {
+    let ironDropdown = this._getIronDropdown();
+    ironDropdown.set('scrollAction', null);
+  }
+  _getDialogContent(d) {
+    const drContent = d.shadowRoot.querySelector('#dialogContent');
+    if (drContent) {
+      return drContent;
+    } else {
+      throw new Error('Element with id="dialogContent" not found in etools-dialog');
+    }
+  }
+
+  _setFitInto(fitInto) {
     let ironDropdown = this._getIronDropdown();
     // fitInto element will not let the dropdown to overlap it's margins
-    if (!this.fitInto && window.EtoolsEsmmFitIntoEl) {
+    if (!fitInto && window.EtoolsEsmmFitIntoEl) {
       ironDropdown.set('fitInto', window.EtoolsEsmmFitIntoEl);
-    } else if (this.fitInto) {
-      ironDropdown.set('fitInto', this.fitInto);
+    }
+    if (fitInto === 'etools-dialog') {
+      try {
+        let rootNodeHost = this.getRootNode().host;
+        let dialogContent = null;
+        while (dialogContent === null && rootNodeHost) {
+          let hostTagName = rootNodeHost.tagName.toLowerCase();
+          // case 1: rootNodeHost is etools-dialog (unlikely, but...)
+          if (hostTagName === 'etools-dialog') {
+            dialogContent = this._getDialogContent(rootNodeHost);
+          } else {
+            // case 2: rootNodeHost is not etools-dialog, but it might contain it
+            let d = rootNodeHost.shadowRoot.querySelector('etools-dialog');
+            if (d instanceof Element) {
+              // etools-dialog found
+              dialogContent = this._getDialogContent(d);
+            } else {
+              // etools-dialog not found, repeat
+              rootNodeHost = rootNodeHost.getRootNode().host;
+            }
+          }
+        }
+        fitInto = dialogContent;
+      } catch(e) {
+        this.logWarn('Cannot find etools-dialog content element.', 'etools-dropdown', e);
+        fitInto = null;
+      }
+    }
+    if (fitInto && fitInto instanceof Element) {
+      fitInto.style.position = 'relative';
+      ironDropdown.set('fitInto', fitInto);
     }
   }
 
@@ -302,6 +352,7 @@ export const CommonFunctionality = (superClass) => class extends ListItemUtils(s
   }
 
   _trimByShownOptionsLimit(options) {
+    this.set('searchedOptionsLength', options.length);
     return options.slice(0, Math.min(this.shownOptionsLimit, options.length));
   }
 
@@ -310,11 +361,11 @@ export const CommonFunctionality = (superClass) => class extends ListItemUtils(s
         item[this.optionLabel].toString().toLowerCase().indexOf(this.search.toLowerCase()) > -1;
   }
 
-  _computeShowLimitWarning(limit, shownOptions) {
-    if (this._isUndefined(limit) || this._isUndefined(shownOptions)) {
+  _computeShowLimitWarning(limit, searchedOptionsLength) {
+    if (this._isUndefined(limit) || this._isUndefined(searchedOptionsLength)) {
       return false;
     }
-    return shownOptions.length > limit;
+    return searchedOptionsLength > limit;
   }
 
   _showNoSearchResultsWarning(noOptionsAvailable, shownOptionsLength, optionsLength) {
@@ -439,19 +490,19 @@ export const CommonFunctionality = (superClass) => class extends ListItemUtils(s
 
   _setDropdownWidth() {
     let ironDropdown = this._getIronDropdown();
-    // ironDropdown.style.width = this.offsetWidth + 'px';
+    ironDropdown.style.left = this.offsetLeft + 'px';
     if (!this.autoWidth) {
       ironDropdown.style.width = this.offsetWidth + 'px';
     }
-    
+
     if (this.minWidth && this.minWidth !== '') {
       ironDropdown.style.minWidth = this.minWidth;
     }
 
     if (this.maxWidth && this.maxWidth !== '') {
       ironDropdown.style.maxWidth = this.maxWidth;
-    }else {
-      ironDropdown.style.maxWidth = '90%';
+    } else {
+      ironDropdown.style.maxWidth = '100%';
     }
   }
 
@@ -506,23 +557,6 @@ export const CommonFunctionality = (superClass) => class extends ListItemUtils(s
     }
     this._openMenu();
   }
-
-  /**
-   * TODO: this might not be needed anymore. To be removed
-   * Sometimes the dropdown doesn't resize when search is changed and we need to force the resize
-   */
-  // _searchValueChanged(search, oldSearch) {
-  //   if (this._isUndefined(search) || (this._isUndefined(oldSearch) && search === '')) {
-  //     // prevent resizing at search property init
-  //     return;
-  //   }
-
-  //   this.resetIronDropdownSize();
-  //   this.notifyDropdownResize();
-  //   this.async(function() {
-  //     this._resizeOptionsListHeight();
-  //   });
-  // }
 
   notifyDropdownResize() {
     let ironDropdown = this._getIronDropdown();

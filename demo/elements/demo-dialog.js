@@ -1,12 +1,13 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '../../../etools-dialog/etools-dialog.js';
 import './multi-selection-demo.js';
-import './sigle-selection-demo.js';
+import './single-selection-demo.js';
 
 /* eslint-disable */
 /**
  * @customElement
  * @polymer
+ * @demo demo/index-dialog.html
  */
 class DropdownDialogDemo extends PolymerElement {
   static get template() {

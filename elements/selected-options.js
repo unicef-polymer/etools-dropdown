@@ -36,7 +36,6 @@ class EsmmSelectedOptions extends ListItemUtils(PolymerElement) {
         }
 
         .selected-item {
-          display: inline-block;
           width: auto;
           height: auto;
           margin-right: 8px;
@@ -47,12 +46,6 @@ class EsmmSelectedOptions extends ListItemUtils(PolymerElement) {
           margin-right: 0;
         }
 
-        .selected-item-body {
-          @apply --layout-horizontal;
-          @apply --layout-wrap;
-          @apply --layout-center;
-        }
-
         :host([readonly]) .selected-item paper-icon-button,
         :host([readonly]) .selected-item:last-of-type .readonly-separator {
           display: none;
@@ -60,6 +53,7 @@ class EsmmSelectedOptions extends ListItemUtils(PolymerElement) {
 
         #selected-items-wrapper {
           width: 100%;
+          display: inline;
         }
 
         .readonly-separator {
@@ -86,7 +80,7 @@ class EsmmSelectedOptions extends ListItemUtils(PolymerElement) {
                              always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel, placeholder)]]"
                              auto-validate\$="[[autoValidate]]" disabled\$="[[disabled]]" invalid="[[invalid]]">
 
-        <label hidden\$="[[!label]]" aria-hidden="true" for="input" slot="label">[[label]]</label>
+        <label hidden\$="[[!label]]" aria-hidden="true" for="selected-items-wrapper" slot="label">[[label]]</label>
 
         <div slot="input" class="paper-input-input">
         <span class="placeholder" hidden\$="[[_hidePlaceholder]]">
@@ -97,12 +91,10 @@ class EsmmSelectedOptions extends ListItemUtils(PolymerElement) {
             <template is="dom-repeat" notify-dom-change="" on-dom-change="_selectedItemsDisplayHasChanged"
                       items="[[selectedItems]]">
             <span class="selected-item">
-              <span class="selected-item-body">
-                [[getLabel(item)]]
-                <span class="readonly-separator" hidden\$="[[!readonly]]">|</span>
-                <paper-icon-button id="iconRemoveSelected" disabled\$="[[disabled]]" hidden\$="[[readonly]]"
-                                   icon="close" on-tap="_removeItem" on-focus="_onXFocus"></paper-icon-button>
-              </span>
+              <span>[[getLabel(item)]]</span>
+              <span class="readonly-separator" hidden\$="[[!readonly]]">|</span>
+              <paper-icon-button id="iconRemoveSelected" disabled\$="[[disabled]]" hidden\$="[[readonly]]"
+                                 icon="close" on-tap="_removeItem" on-focus="_onXFocus"></paper-icon-button>
             </span>
             </template>
 

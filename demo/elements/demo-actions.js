@@ -2,6 +2,10 @@ import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-button/paper-button.js';
 
 /* eslint-disable */
+/**
+ * @polymer
+ * @customElement
+ */
 class EsmmDemoActions extends PolymerElement {
   static get template() {
     // language=HTML

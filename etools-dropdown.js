@@ -65,10 +65,10 @@ class EtoolsDropdown extends DropdownRequiredMixins {
         <iron-icon icon="arrow-drop-down" slot="suffix" hidden\$="[[readonly]]"></iron-icon>
       </paper-input>
 
-      <iron-dropdown id="dropdownMenu" horizontal-align="[[horizontalAlign]]" allow-outside-scroll="[[allowOutsideScroll]]"
+      <iron-dropdown id="dropdownMenu" horizontal-align="[[horizontalAlign]]"
                      dynamic-align="[[!noDynamicAlign]]" on-iron-overlay-opened="_onDropdownOpen"
                      on-iron-overlay-closed="_onDropdownClose" disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
-                     no-cancel-on-outside-click="">
+                     no-cancel-on-outside-click allow-click-through>
 
         <div id="ironDrContent" class="paper-material" elevation="1" slot="dropdown-content">
           <esmm-searchbox-input id="searchbox" search="{{search}}" hidden\$="{{hideSearch}}"></esmm-searchbox-input>

@@ -10,8 +10,10 @@
 
   <script type="module" src="../node_modules/@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
 
-  <script type="module" src="./elements/sigle-selection-demo.js"></script>
-  <script type="module" src="./elements/multi-selection-demo.js"></script>
+  <script type="module" src="elements/single-selection-demo.js"></script>
+  <!-- multi-selection-demo is imported only to be catched by polymer analyzer and be added to demo -->
+  <script type="module" src="elements/multi-selection-demo.js"></script>
+  <script type="module" src="elements/demo-dialog.js"></script>
 
   <script type="module">
     const $_documentContainer = document.createElement('template');
@@ -40,12 +42,6 @@
       <h3>etools-dropdown: single selection demo</h3>
       <esmm-single-selection-demo></esmm-single-selection-demo>
     </div>
-
-    <div class="vertical-section-container centered">
-      <h3>etools-dropdown: multi selection demo</h3>
-      <esmm-multi-selection-demo></esmm-multi-selection-demo>
-    </div>
-
 `;
 
   document.body.appendChild($_documentContainer.content);

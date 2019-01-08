@@ -33,6 +33,10 @@ $_documentContainer.innerHTML = `<custom-style>
       :host(:not([readonly])), :host(:not([disabled])) {
         cursor: var(--esmm-select-cursor);
       }
+      
+      #dropdownMenu {
+        position: absolute !important;
+      }
 
       #ironDrContent {
         background-color: var(--esmm-bg-color, #ffffff);

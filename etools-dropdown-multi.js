@@ -16,13 +16,11 @@ import './elements/options-list.js';
 import './styles/esmm-shared-styles.js';
 
 /**
- *
  * @polymer
  * @mixinFunction
  * @appliesMixin EsmmMixins.MissingOptions
  * @appliesMixin EsmmMixins.CommonFunctionality
  * @appliesMixin EtoolsLogsMixin
- *
  */
 const MultiDropdownRequiredMixins = MissingOptions(CommonFunctionality(
     EtoolsLogsMixin(PolymerElement)));
@@ -30,9 +28,8 @@ const MultiDropdownRequiredMixins = MissingOptions(CommonFunctionality(
 /**
  * `etools-dropdown-multi`
  *
- *
- * @customElement
  * @polymer
+ * @customElement
  * @appliesMixin MultiDropdownRequiredMixins
  * @demo demo/index-multi.html
  */
@@ -54,10 +51,10 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
                              error-message="[[_getErrorMessage(errorMessage, invalid)]]" on-focus="onInputFocus"
                              on-tap="_openMenu"></esmm-selected-options>
 
-      <iron-dropdown id="dropdownMenu" horizontal-align="[[horizontalAlign]]" allow-outside-scroll="[[allowOutsideScroll]]"
+      <iron-dropdown id="dropdownMenu" horizontal-align="[[horizontalAlign]]"
                      dynamic-align="[[!noDynamicAlign]]" on-iron-overlay-opened="_onDropdownOpen"
                      on-iron-overlay-closed="_onDropdownClose" disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
-                     no-cancel-on-outside-click="">
+                     no-cancel-on-outside-click allow-click-through>
 
         <div id="ironDrContent" class="paper-material" elevation="1" slot="dropdown-content">
           <esmm-searchbox-input id="searchbox" search="{{search}}" hidden\$="{{hideSearch}}"></esmm-searchbox-input>
@@ -66,7 +63,8 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
                              selected-values="{{selectedValues}}" two-lines-label="[[twoLinesLabel]]"
                              option-value="[[optionValue]]" option-label="[[optionLabel]]"
                              show-no-search-results-warning="[[showNoSearchResultsWarning]]"
-                             show-limit-warning="[[showLimitWarning]]" no-options-available="[[noOptionsAvailable]]"
+                             show-limit-warning="[[showLimitWarning]]" shown-options-limit="[[shownOptionsLimit]]"
+                             no-options-available="[[noOptionsAvailable]]"
                              capitalize="[[capitalize]]"></esmm-options-list>
         </div>
 

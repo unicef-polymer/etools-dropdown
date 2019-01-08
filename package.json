@@ -14,8 +14,7 @@
   "scripts": {
     "lint": "npm run lint:javascript && polymer lint && exit 0",
     "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore && exit 0",
-    "test": "polymer test",
-    "postinstall": "node -e \"try { require('fs').symlinkSync(require('path').resolve('node_modules/@bower_components'), 'bower_components', 'junction') } catch (e) { }\""
+    "test": "polymer test"
   },
   "version": "3.0.0",
   "resolutions": {
