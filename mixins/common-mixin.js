@@ -534,7 +534,12 @@ export const CommonFunctionality = (superClass) => class extends EtoolsLogsMixin
     return this.$.searchbox;
   }
 
-  _openMenu() {
+  _openMenu(e) {
+    // this is in place here so that the dropdown would close if you click the label of another dropdown
+    if (Polymer && Polymer.IronOverlayManager && Polymer.IronOverlayManager._overlays.length > 0) {
+      document.dispatchEvent(new CustomEvent('tap', {detail: {sourceEvent: e}}));
+    }
+
     let dr = this._getIronDropdown();
     if (!dr.opened) {
       dr.open();
@@ -555,7 +560,7 @@ export const CommonFunctionality = (superClass) => class extends EtoolsLogsMixin
     if (this.disableOnFocusHandling || this.dropdownIsClosing) {
       return;
     }
-    this._openMenu();
+    this._openMenu(e);
   }
 
   notifyDropdownResize() {
