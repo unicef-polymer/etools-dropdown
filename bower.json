@@ -1,7 +1,7 @@
 {
   "name": "etools-dropdown",
   "description": "Dropdown Polymer 2 element with search and the options are objects with different values and labels.",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "license": "https://github.com/unicef-polymer/etools-dropdown/blob/master/LICENSE.md",
   "main": "etools-dropdown.html",
   "dependencies": {
