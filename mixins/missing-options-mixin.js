@@ -5,9 +5,9 @@ import {dedupingMixin} from '@polymer/polymer/lib/utils/mixin.js';
  * Missing options helper
  * @polymer
  * @mixinFunction
- * @appliesMixin EtoolsLogsMixin
+ * @extends EtoolsLogsMixin
  */
-export const MissingOptions = dedupingMixin(superClass => class extends EtoolsLogsMixin(superClass) {
+let internalMissingOptions = superClass => class extends EtoolsLogsMixin(superClass) {
 
   static get properties() {
     return {
@@ -137,4 +137,6 @@ export const MissingOptions = dedupingMixin(superClass => class extends EtoolsLo
     }
   }
 
-});
+};
+
+export const MissingOptions = dedupingMixin(internalMissingOptions);

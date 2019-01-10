@@ -18,9 +18,9 @@ import './styles/esmm-shared-styles.js';
 /**
  * @polymer
  * @mixinFunction
- * @appliesMixin EsmmMixins.MissingOptions
- * @appliesMixin EsmmMixins.CommonFunctionality
- * @appliesMixin EtoolsLogsMixin
+ * @extends MissingOptions
+ * @extends CommonFunctionality
+ * @extends EtoolsLogsMixin
  */
 const MultiDropdownRequiredMixins = MissingOptions(CommonFunctionality(
     EtoolsLogsMixin(PolymerElement)));

@@ -1,29 +1,31 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
-import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
-import {CommonFunctionality} from './mixins/common-mixin.js';
-import {MissingOptions} from './mixins/missing-options-mixin.js';
-import {timeOut} from '@polymer/polymer/lib/utils/async.js';
-import '@polymer/iron-icons/iron-icons.js';
-import '@polymer/iron-dropdown/iron-dropdown.js';
-import '@polymer/neon-animation/neon-animations.js';
-import '@polymer/paper-input/paper-input.js';
-import '@polymer/paper-styles/element-styles/paper-material-styles.js';
-import EtoolsLogsMixin from 'etools-behaviors/etools-logs-mixin.js';
-import 'etools-ajax/etools-ajax.js';
-import './scripts/es6-polyfills.js';
-import './elements/searchbox-input.js';
-import './elements/options-list.js';
-import './styles/esmm-shared-styles.js';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element';
+import {Debouncer} from '@polymer/polymer/lib/utils/debounce';
+import {CommonFunctionality} from './mixins/common-mixin';
+import {MissingOptions} from './mixins/missing-options-mixin';
+import {ListItemUtils} from './mixins/list-item-utils-mixin';
+import {timeOut} from '@polymer/polymer/lib/utils/async';
+import '@polymer/iron-icons/iron-icons';
+import '@polymer/iron-dropdown/iron-dropdown';
+import '@polymer/neon-animation/neon-animations';
+import '@polymer/paper-input/paper-input';
+import '@polymer/paper-styles/element-styles/paper-material-styles';
+import EtoolsLogsMixin from 'etools-behaviors/etools-logs-mixin';
+import 'etools-ajax/etools-ajax';
+import './scripts/es6-polyfills';
+import './elements/searchbox-input';
+import './elements/options-list';
+import {EsmmSharedStyles} from './styles/esmm-shared-styles';
 
 /**
  * @polymer
  * @mixinFunction
- * @appliesMixin EsmmMixins.MissingOptions
- * @appliesMixin EsmmMixins.CommonFunctionality
- * @appliesMixin EtoolsLogsMixin
+ * @extends MissingOptions
+ * @extends CommonFunctionality
+ * @extends EtoolsLogsMixin
+ * @extends ListItemUtils
  */
-const DropdownRequiredMixins = MissingOptions(CommonFunctionality(
-    EtoolsLogsMixin(PolymerElement)));
+const DropdownRequiredMixins = MissingOptions(ListItemUtils(CommonFunctionality(
+    EtoolsLogsMixin(PolymerElement))));
 
 /**
  * `etools-dropdown`
@@ -37,7 +39,8 @@ class EtoolsDropdown extends DropdownRequiredMixins {
   static get template() {
     // language=HTML
     return html`
-      <style include="paper-material-styles esmm-shared-styles">
+      ${EsmmSharedStyles}
+      <style include="paper-material-styles">
 
         :host {
           --paper-input-container-input: {
@@ -112,7 +115,7 @@ class EtoolsDropdown extends DropdownRequiredMixins {
       title: {
         type: String,
         reflectToAttribute: true,
-        computed: 'getLabel(selectedItem)'
+        computed: this.getLabel(this.selectedItem)
       }
     };
   }

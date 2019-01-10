@@ -1,6 +1,10 @@
 {
   "description": "Dropdown Polymer 2 element with search and the options are objects with different values and labels.",
   "name": "etools-dropdown",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unicef-polymer/etools-dropdown"
+  },
   "devDependencies": {
     "eslint": "^3.19.0",
     "eslint-config-google": "^0.7.0",
@@ -25,7 +29,7 @@
     "@webcomponents/webcomponentsjs": "2.0.0-beta.2"
   },
   "main": "etools-dropdown.js",
-  "license": "https://github.com/unicef-polymer/etools-dropdown/blob/master/LICENSE.md",
+  "license": "Apache-2.0",
   "dependencies": {
     "@polymer/iron-dropdown": "^3.0.0-pre.18",
     "@polymer/iron-flex-layout": "^3.0.0-pre.18",

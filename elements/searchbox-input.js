@@ -6,6 +6,7 @@ import '@polymer/paper-input/paper-input.js';
 /**
  * @customElement
  * @polymer
+ * @extends {PolymerElement}
  */
 class EsmmSearchboxInput extends PolymerElement {
   static get template() {

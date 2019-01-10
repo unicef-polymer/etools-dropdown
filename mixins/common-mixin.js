@@ -5,9 +5,9 @@ import EtoolsLogsMixin from 'etools-behaviors/etools-logs-mixin.js';
  * @polymer
  * @mixinFunction
  * @appliesMixin EtoolsLogsMixin
- * @appliesMixin EsmmMixins.ListItemUtils
+ * @appliesMixin ListItemUtils
  */
-export const CommonFunctionality = (superClass) => class extends EtoolsLogsMixin(ListItemUtils(superClass)) {
+export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(ListItemUtils(superClass)) {
 
   static get properties() {
     return {
@@ -43,7 +43,7 @@ export const CommonFunctionality = (superClass) => class extends EtoolsLogsMixin
       },
       readonly: {
         type: Boolean,
-        value: function () {
+        value: () => {
           return false;
         },
         reflectToAttribute: true,
@@ -51,7 +51,7 @@ export const CommonFunctionality = (superClass) => class extends EtoolsLogsMixin
       },
       invalid: {
         type: Boolean,
-        value: function () {
+        value: () => {
           return false;
         },
         reflectToAttribute: true
@@ -119,7 +119,7 @@ export const CommonFunctionality = (superClass) => class extends EtoolsLogsMixin
       /** Stop autofocus from paper-dialog */
       disableOnFocusHandling: {
         type: Boolean,
-        value: function () {
+        value: () => {
           return this.disableOnFocusHandling || this.isIEBrowser();
         },
         reflectToAttribute: true
@@ -444,7 +444,7 @@ export const CommonFunctionality = (superClass) => class extends EtoolsLogsMixin
   _resizeOptionsListHeight() {
     let ironDrContent = this._getIronDropdownContent();
 
-    let dropdownContentHeightCheck = setInterval(function () {
+    let dropdownContentHeightCheck = setInterval(() => {
       // opened dropdown coordinates
       let openedDropdownCoord = ironDrContent.getBoundingClientRect();
 
@@ -468,7 +468,7 @@ export const CommonFunctionality = (superClass) => class extends EtoolsLogsMixin
         let optionsList = this._getOptionsList();
         optionsList.style.maxHeight = listOptionsComputedHeight + 'px';
       }
-    }.bind(this), 0);
+    });
   }
 
   _onDropdownOpen() {
