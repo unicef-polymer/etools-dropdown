@@ -115,7 +115,7 @@ class EtoolsDropdown extends DropdownRequiredMixins {
       title: {
         type: String,
         reflectToAttribute: true,
-        computed: this.getLabel(this.selectedItem)
+        computed: 'getLabel(selectedItem)'
       }
     };
   }

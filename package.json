@@ -1,5 +1,5 @@
 {
-  "description": "Dropdown Polymer 2 element with search and the options are objects with different values and labels.",
+  "description": "Dropdown Polymer 3 element with search and the options are objects with different values and labels.",
   "name": "etools-dropdown",
   "repository": {
     "type": "git",
