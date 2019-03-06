@@ -9,12 +9,14 @@
     "wct-browser-legacy": "^0.0.1-pre.11",
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "@polymer/paper-button": "^3.0.0-pre.18",
-    "@polymer/iron-component-page": "^3.0.0-pre.18"
+    "@polymer/iron-component-page": "^3.0.0-pre.18",
+    "@polymer/gen-typescript-declarations": "^1.6.0"
   },
   "scripts": {
     "lint": "npm run lint:javascript && polymer lint && exit 0",
     "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore && exit 0",
-    "test": "polymer test"
+    "test": "polymer test",
+    "gen-typings": "gen-typescript-declarations --deleteExisting --outDir './'"
   },
   "version": "3.0.0",
   "resolutions": {
