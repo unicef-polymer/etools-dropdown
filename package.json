@@ -16,7 +16,7 @@
     "lint": "npm run lint:javascript && polymer lint && exit 0",
     "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore && exit 0",
     "test": "polymer test",
-    "gen-typings": "gen-typescript-declarations"
+    "gen-typings": "gen-typescript-declarations --deleteExisting --outDir './'"
   },
   "version": "3.0.0",
   "resolutions": {
