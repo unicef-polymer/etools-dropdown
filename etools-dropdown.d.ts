@@ -50,7 +50,7 @@ declare class EtoolsDropdown extends  MissingOptions(
   /**
    * Validate dropdown selection
    */
-  validate(selected: any): boolean;
+  validate(selected?: any): boolean;
   _selectedChanged(selected: any): void;
   _fireChangeEvent(): void;
 }

@@ -62,7 +62,7 @@ declare class EtoolsDropdownMulti extends MissingOptions(CommonFunctionality(
   /**
    * Validate multi selection
    */
-  validate(selectedValues: any): boolean;
+  validate(selectedValues?: any): boolean;
   _getValuesFromItems(selectedItems: any): any;
   _noSelectedValues(selectedValues: any): any;
   _noSelectedItems(selectedItems: any): any;
