@@ -28,7 +28,7 @@ interface CommonFunctionalityConstructor {
 
 export {CommonFunctionalityConstructor};
 
-interface CommonFunctionality {
+interface CommonFunctionality extends ListItemUtils{
 
   /**
    * Dropdown label
