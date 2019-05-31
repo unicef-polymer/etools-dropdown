@@ -1,6 +1,7 @@
 {
   "description": "Dropdown Polymer 2 element with search and the options are objects with different values and labels.",
-  "name": "etools-dropdown",
+  "name": "@unicef-polymer/etools-dropdown",
+  "version": "3.0.0",
   "devDependencies": {
     "eslint": "^3.19.0",
     "eslint-config-google": "^0.7.0",
@@ -18,7 +19,6 @@
     "test": "polymer test",
     "gen-typings": "gen-typescript-declarations --deleteExisting --outDir './'"
   },
-  "version": "3.0.0",
   "resolutions": {
     "inherits": "2.0.3",
     "samsam": "1.1.3",
