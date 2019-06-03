@@ -8,7 +8,7 @@ import '@polymer/iron-dropdown/iron-dropdown.js';
 import '@polymer/neon-animation/neon-animations.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-styles/element-styles/paper-material-styles.js';
-import EtoolsLogsMixin from 'etools-behaviors/etools-logs-mixin.js';
+import EtoolsLogsMixin from '@unicef-polymer/etools-behaviors/etools-logs-mixin.js';
 import 'etools-ajax/etools-ajax.js';
 import './scripts/es6-polyfills.js';
 import './elements/searchbox-input.js';

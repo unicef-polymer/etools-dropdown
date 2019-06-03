@@ -1,5 +1,5 @@
 import {ListItemUtils} from './list-item-utils-mixin.js';
-import EtoolsLogsMixin from 'etools-behaviors/etools-logs-mixin.js';
+import EtoolsLogsMixin from '@unicef-polymer/etools-behaviors/etools-logs-mixin.js';
 /*
  * Common functionality for single selection and multiple selection dropdown
  * @polymer
