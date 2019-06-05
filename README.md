@@ -1,9 +1,7 @@
 # \<etools-dropdown\> and \<etools-dropdown-multi\>
 
-Dropdown menu with search and single option selection
-When the `optionValue` property is `Number` (in the options array of objects),
-the type is preserved, it's not converted to string.
-
+Dropdown menu with search and single/multiple option(s) selection.
+For documentation details see component demo (`npm i`, `polymer serve`)
 
 ## Usage
 
@@ -108,21 +106,12 @@ that you have custom options and which properties to be used as values and label
 
 ```javascript
 // options example(used in the demo), in properties object
-customObjOptions: {
-    type: Array,
-    value: function() {
-      let opt = [];
-      for(let i = 1; i <= 100; i++) {
-        opt.push({
-          id: i,
-          option_key: 'opt' + i,
-          option_label: 'Option ' + i,
-          some_other_propery: 'dummy propery for objIdx' + (i -1)
-        });
-      }
-      return opt;
+customObjOptions = [
+    {
+      option_key: 'option_identifier',
+      option_label: 'Option label'
     }
-}
+]
 ```
 ```html
 <etools-dropdown
@@ -147,9 +136,8 @@ Custom property | Description | Default
 `--esmm-bg-color` | Dropdown background color | `#ffffff`
 
 ## Install
-TODO: create npm package
 ```bash
-$ npm i --save unicef-polymer/etools-dropdown#branch_name
+$ npm i --save @unicef-polymer/etools-dropdown
 ```
 
 ## Install the Polymer-CLI
