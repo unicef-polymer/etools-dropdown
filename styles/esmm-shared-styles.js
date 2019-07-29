@@ -36,11 +36,7 @@ $_documentContainer.innerHTML = `<custom-style>
       }
       
       #dropdownMenu {
-        position: absolute !important;
-      }
-
-      #dropdownMenu {
-        position: absolute !important;
+        position: var(--dropdownmenu-position, absolute) !important;
       }
 
       #ironDrContent {
