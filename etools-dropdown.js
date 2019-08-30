@@ -216,7 +216,7 @@ class EtoolsDropdown extends DropdownRequiredMixins {
 
     this._debouncer = Debouncer.debounce(
         this._debouncer,
-        timeOut.after(10),
+        timeOut.after(90),// Debounce so this.selectedItem gets the chance to be set
         () => {
           this._fireChangeEvent();
         }
