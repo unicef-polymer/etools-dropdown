@@ -3,7 +3,7 @@
  * @polymer
  * @mixinFunction
  */
-export const TestData = (superClass) => class extends superClass {
+export const TestData = superClass => class extends superClass {
   static get properties() {
     return {
       simpleOptions: {
@@ -19,15 +19,15 @@ export const TestData = (superClass) => class extends superClass {
       },
       twoLineOptions: {
         type: Array,
-        value: function () {
+        value: function() {
           let opt = [];
-          for (let i=1 ; i<=10 ; i++)  {
-            opt.push({value: i, label: 'Option ' + i + '|' + 'Second line for option' + i})
+          for (let i=1; i<=10; i++) {
+            opt.push({value: i, label: 'Option ' + i + '|' + 'Second line for option' + i});
           }
           return opt;
         },
         notify: true
-      },
-    }
+      }
+    };
   }
 };

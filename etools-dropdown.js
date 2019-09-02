@@ -8,8 +8,8 @@ import '@polymer/iron-dropdown/iron-dropdown.js';
 import '@polymer/neon-animation/neon-animations.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-styles/element-styles/paper-material-styles.js';
-import EtoolsLogsMixin from 'etools-behaviors/etools-logs-mixin.js';
-import 'etools-ajax/etools-ajax.js';
+import EtoolsLogsMixin from '@unicef-polymer/etools-behaviors/etools-logs-mixin.js';
+import '@unicef-polymer/etools-ajax/etools-ajax.js';
 import './scripts/es6-polyfills.js';
 import './elements/searchbox-input.js';
 import './elements/options-list.js';
@@ -60,7 +60,7 @@ class EtoolsDropdown extends DropdownRequiredMixins {
 
       <paper-input id="main" label="[[label]]" placeholder="[[placeholder]]" always-float-label="[[alwaysFloatLabel]]"
                    no-label-float="[[noLabelFloat]]" value="[[getLabel(selectedItem)]]" disabled="[[disabled]]"
-                   invalid="[[invalid]]" error-message="[[_getErrorMessage(errorMessage, invalid)]]" readonly=""
+                   invalid="[[invalid]]" error-message="[[_getErrorMessage(errorMessage, invalid)]]" readonly="[[readonly]]"
                    on-focus="onInputFocus" on-tap="_openMenu">
         <iron-icon icon="arrow-drop-down" slot="suffix" hidden\$="[[readonly]]"></iron-icon>
       </paper-input>
@@ -126,6 +126,17 @@ class EtoolsDropdown extends DropdownRequiredMixins {
 
   _selectedAndOptionsChanged(selected, options) {
     this._setSelectedItem();
+    if (!this.triggerValueChangeEvent) {
+      return;
+    }
+
+    this._debouncer = Debouncer.debounce(
+        this._debouncer,
+        timeOut.after(20),
+        () => {
+          this._fireChangeEvent();
+        }
+    );
   }
 
   _setSelectedItem(selected, selectedItem) {
@@ -205,22 +216,6 @@ class EtoolsDropdown extends DropdownRequiredMixins {
     if (this.autoValidate && this.elemAttached) {
       this.validate(selected);
     }
-    if (!selected) {
-      this.set('selectedItem', null);
-    }
-
-    // trigger item change event check
-    if (!this.triggerValueChangeEvent) {
-      return;
-    }
-
-    this._debouncer = Debouncer.debounce(
-        this._debouncer,
-        timeOut.after(10),
-        () => {
-          this._fireChangeEvent();
-        }
-    );
   }
 
   _fireChangeEvent() {

@@ -11,7 +11,7 @@ import {MissingOptions} from './mixins/missing-options-mixin.js';
 
 import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 
-import EtoolsLogsMixin from 'etools-behaviors/etools-logs-mixin.js';
+import EtoolsLogsMixin from '@unicef-polymer/etools-behaviors/etools-logs-mixin.js';
 
 
 /**
