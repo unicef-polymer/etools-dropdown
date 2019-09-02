@@ -59,7 +59,8 @@ class EtoolsDropdown extends DropdownRequiredMixins {
                    on-fail="handleMissingOptionsReqError"></etools-ajax>
 
       <paper-input id="main" label="[[label]]" placeholder="[[placeholder]]" always-float-label="[[alwaysFloatLabel]]"
-                   no-label-float="[[noLabelFloat]]" value="[[getLabel(selectedItem)]]" disabled="[[disabled]]"
+                   no-label-float="[[noLabelFloat]]"
+                   value="[[getLabel(selectedItem)]]" disabled="[[disabled]]"
                    invalid="[[invalid]]" error-message="[[_getErrorMessage(errorMessage, invalid)]]" readonly="[[readonly]]"
                    on-focus="onInputFocus" on-tap="_openMenu">
         <iron-icon icon="arrow-drop-down" slot="suffix" hidden\$="[[readonly]]"></iron-icon>
@@ -207,8 +208,14 @@ class EtoolsDropdown extends DropdownRequiredMixins {
       return true;
     }
     selected = selected || this.selected;
-    this.set('invalid', !selected);
-    return !!selected;
+    let valid = true;
+    if (!selected) {
+      if (parseInt(selected) !== 0) {
+        valid = false;
+      }
+    }
+    this.set('invalid', !valid);
+    return valid;
   }
 
   _selectedChanged(selected) {
