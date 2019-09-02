@@ -199,9 +199,17 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
    */
   _getSelectedClassMulti(item) {
     if (this.selectedValues instanceof Array && this.selectedValues.length > 0) {
-      return this.selectedValues.indexOf(item[this.optionValue].toString()) > -1 ? 'iron-selected' : '';
+      return this.selectedValues.indexOf(this._getItemValueByOptionValue(item).toString()) > -1 ? 'iron-selected' : '';
     }
     return '';
+  }
+
+  _getItemValueByOptionValue(item) {
+    let val = item[this.optionValue];
+    if (val === null || val === undefined) {
+      return -1;
+    }
+    return val;
   }
 }
 
