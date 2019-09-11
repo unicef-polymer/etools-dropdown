@@ -153,7 +153,7 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       return;
     }
     let selectedItems = this.options.filter((item) => {
-      return (selectedValues instanceof Array)
+      return (selectedValues instanceof Array && item[this.optionValue])
           ? selectedValues.includes(item[this.optionValue].toString())
           : false;
     });
@@ -296,7 +296,7 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       return;
     }
     this.selectedValues.forEach((value, index) => {
-      if (typeof value !== 'string') {
+      if (value && typeof value !== 'string') {
         this.selectedValues[index] = value.toString();
       }
     });
