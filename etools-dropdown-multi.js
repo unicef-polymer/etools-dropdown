@@ -122,7 +122,7 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     if (this._isUndefined(selectedValuesOrLength) || this._isUndefined(options)) {
       return;
     }
-    if (!this.selectedValues) {
+    if (!this.selectedValues || (this.enableNoneOption && this.selectedValues.indexOf(null) >= 0)) {
       this.selectedValues = [];
     }
     this._selectedValuesToString();
