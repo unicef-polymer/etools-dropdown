@@ -472,13 +472,16 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
   }
 
   _onDropdownOpen() {
-    if (!this.autoWidth) {
-      this._setDropdownWidth();
-    }
-    this._resizeOptionsListHeight();
-    // when inside a paper-dialog the dropdown opens somewhere in the background and
-    // we need to force repositioning
-    this.notifyDropdownResize();
+    setTimeout(() => {
+      // delay on open size updates (fixes open flickering in dialogs)
+      if (!this.autoWidth) {
+        this._setDropdownWidth();
+      }
+      this._resizeOptionsListHeight();
+      // when inside a paper-dialog the dropdown opens somewhere in the background and
+      // we need to force repositioning
+      this.notifyDropdownResize();
+    }, 0);
   }
 
   _onDropdownClose() {
@@ -490,7 +493,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
 
   _setDropdownWidth() {
     let ironDropdown = this._getIronDropdown();
-    ironDropdown.style.left = this.offsetLeft + 'px';
+    ironDropdown.style.left = this.offsetLeft + 'px'; // TODO: why is style.left set here?
     if (!this.autoWidth) {
       ironDropdown.style.width = this.offsetWidth + 'px';
     }
