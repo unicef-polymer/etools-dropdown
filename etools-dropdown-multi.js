@@ -38,6 +38,21 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     // language=HTML
     return html`
       <style include="paper-material-styles esmm-shared-styles">
+        #close-dropdown {
+          position: absolute;
+          top: 4px;
+          right: 2px;
+          width: 16px;
+          height: 16px;
+        }
+
+        #dropdown-controls {
+          padding-top: 24px;
+        }
+        
+        #dropdown-controls #searchbox {
+          padding-top: 0;
+        }
       </style>
 
       <etools-ajax id="missingOptionsAjax" params="[[ajaxParams]]" on-success="handleMissingOptionsReqResponse"
@@ -55,9 +70,12 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
                      dynamic-align="[[!noDynamicAlign]]" on-iron-overlay-opened="_onDropdownOpen"
                      on-iron-overlay-closed="_onDropdownClose" disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
                      no-cancel-on-outside-click allow-click-through>
-
+        
         <div id="ironDrContent" class="paper-material" elevation="1" slot="dropdown-content">
-          <esmm-searchbox-input id="searchbox" search="{{search}}" hidden\$="{{hideSearch}}"></esmm-searchbox-input>
+          <div id="dropdown-controls">
+            <esmm-searchbox-input id="searchbox" search="{{search}}" hidden$="{{hideSearch}}"></esmm-searchbox-input>
+            <iron-icon id="close-dropdown" icon="close" title="Close" on-tap="_closeMenu"></iron-icon>
+          </div>
 
           <esmm-options-list id="optionsList" shown-options="[[shownOptions]]" multi=""
                              selected-values="{{selectedValues}}" two-lines-label="[[twoLinesLabel]]"
