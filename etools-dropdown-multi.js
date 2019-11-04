@@ -50,6 +50,10 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
           padding-top: 14px;
         }
 
+        :host([hide-search]) #dropdown-controls {
+          padding-top: 24px;
+        }
+
         #dropdown-controls #searchbox {
           padding-top: 0;
         }
