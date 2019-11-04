@@ -399,7 +399,8 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
     return Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
   }
 
-  _recalculateOptionsListHeightForIE11(newComputedHeight, openedDropdownCoord, searchboxHeight) {
+  // TODO: this might be removed as support IE11 has ended
+  _recalculateOptionsListHeightForIE11(newComputedHeight, openedDropdownCoord, drControlsHeight) {
     if (this.isIEBrowser()) {
       let viewportH = this._getViewportHeight();
       /**
@@ -410,7 +411,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
        */
       if (this._dropdownOpenedDownwards(openedDropdownCoord) &&
           (newComputedHeight > viewportH || this._dropdownBottomOutsideViewPort(openedDropdownCoord))) {
-        newComputedHeight = this._getNewHeightRelatedToBottomViewportEdge(openedDropdownCoord, searchboxHeight);
+        newComputedHeight = this._getNewHeightRelatedToBottomViewportEdge(openedDropdownCoord, drControlsHeight);
       }
 
       /**
@@ -419,7 +420,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
        */
       if (!this._dropdownOpenedDownwards(openedDropdownCoord) && newComputedHeight > viewportH) {
         let maxDropdownHeight = viewportH - openedDropdownCoord.bottom;
-        newComputedHeight = viewportH - maxDropdownHeight - searchboxHeight - 60;
+        newComputedHeight = viewportH - maxDropdownHeight - drControlsHeight - 60;
         let ironDropdown = this._getIronDropdown();
         ironDropdown.style.top = '60px'; // adjust iron dropdown top to be able to see it, ugly
       }
@@ -436,9 +437,9 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
     return searchboxHeight;
   }
 
-  _getNewHeightRelatedToBottomViewportEdge(openedDropdownCoord, searchboxHeight) {
+  _getNewHeightRelatedToBottomViewportEdge(openedDropdownCoord, drControlsHeight) {
     let viewportH = this._getViewportHeight();
-    return viewportH - openedDropdownCoord.top - searchboxHeight - this.viewportEdgeMargin;
+    return viewportH - openedDropdownCoord.top - drControlsHeight - this.viewportEdgeMargin;
   }
 
   _resizeOptionsListHeight() {
@@ -453,9 +454,13 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
         clearInterval(dropdownContentHeightCheck);
         let drMaxHeight = Number(ironDrContent.style.maxHeight.replace('px', ''));
         let searchboxHeight = this._getSearchFieldHeight();
+        let dropdownControls = this.querySelector('#dropdown-controls');
+        let dropdownControlsTopPadding = dropdownControls
+            ? dropdownControls.style.paddingTop.replace('px', '')
+            : 0;
 
         // for browsers
-        let listOptionsComputedHeight = drMaxHeight - searchboxHeight;
+        let listOptionsComputedHeight = drMaxHeight - searchboxHeight - dropdownControlsTopPadding;
         if (this._dropdownOpenedDownwards(openedDropdownCoord) &&
             this._bottomTooCloseToViewportEdge(drMaxHeight + openedDropdownCoord.top)) {
           listOptionsComputedHeight -= this.viewportEdgeMargin;
@@ -463,7 +468,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
 
         // check if height is correctly calculated for IE11 and recalculate if needed
         listOptionsComputedHeight = this._recalculateOptionsListHeightForIE11(listOptionsComputedHeight,
-            openedDropdownCoord, searchboxHeight);
+            openedDropdownCoord, searchboxHeight + dropdownControlsTopPadding);
 
         let optionsList = this._getOptionsList();
         optionsList.style.maxHeight = listOptionsComputedHeight + 'px';
