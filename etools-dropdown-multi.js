@@ -38,12 +38,13 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     // language=HTML
     return html`
       <style include="paper-material-styles esmm-shared-styles">
-        #close-dropdown {
+        #close-btn {
           position: absolute;
-          top: 4px;
+          top: 2px;
           right: 2px;
           width: 16px;
           height: 16px;
+          color: var(--paper-input-prefix_-_color);
         }
 
         #dropdown-controls {
@@ -51,7 +52,7 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
         }
 
         :host([hide-search]) #dropdown-controls {
-          padding-top: 24px;
+          padding-top: 20px;
         }
 
         #dropdown-controls #searchbox {
@@ -78,7 +79,7 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
         <div id="ironDrContent" class="paper-material" elevation="1" slot="dropdown-content">
           <div id="dropdown-controls">
             <esmm-searchbox-input id="searchbox" search="{{search}}" hidden$="{{hideSearch}}"></esmm-searchbox-input>
-            <iron-icon id="close-dropdown" icon="close" title="Close" on-tap="_closeMenu"></iron-icon>
+            <iron-icon id="close-btn" icon="close" title="Close" on-tap="_closeMenu"></iron-icon>
           </div>
 
           <esmm-options-list id="optionsList" shown-options="[[shownOptions]]" multi=""

@@ -43,7 +43,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
       },
       readonly: {
         type: Boolean,
-        value: function() {
+        value: function () {
           return false;
         },
         reflectToAttribute: true,
@@ -51,7 +51,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
       },
       invalid: {
         type: Boolean,
-        value: function() {
+        value: function () {
           return false;
         },
         reflectToAttribute: true
@@ -87,7 +87,8 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
       },
       hideSearch: {
         type: Boolean,
-        value: false
+        value: false,
+        reflectToAttribute: true
       },
       dropdownIsClosing: {
         type: Boolean,
@@ -119,7 +120,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
       /** Stop autofocus from paper-dialog */
       disableOnFocusHandling: {
         type: Boolean,
-        value: function() {
+        value: function () {
           return this.disableOnFocusHandling || this.isIEBrowser();
         },
         reflectToAttribute: true
@@ -241,7 +242,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
           }
         }
         fitInto = dialogContent;
-      } catch(e) {
+      } catch (e) {
         this.logWarn('Cannot find etools-dialog content element.', 'etools-dropdown', e);
         fitInto = null;
       }
@@ -358,7 +359,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
 
   _itemContainsSearchString(item) {
     return item[this.optionLabel] &&
-        item[this.optionLabel].toString().toLowerCase().indexOf(this.search.toLowerCase()) > -1;
+      item[this.optionLabel].toString().toLowerCase().indexOf(this.search.toLowerCase()) > -1;
   }
 
   _computeShowLimitWarning(limit, searchedOptionsLength) {
@@ -373,14 +374,14 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
       return false;
     }
     return (optionsLength > 0 && shownOptionsLength === 0) ||
-        (shownOptionsLength === 1 && this.shownOptions[0][this.optionValue] === null);
+      (shownOptionsLength === 1 && this.shownOptions[0][this.optionValue] === null);
   }
 
   _validCoordinates(coords) {
     return !(coords.x === 0 && coords.y === 0 &&
-        coords.width === 0 && coords.height === 0 &&
-        coords.left === 0 && coords.right === 0 &&
-        coords.top === 0 && coords.bottom === 0);
+      coords.width === 0 && coords.height === 0 &&
+      coords.left === 0 && coords.right === 0 &&
+      coords.top === 0 && coords.bottom === 0);
   }
 
   _bottomTooCloseToViewportEdge(dropdownBottom) {
@@ -410,7 +411,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
        * possible dynamicAlign issue in IE11
        */
       if (this._dropdownOpenedDownwards(openedDropdownCoord) &&
-          (newComputedHeight > viewportH || this._dropdownBottomOutsideViewPort(openedDropdownCoord))) {
+        (newComputedHeight > viewportH || this._dropdownBottomOutsideViewPort(openedDropdownCoord))) {
         newComputedHeight = this._getNewHeightRelatedToBottomViewportEdge(openedDropdownCoord, drControlsHeight);
       }
 
@@ -445,7 +446,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
   _resizeOptionsListHeight() {
     let ironDrContent = this._getIronDropdownContent();
 
-    let dropdownContentHeightCheck = setInterval(function() {
+    let dropdownContentHeightCheck = setInterval(function () {
       // opened dropdown coordinates
       let openedDropdownCoord = ironDrContent.getBoundingClientRect();
 
@@ -456,19 +457,19 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
         let searchboxHeight = this._getSearchFieldHeight();
         let dropdownControls = this.querySelector('#dropdown-controls');
         let dropdownControlsTopPadding = dropdownControls
-            ? dropdownControls.style.paddingTop.replace('px', '')
-            : 0;
+          ? dropdownControls.style.paddingTop.replace('px', '')
+          : 0;
 
         // for browsers
         let listOptionsComputedHeight = drMaxHeight - searchboxHeight - dropdownControlsTopPadding;
         if (this._dropdownOpenedDownwards(openedDropdownCoord) &&
-            this._bottomTooCloseToViewportEdge(drMaxHeight + openedDropdownCoord.top)) {
+          this._bottomTooCloseToViewportEdge(drMaxHeight + openedDropdownCoord.top)) {
           listOptionsComputedHeight -= this.viewportEdgeMargin;
         }
 
         // check if height is correctly calculated for IE11 and recalculate if needed
         listOptionsComputedHeight = this._recalculateOptionsListHeightForIE11(listOptionsComputedHeight,
-            openedDropdownCoord, searchboxHeight + dropdownControlsTopPadding);
+          openedDropdownCoord, searchboxHeight + dropdownControlsTopPadding);
 
         let optionsList = this._getOptionsList();
         optionsList.style.maxHeight = listOptionsComputedHeight + 'px';
