@@ -520,7 +520,10 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
   /**
    * Set focus target after showOptions is set,
    * and after the paper-icon-items have gotten the chance to be added to the DOM,
-   * but before the dropdown is openned , otherwise ironDropdown will ignore focusedTarget
+   * but before the dropdown is openned , otherwise ironDropdown will ignore focusTarget
+   *
+   * Setting the focus on a paper-listbox item
+   * enables the 'Go to item that starts with pressed letter' functionality
    */
   _setFocusTarget() {
     if (!this.shownOptions || !this.shownOptions.length) {
