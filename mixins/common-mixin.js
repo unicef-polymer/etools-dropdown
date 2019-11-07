@@ -517,15 +517,15 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
     }
   }
 
-  _setFocusTarget() {
-    let ironDropdown = this._getIronDropdown();
+  _setFocusTarget() {    
     let focusTarget = null;
     if (this.hideSearch) {
       focusTarget = this.$.optionsList.shadowRoot.querySelector('paper-icon-item');
     } else {
       focusTarget = this._getSearchox().shadowRoot.querySelector('#searchInput');
     }
-    ironDropdown.focusTarget = focusTarget;
+    
+    this._getIronDropdown().focusTarget = focusTarget;
   }
 
   _setPositionTarget() {
