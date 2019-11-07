@@ -183,7 +183,6 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
 
     this._setFitInto(this.fitInto);
     this._setPositionTarget();
-    this._setFocusTarget();
     this._setDropdownWidth();
     this._disableScrollAction();
     this.notifyDropdownResize();
@@ -349,6 +348,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
       emptyOption[this.optionLabel] = this.noneOptionLabel;
       shownOptions.unshift(emptyOption);
     }
+
     return shownOptions;
   }
 
@@ -478,6 +478,8 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
   }
 
   _onDropdownOpen() {
+    this._setFocusTarget();
+
     setTimeout(() => {
       // delay on open size updates (fixes open flickering in dialogs)
       if (!this.autoWidth) {
@@ -517,8 +519,13 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
 
   _setFocusTarget() {
     let ironDropdown = this._getIronDropdown();
-    let searchbox = this._getSearchox();
-    ironDropdown.focusTarget = searchbox.shadowRoot.querySelector('#searchInput');
+    let focusTarget = null;
+    if (this.hideSearch) {
+      focusTarget = this.$.optionsList.shadowRoot.querySelector('paper-icon-item');
+    } else {
+      focusTarget = this._getSearchox().shadowRoot.querySelector('#searchInput');
+    }
+    ironDropdown.focusTarget = focusTarget;
   }
 
   _setPositionTarget() {
