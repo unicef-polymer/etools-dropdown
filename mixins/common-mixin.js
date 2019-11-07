@@ -72,7 +72,8 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
       /** Options seen by user */
       shownOptions: {
         type: Array,
-        computed: '_computeShownOptions(options, search, enableNoneOption, options.length)'
+        computed: '_computeShownOptions(options, search, enableNoneOption, options.length)',
+        observer: '_setFocusTarget'
       },
       searchedOptionsLength: {
         type: Number
@@ -478,7 +479,6 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
   }
 
   _onDropdownOpen() {
-    this._setFocusTarget();
 
     setTimeout(() => {
       // delay on open size updates (fixes open flickering in dialogs)
@@ -517,15 +517,25 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
     }
   }
 
+  /**
+   * Set focus target after showOptions is set,
+   * and after the paper-icon-items have gotten the chance to be added to the DOM,
+   * but before the dropdown is openned , otherwise ironDropdown will ignore focusedTarget
+   */
   _setFocusTarget() {
-    let ironDropdown = this._getIronDropdown();
-    let focusTarget = null;
-    if (this.hideSearch) {
-      focusTarget = this.$.optionsList.shadowRoot.querySelector('paper-icon-item');
-    } else {
-      focusTarget = this._getSearchox().shadowRoot.querySelector('#searchInput');
+    if (!this.shownOptions || !this.shownOptions.length) {
+      return;
     }
-    ironDropdown.focusTarget = focusTarget;
+    setTimeout(() => {
+      let focusTarget = null;
+      if (this.hideSearch) {
+        focusTarget = this.$.optionsList.shadowRoot.querySelector('paper-icon-item');
+      } else {
+        focusTarget = this._getSearchox().shadowRoot.querySelector('#searchInput');
+      }
+
+      this._getIronDropdown().focusTarget = focusTarget;
+    }, 10);
   }
 
   _setPositionTarget() {
