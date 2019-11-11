@@ -72,7 +72,8 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
       /** Options seen by user */
       shownOptions: {
         type: Array,
-        computed: '_computeShownOptions(options, search, enableNoneOption, options.length)'
+        computed: '_computeShownOptions(options, search, enableNoneOption, options.length)',
+        observer: '_setFocusTarget'
       },
       searchedOptionsLength: {
         type: Number
@@ -183,7 +184,6 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
 
     this._setFitInto(this.fitInto);
     this._setPositionTarget();
-    this._setFocusTarget();
     this._setDropdownWidth();
     this._disableScrollAction();
     this.notifyDropdownResize();
@@ -349,6 +349,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
       emptyOption[this.optionLabel] = this.noneOptionLabel;
       shownOptions.unshift(emptyOption);
     }
+
     return shownOptions;
   }
 
@@ -478,6 +479,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
   }
 
   _onDropdownOpen() {
+
     setTimeout(() => {
       // delay on open size updates (fixes open flickering in dialogs)
       if (!this.autoWidth) {
@@ -515,10 +517,28 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
     }
   }
 
+  /**
+   * Set focus target after showOptions is set,
+   * and after the paper-icon-items have gotten the chance to be added to the DOM,
+   * but before the dropdown is openned , otherwise ironDropdown will ignore focusTarget
+   *
+   * Setting the focus on a paper-listbox item
+   * enables the 'Go to item that starts with pressed letter' functionality
+   */
   _setFocusTarget() {
-    let ironDropdown = this._getIronDropdown();
-    let searchbox = this._getSearchox();
-    ironDropdown.focusTarget = searchbox.shadowRoot.querySelector('#searchInput');
+    if (!this.shownOptions || !this.shownOptions.length) {
+      return;
+    }
+    setTimeout(() => {
+      let focusTarget = null;
+      if (this.hideSearch) {
+        focusTarget = this.$.optionsList.shadowRoot.querySelector('paper-icon-item');
+      } else {
+        focusTarget = this._getSearchox().shadowRoot.querySelector('#searchInput');
+      }
+
+      this._getIronDropdown().focusTarget = focusTarget;
+    }, 10);
   }
 
   _setPositionTarget() {

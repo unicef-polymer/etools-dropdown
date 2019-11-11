@@ -23,7 +23,7 @@ import './styles/esmm-shared-styles.js';
  * @appliesMixin EtoolsLogsMixin
  */
 const DropdownRequiredMixins = MissingOptions(CommonFunctionality(
-    EtoolsLogsMixin(PolymerElement)));
+  EtoolsLogsMixin(PolymerElement)));
 
 /**
  * `etools-dropdown`
@@ -61,7 +61,7 @@ class EtoolsDropdown extends DropdownRequiredMixins {
       <paper-input id="main" label="[[label]]" placeholder="[[placeholder]]" always-float-label="[[alwaysFloatLabel]]"
                    no-label-float="[[noLabelFloat]]"
                    value="[[getLabel(selectedItem)]]" disabled="[[disabled]]"
-                   invalid="[[invalid]]" error-message="[[_getErrorMessage(errorMessage, invalid)]]" readonly="[[readonly]]"
+                   invalid="[[invalid]]" error-message="[[_getErrorMessage(errorMessage, invalid)]]" readonly
                    on-focus="onInputFocus" on-tap="_openMenu">
         <iron-icon icon="arrow-drop-down" slot="suffix" hidden\$="[[readonly]]"></iron-icon>
       </paper-input>
@@ -132,11 +132,11 @@ class EtoolsDropdown extends DropdownRequiredMixins {
     }
 
     this._debouncer = Debouncer.debounce(
-        this._debouncer,
-        timeOut.after(20),
-        () => {
-          this._fireChangeEvent();
-        }
+      this._debouncer,
+      timeOut.after(20),
+      () => {
+        this._fireChangeEvent();
+      }
     );
   }
 
