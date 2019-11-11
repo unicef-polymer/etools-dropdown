@@ -16,6 +16,13 @@ $_documentContainer.innerHTML = `<custom-style>
 
       --esmm-select-cursor: pointer;
 
+      --paper-item-focused-before: {
+        opacity: 0.06;
+      };
+      --paper-item-focused-after: {
+        opacity: 0.06;
+      };
+
     }
   </style>
 </custom-style><dom-module id="esmm-shared-styles">
@@ -34,7 +41,7 @@ $_documentContainer.innerHTML = `<custom-style>
       :host(:not([readonly])), :host(:not([disabled])) {
         cursor: var(--esmm-select-cursor);
       }
-      
+
       #dropdownMenu {
         position: var(--esmm-dropdown-menu-position, absolute) !important;
       }
