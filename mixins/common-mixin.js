@@ -335,6 +335,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
     }
 
     let shownOptions = JSON.parse(JSON.stringify(options));
+    const initialOptionsNo = shownOptions ? shownOptions.length : 0;
 
     if (search) {
       shownOptions = options.filter(this._itemContainsSearchString.bind(this));
@@ -349,7 +350,10 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
       emptyOption[this.optionLabel] = this.noneOptionLabel;
       shownOptions.unshift(emptyOption);
     }
-
+    const shownOptionsNo = shownOptions ? shownOptions.length : 0;
+    if (initialOptionsNo !== shownOptionsNo) {
+      this._getIronDropdown()._updateOverlayPosition();
+    }
     return shownOptions;
   }
 
