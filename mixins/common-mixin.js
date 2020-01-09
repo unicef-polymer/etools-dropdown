@@ -572,10 +572,14 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
     return this.$.searchbox;
   }
 
+  _getPaperInputContainer() {
+    return this.$.main.$.container;
+  }
+
   _openMenu(e) {
     let dr = this._getIronDropdown();
     if (!dr.opened) {
-      this.verticalOffset = this.$.main.$.container.getBoundingClientRect().height;
+      this.verticalOffset = this._getPaperInputContainer().getBoundingClientRect().height;
       dr.open();
     }
   }
