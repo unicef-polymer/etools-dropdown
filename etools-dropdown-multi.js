@@ -71,7 +71,7 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
                              error-message="[[_getErrorMessage(errorMessage, invalid)]]" on-focus="onInputFocus"
                              on-tap="_openMenu"></esmm-selected-options>
 
-      <iron-dropdown id="dropdownMenu" horizontal-align="[[horizontalAlign]]"
+      <iron-dropdown id="dropdownMenu" horizontal-align="[[horizontalAlign]]" vertical-offset="[[verticalOffset]]"
                      dynamic-align="[[!noDynamicAlign]]" on-iron-overlay-opened="_onDropdownOpen"
                      on-iron-overlay-closed="_onDropdownClose" disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
                      no-cancel-on-outside-click allow-click-through>

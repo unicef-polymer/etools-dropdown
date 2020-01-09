@@ -105,6 +105,11 @@ interface CommonFunctionality extends ListItemUtils{
   viewportEdgeMargin: number|null|undefined;
 
   /**
+   * Vertical offset for dropdownMenu
+   */
+  verticalOffset: number | null | undefined;
+
+  /**
    * By default the search string is reset when the dropdown closes
    * This flag allows the search value to persist after the dropdown is closed
    */

@@ -139,6 +139,11 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
         type: Number,
         value: 20
       },
+      /** Vertical offset for dropdownMenu */
+      verticalOffset: {
+        type: Number,
+        value: 0
+      },
       /**
        * By default the search string is reset when the dropdown closes
        * This flag allows the search value to persist after the dropdown is closed
@@ -567,9 +572,14 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
     return this.$.searchbox;
   }
 
+  _getPaperInputContainer() {
+    return this.$.main.$.container;
+  }
+
   _openMenu(e) {
     let dr = this._getIronDropdown();
     if (!dr.opened) {
+      this.verticalOffset = this._getPaperInputContainer().getBoundingClientRect().height;
       dr.open();
     }
   }
