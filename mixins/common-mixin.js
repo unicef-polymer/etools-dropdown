@@ -579,7 +579,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
   _openMenu(e) {
     let dr = this._getIronDropdown();
     if (!dr.opened) {
-      this.verticalOffset = this._getPaperInputContainer().getBoundingClientRect().height;
+      this._setDropdownMenuVerticalOffset();
       dr.open();
     }
   }
@@ -588,6 +588,11 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
     let dr = this._getIronDropdown();
     this.dropdownIsClosing = true;
     dr.close();
+  }
+
+  _setDropdownMenuVerticalOffset() {
+    // substract 8px which represents paper-input-container top-bottom padding
+    this.verticalOffset = this._getPaperInputContainer().getBoundingClientRect().height - 8;
   }
 
   /**

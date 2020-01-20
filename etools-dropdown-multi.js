@@ -186,6 +186,8 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
   }
 
   _selectedItemsChanged(selectedItems) {
+    this._updateDrdropdownMenuPosition();
+
     if (this._isUndefined(selectedItems)) {
       return;
     }
@@ -245,6 +247,13 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     if (this.autoValidate) {
       this.validate(this.selectedValues);
     }
+  }
+
+  _updateDrdropdownMenuPosition() {
+    setTimeout(() => {
+      this._setDropdownMenuVerticalOffset();
+      this._getIronDropdown()._updateOverlayPosition();
+    }, 10);
   }
 
   /**
