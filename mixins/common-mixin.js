@@ -553,7 +553,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
   _setPositionTarget() {
     // set position target to align dropdown content properly
     let ironDropdown = this._getIronDropdown();
-    ironDropdown.set('positionTarget', this);
+    ironDropdown.set('positionTarget', this._getPaperInputContainer());
   }
 
   _getIronDropdown() {
