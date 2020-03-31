@@ -58,6 +58,10 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
         #dropdown-controls #searchbox {
           padding-top: 0;
         }
+
+        #optionsList {
+          max-height: var(--dropdown-height, 250px);
+        }
       </style>
 
       <etools-ajax id="missingOptionsAjax" params="[[ajaxParams]]" on-success="handleMissingOptionsReqResponse"
