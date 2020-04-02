@@ -79,7 +79,7 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
         <div id="ironDrContent" class="paper-material" elevation="1" slot="dropdown-content">
           <div id="dropdown-controls">
             <esmm-searchbox-input id="searchbox" search="{{search}}" hidden$="{{hideSearch}}"></esmm-searchbox-input>
-            <iron-icon id="close-btn" icon="close" title="Close" on-tap="_closeMenu"></iron-icon>
+            <iron-icon id="close-btn" icon="close" title="Close" hidden$="{{hideClose}}" on-tap="_closeMenu"></iron-icon>
           </div>
 
           <esmm-options-list id="optionsList" shown-options="[[shownOptions]]" multi=""

@@ -43,7 +43,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
       },
       readonly: {
         type: Boolean,
-        value: function () {
+        value: function() {
           return false;
         },
         reflectToAttribute: true,
@@ -51,7 +51,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
       },
       invalid: {
         type: Boolean,
-        value: function () {
+        value: function() {
           return false;
         },
         reflectToAttribute: true
@@ -91,6 +91,11 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
         value: false,
         reflectToAttribute: true
       },
+      hideClose: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
       dropdownIsClosing: {
         type: Boolean,
         value: false
@@ -121,7 +126,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
       /** Stop autofocus from paper-dialog */
       disableOnFocusHandling: {
         type: Boolean,
-        value: function () {
+        value: function() {
           return this.disableOnFocusHandling || this.isIEBrowser();
         },
         reflectToAttribute: true
@@ -456,7 +461,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
   _resizeOptionsListHeight() {
     let ironDrContent = this._getIronDropdownContent();
 
-    let dropdownContentHeightCheck = setInterval(function () {
+    let dropdownContentHeightCheck = setInterval(function() {
       // opened dropdown coordinates
       let openedDropdownCoord = ironDrContent.getBoundingClientRect();
 
