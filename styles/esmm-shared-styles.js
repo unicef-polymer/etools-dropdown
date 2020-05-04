@@ -1,7 +1,10 @@
-<link rel="import" href="../../polymer/polymer-element.html">
-<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+import '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
+// eslint-disable-next-line
+const $_documentContainer = document.createElement('template');
+$_documentContainer.setAttribute('style', 'display: none;');
 
-<custom-style>
+$_documentContainer.innerHTML = `<custom-style>
   <style>
     /* esmm global styles */
     html {
@@ -13,11 +16,16 @@
 
       --esmm-select-cursor: pointer;
 
+      --paper-item-focused-before: {
+        opacity: 0.06;
+      };
+      --paper-item-focused-after: {
+        opacity: 0.06;
+      };
+
     }
   </style>
-</custom-style>
-
-<dom-module id="esmm-shared-styles">
+</custom-style><dom-module id="esmm-shared-styles">
   <template>
     <style>
       *[hidden] {
@@ -35,7 +43,7 @@
       }
 
       #dropdownMenu {
-        position: absolute !important;
+        position: var(--esmm-dropdown-menu-position, absolute) !important;
       }
 
       #ironDrContent {
@@ -50,4 +58,6 @@
 
     </style>
   </template>
-</dom-module>
+</dom-module>`;
+
+document.head.appendChild($_documentContainer.content);
