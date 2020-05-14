@@ -1,7 +1,7 @@
 {
   "name": "@unicef-polymer/etools-dropdown",
   "description": "Polymer 3 dropdown element with searchable options, single and multiple selection",
-  "version": "3.0.15",
+  "version": "3.1.0",
   "homepage": "https://github.com/unicef-polymer/etools-dropdown",
   "repository": {
     "type": "git",
@@ -18,7 +18,8 @@
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "@polymer/paper-button": "^3.0.0",
     "@polymer/iron-component-page": "^4.0.0",
-    "@polymer/gen-typescript-declarations": "^1.6.0"
+    "@polymer/gen-typescript-declarations": "^1.6.0",
+    "@unicef-polymer/etools-dialog": "3.0.0"
   },
   "scripts": {
     "lint": "npm run lint:javascript && polymer lint && exit 0",
@@ -43,12 +44,17 @@
     "@polymer/paper-item": "^3.0.0",
     "@polymer/paper-listbox": "^3.0.0",
     "@polymer/paper-styles": "^3.0.0",
-    "@polymer/polymer": "^3.2.0",
+    "@polymer/polymer": "^3.4.1",
     "web-animations-js": "^2.3.1",
-    "@unicef-polymer/etools-behaviors": "3.0.0-rc.1",
-    "@unicef-polymer/etools-dialog": "3.0.0-rc.1",
-    "@unicef-polymer/etools-loading": "4.0.0-rc.1",
-    "@unicef-polymer/etools-ajax": "4.0.0-rc.1"
+    "@unicef-polymer/etools-behaviors": "3.0.2",
+    "@unicef-polymer/etools-loading": "4.0.2",
+    "@unicef-polymer/etools-ajax": "4.1.3",
+    "acorn": ">=7.1.1",
+    "minimist": ">=0.2.1",
+    "lodash-es": ">=4.17.14",
+    "lodash": ">=4.17.12",
+    "diff": ">=3.5.0",
+    "growl": ">=1.10.0"
   },
   "engines": {
     "yarn": ">= 1.0.0"

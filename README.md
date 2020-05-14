@@ -3,6 +3,149 @@
 Dropdown menu with search and single/multiple option(s) selection.
 For documentation details see component demo (`npm i`, `polymer serve`)
 
+### etools-dropdown specific properties
+* selected: number, notify
+    - the id/optionValue of the selected item
+
+* selectedItem: Object = null, notify.
+    - Selected option object
+
+* notFoundOption: string
+    - Selected value not found in options
+
+### etools-dropdown-multi specific properties
+
+* selectedValues - Array, notify
+    - the id/optionValue of the selected items
+
+* selectedItems: Array = [], notify
+    - Selected options objects
+
+* notFoundOptions - Array = []
+    - populated in case `selectedValues` are not found in the options
+
+* triggerValueChangeEvent - Boolean, default: `false`
+    - it can be used to trigger `etools-selected-items-changed` event if needed
+
+
+### Common properties
+* ajaxParams: Object
+    - Inherited from EsmmMixins.MissingOptions
+
+* allowOutsideScroll: boolean
+    - Inherited from EsmmMixins.CommonFunctionality
+    - Allows scroll outside opened dropdown
+
+* alwaysFloatLabel: boolean = true
+    - Inherited from EsmmMixins.CommonFunctionality
+
+* autoValidate: boolean
+    - Inherited from EsmmMixins.CommonFunctionality
+
+* capitalize: boolean = false
+    - Inherited from EsmmMixins.ListItemUtils
+    - Capitalize selected values/option, UI only
+
+* disabled: boolean = false
+    - Inherited from EsmmMixins.CommonFunctionality
+
+* disableOnFocusHandling: boolean
+    - Inherited from EsmmMixins.CommonFunctionality
+    - Stop autofocus from paper-dialog
+
+* noDynamicAlign: boolean = false
+    - Inherited from EsmmMixins.CommonFunctionality
+    - By default, dropdown is shown top or bottom where it will fit better. This flag can disable this behavior.
+
+* enableNoneOption: boolean = false
+    - Inherited from EsmmMixins.CommonFunctionality
+    - Flag to show None option (first dropdown option) Used to reset single selection dropdown selected value
+
+* errorMessage: string = "This field is required"
+    - Inherited from EsmmMixins.CommonFunctionality
+
+* fitInto: Object
+    - Inherited from EsmmMixins.CommonFunctionality
+    - Element that will prevent dropdown to overflow outside it's margins
+
+* hideSearch: boolean = false
+    - Inherited from EsmmMixins.CommonFunctionality
+
+* invalid: boolean = false
+    - Inherited from EsmmMixins.CommonFunctionality
+
+* label: string
+    - Inherited from EsmmMixins.CommonFunctionality
+    - Dropdown label
+
+* noLabelFloat: boolean
+    - Inherited from EsmmMixins.CommonFunctionality
+
+* noneOptionLabel: string = "-- NONE --"
+    - Inherited from EsmmMixins.ListItemUtils
+    - None option label
+
+* noOptionsAvailable: boolean = truereadOnly
+    - Inherited from EsmmMixins.CommonFunctionality
+    - Flag to show a no options avaliable warning
+
+* optionLabel: string = "label"
+    - Inherited from EsmmMixins.ListItemUtils
+    - Option object property to use as label
+
+* options: Array
+    - Inherited from EsmmMixins.CommonFunctionality
+    - Array of objects, dropdowns options used to compute shownOptions
+
+* optionValue: string = "value"
+    - Inherited from EsmmMixins.ListItemUtils
+    - Option object property to use as value for selection
+
+* placeholder: string = "—"
+    - Inherited from EsmmMixins.CommonFunctionality
+
+* preserveSearchOnClose : Boolean
+    - By default the search string is reset when the dropdown closes; this flag allows the search value to persist after the dropdown is closed
+
+* readonly: boolean = false
+    - Inherited from EsmmMixins.CommonFunctionality
+
+* required: boolean
+    - Inherited from EsmmMixins.CommonFunctionality
+
+* search: string
+    - Inherited from EsmmMixins.CommonFunctionality
+
+* showLimitWarning: boolean = falsereadOnly
+    - Inherited from EsmmMixins.CommonFunctionality
+    - Flag to show the limit of options shown in dropdown
+
+* shownOptions: ArrayreadOnly
+    - Inherited from EsmmMixins.CommonFunctionality
+    - Options seen by user
+
+* shownOptionsLimit: number = 50
+    - Inherited from EsmmMixins.CommonFunctionality
+    - Limit displayed options
+
+* showNoSearchResultsWarning: boolean = falsereadOnly
+    - Inherited from EsmmMixins.CommonFunctionality
+    - Flag used to show no search result found warning
+
+* title: stringreadOnly
+    - Element title attribute
+
+* twoLinesLabel: boolean = false
+    - Inherited from EsmmMixins.ListItemUtils
+    - Show option label on 2 lines
+
+* url: string
+    - Inherited from EsmmMixins.MissingOptions
+
+* viewportEdgeMargin: number = 20
+    - Inherited from EsmmMixins.CommonFunctionality
+    - Margin added if dropdown bottom is too close to the viewport bottom margin
+
 ## Usage
 
 Examples:
