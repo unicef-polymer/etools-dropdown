@@ -3,7 +3,6 @@
 Dropdown menu with search and single/multiple option(s) selection.
 For documentation details see component demo (`npm i`, `polymer serve`)
 
-
 ### etools-dropdown specific properties
 * selected: number, notify
     - the id/optionValue of the selected item
@@ -146,7 +145,6 @@ For documentation details see component demo (`npm i`, `polymer serve`)
 * viewportEdgeMargin: number = 20
     - Inherited from EsmmMixins.CommonFunctionality
     - Margin added if dropdown bottom is too close to the viewport bottom margin
-
 
 ## Usage
 
