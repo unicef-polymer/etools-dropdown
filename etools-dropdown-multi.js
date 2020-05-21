@@ -123,15 +123,6 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
         type: String,
         computed: '_getElementTitle(selectedItems)',
         reflectToAttribute: true
-      },
-      /* withBackdrop property was added in order to trap the focus within the light DOM of the iron-dropdown.
-         Setting this to true solves a bug in PRP where when you have the etools-dropdown in a paper-dialog,
-         and you click on the opened drodpdown's scroll,  the dropdown closes.
-      **/
-      withBackdrop: {
-        type: Boolean,
-        reflectToAttribute: true,
-        value: false
       }
     };
   }
