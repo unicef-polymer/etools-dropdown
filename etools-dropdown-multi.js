@@ -74,7 +74,7 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       <iron-dropdown id="dropdownMenu" horizontal-align="[[horizontalAlign]]" vertical-offset="[[verticalOffset]]"
                      dynamic-align="[[!noDynamicAlign]]" on-iron-overlay-opened="_onDropdownOpen"
                      on-iron-overlay-closed="_onDropdownClose" disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
-                     no-cancel-on-outside-click allow-click-through>
+                     no-cancel-on-outside-click allow-click-through with-backdrop="[[withBackdrop]]">
 
         <div id="ironDrContent" class="paper-material" elevation="1" slot="dropdown-content">
           <div id="dropdown-controls">

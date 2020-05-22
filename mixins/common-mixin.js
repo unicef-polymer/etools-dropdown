@@ -181,6 +181,15 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
       horizontalAlign: {
         type: String,
         value: 'right'
+      },
+      /* withBackdrop property was added in order to trap the focus within the light DOM of the iron-dropdown.
+         Setting this to true solves a bug in PRP where when you have the etools-dropdown in a paper-dialog,
+         and you click on the opened drodpdown's scroll,  the dropdown closes.
+      **/
+      withBackdrop: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: false
       }
     };
   }
