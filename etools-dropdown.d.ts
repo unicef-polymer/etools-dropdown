@@ -39,7 +39,7 @@ declare class EtoolsDropdown extends  MissingOptions(
   /**
    * Element title attribute
    */
-  readonly title: string|null|undefined;
+  readonly title: string;
   _selectedAndOptionsChanged(selected: any, options: any): void;
   _setSelectedItem(selected: any, selectedItem: any): void;
   _getItemFromOptions(value: any): any;

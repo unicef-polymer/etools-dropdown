@@ -37,7 +37,7 @@ declare class EtoolsDropdownMulti extends MissingOptions(CommonFunctionality(
   /**
    * Element title attribute
    */
-  readonly title: string|null|undefined;
+  readonly title: string;
   connectedCallback(): void;
   _selectedValuesOrOptionsChanged(selectedValuesOrLength: any, options: any): void;
 
