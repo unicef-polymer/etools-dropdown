@@ -359,7 +359,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
     if (search) {
       shownOptions = options.filter(this._itemContainsSearchString.bind(this));
       shownOptions = this._trimByShownOptionsLimit(shownOptions);
-    } else if (options.length > this.shownOptionsLimit) {
+    } else if ((options.length > this.shownOptionsLimit) || this.showLimitWarning ) {
       shownOptions = this._trimByShownOptionsLimit(options);
     }
 
