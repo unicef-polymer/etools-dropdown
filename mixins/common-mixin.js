@@ -221,7 +221,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
     this._closeMenu();
   }
   _disableScrollAction() {
-    let ironDropdown = this._getIronDropdown();
+    const ironDropdown = this._getIronDropdown();
     ironDropdown.set('scrollAction', null);
   }
   _getDialogContent(d) {
@@ -234,7 +234,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
   }
 
   _setFitInto(fitInto) {
-    let ironDropdown = this._getIronDropdown();
+    const ironDropdown = this._getIronDropdown();
     // fitInto element will not let the dropdown to overlap it's margins
     if (!fitInto && window.EtoolsEsmmFitIntoEl) {
       ironDropdown.set('fitInto', window.EtoolsEsmmFitIntoEl);
@@ -244,13 +244,13 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
         let rootNodeHost = this.getRootNode().host;
         let dialogContent = null;
         while (dialogContent === null && rootNodeHost) {
-          let hostTagName = rootNodeHost.tagName.toLowerCase();
+          const hostTagName = rootNodeHost.tagName.toLowerCase();
           // case 1: rootNodeHost is etools-dialog (unlikely, but...)
           if (hostTagName === 'etools-dialog') {
             dialogContent = this._getDialogContent(rootNodeHost);
           } else {
             // case 2: rootNodeHost is not etools-dialog, but it might contain it
-            let d = rootNodeHost.shadowRoot.querySelector('etools-dialog');
+            const d = rootNodeHost.shadowRoot.querySelector('etools-dialog');
             if (d instanceof Element) {
               // etools-dialog found
               dialogContent = this._getDialogContent(d);
@@ -276,7 +276,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
    * Reset dropdown size on close
    */
   _setResetSizeHandler() {
-    let ironDropdown = this._getIronDropdown();
+    const ironDropdown = this._getIronDropdown();
     ironDropdown.addEventListener('iron-overlay-closed', this.resetIronDropdownSize.bind(this));
   }
 
@@ -289,14 +289,14 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
    * in this way on each dropdown open action we'll get the same calculated new height.
    */
   resetIronDropdownSize() {
-    let ironDrContent = this._getIronDropdownContent();
-    let optionsList = this._getOptionsList();
+    const ironDrContent = this._getIronDropdownContent();
+    const optionsList = this._getOptionsList();
     ironDrContent.style.maxHeight = 'none';
     optionsList.style.maxHeight = 'none';
   }
 
   _dropdownOpenedDownwards(overlayCoord) {
-    let paperContainerCoords = this.$.main.getBoundingClientRect();
+    const paperContainerCoords = this.$.main.getBoundingClientRect();
     return Math.abs(overlayCoord.top - paperContainerCoords.top) <= 10;
   }
 
@@ -364,7 +364,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
     }
 
     if (enableNoneOption) {
-      let emptyOption = {cssClass: 'esmm-none-option'};
+      const emptyOption = {cssClass: 'esmm-none-option'};
       emptyOption[this.optionValue] = null;
       emptyOption[this.optionLabel] = this.noneOptionLabel;
       shownOptions.unshift(emptyOption);
@@ -409,14 +409,14 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
   }
 
   _bottomTooCloseToViewportEdge(dropdownBottom) {
-    let viewportH = this._getViewportHeight();
+    const viewportH = this._getViewportHeight();
     return (viewportH - dropdownBottom) < 10;
   }
 
   _dropdownBottomOutsideViewPort(openedDropdownCoord) {
-    let viewportH = this._getViewportHeight();
-    let dropdownBottomY = openedDropdownCoord.top + openedDropdownCoord.height;
-    let diff = viewportH - dropdownBottomY;
+    const viewportH = this._getViewportHeight();
+    const dropdownBottomY = openedDropdownCoord.top + openedDropdownCoord.height;
+    const diff = viewportH - dropdownBottomY;
     return diff <= 0;
   }
 
@@ -427,7 +427,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
   // TODO: this might be removed as support IE11 has ended
   _recalculateOptionsListHeightForIE11(newComputedHeight, openedDropdownCoord, drControlsHeight) {
     if (this.isIEBrowser()) {
-      let viewportH = this._getViewportHeight();
+      const viewportH = this._getViewportHeight();
       /**
        * - if newComputedHeight is bigger than IE11 viewport we need to recalculate list height
        * or
@@ -444,9 +444,9 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
        * and the height is bigger than the viewport height
        */
       if (!this._dropdownOpenedDownwards(openedDropdownCoord) && newComputedHeight > viewportH) {
-        let maxDropdownHeight = viewportH - openedDropdownCoord.bottom;
+        const maxDropdownHeight = viewportH - openedDropdownCoord.bottom;
         newComputedHeight = viewportH - maxDropdownHeight - drControlsHeight - 60;
-        let ironDropdown = this._getIronDropdown();
+        const ironDropdown = this._getIronDropdown();
         ironDropdown.style.top = '60px'; // adjust iron dropdown top to be able to see it, ugly
       }
     }
@@ -456,33 +456,38 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
   _getSearchFieldHeight() {
     let searchboxHeight = 0;
     if (!this.hideSearch) {
-      let searchInputWrapper = this._getSearchox();
-      searchboxHeight = Number(window.getComputedStyle(searchInputWrapper).height.replace('px', ''));
+      const searchInputWrapper = this._getSearchox();
+      const inputComputedtStyle = window.getComputedStyle(searchInputWrapper);
+      searchboxHeight = Number(inputComputedtStyle.height.replace('px', ''));
+      searchboxHeight += Number(inputComputedtStyle.paddingTop.replace('px', ''));
+      searchboxHeight += Number(inputComputedtStyle.paddingBottom.replace('px', ''));
+      searchboxHeight += Number(inputComputedtStyle.paddingBlockEnd.replace('px', ''));
+      searchboxHeight += Number(inputComputedtStyle.paddingBlockStart.replace('px', ''));
     }
     return searchboxHeight;
   }
 
   _getNewHeightRelatedToBottomViewportEdge(openedDropdownCoord, drControlsHeight) {
-    let viewportH = this._getViewportHeight();
+    const viewportH = this._getViewportHeight();
     return viewportH - openedDropdownCoord.top - drControlsHeight - this.viewportEdgeMargin;
   }
 
   _resizeOptionsListHeight() {
-    let ironDrContent = this._getIronDropdownContent();
+    const ironDrContent = this._getIronDropdownContent();
 
-    let dropdownContentHeightCheck = setInterval(function() {
+    const dropdownContentHeightCheck = setInterval(function() {
       // opened dropdown coordinates
-      let openedDropdownCoord = ironDrContent.getBoundingClientRect();
+      const openedDropdownCoord = ironDrContent.getBoundingClientRect();
 
       // don't do anything until maxHeight is set and the dropdown has been opened
       if (ironDrContent.style.maxHeight && this._validCoordinates(openedDropdownCoord)) {
         clearInterval(dropdownContentHeightCheck);
-        let drMaxHeight = Number(ironDrContent.style.maxHeight.replace('px', ''));
-        let searchboxHeight = this._getSearchFieldHeight();
-        let dropdownControls = this.querySelector('#dropdown-controls');
-        let dropdownControlsTopPadding = dropdownControls
-          ? dropdownControls.style.paddingTop.replace('px', '')
-          : 0;
+        const drMaxHeight = Number(ironDrContent.style.maxHeight.replace('px', ''));
+        const searchboxHeight = this._getSearchFieldHeight();
+        const dropdownControls = this.querySelector('#dropdown-controls');
+        const dropdownControlsTopPadding = dropdownControls ?
+          dropdownControls.style.paddingTop.replace('px', '') :
+          0;
 
         // for browsers
         let listOptionsComputedHeight = drMaxHeight - searchboxHeight - dropdownControlsTopPadding;
@@ -493,9 +498,9 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
 
         // check if height is correctly calculated for IE11 and recalculate if needed
         listOptionsComputedHeight = this._recalculateOptionsListHeightForIE11(listOptionsComputedHeight,
-          openedDropdownCoord, searchboxHeight + dropdownControlsTopPadding);
+            openedDropdownCoord, searchboxHeight + dropdownControlsTopPadding);
 
-        let optionsList = this._getOptionsList();
+        const optionsList = this._getOptionsList();
         optionsList.style.maxHeight = listOptionsComputedHeight + 'px';
       }
     }.bind(this), 0);
@@ -523,7 +528,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
   }
 
   _setDropdownWidth() {
-    let ironDropdown = this._getIronDropdown();
+    const ironDropdown = this._getIronDropdown();
     ironDropdown.style.left = this.offsetLeft + 'px'; // TODO: why is style.left set here?
     if (!this.autoWidth) {
       ironDropdown.style.width = this.offsetWidth + 'px';
@@ -566,7 +571,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
 
   _setPositionTarget() {
     // set position target to align dropdown content properly
-    let ironDropdown = this._getIronDropdown();
+    const ironDropdown = this._getIronDropdown();
     ironDropdown.set('positionTarget', this._getPaperInputContainer());
   }
 
@@ -591,7 +596,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
   }
 
   _openMenu(e) {
-    let dr = this._getIronDropdown();
+    const dr = this._getIronDropdown();
     if (!dr.opened) {
       this._setDropdownMenuVerticalOffset();
       dr.open();
@@ -599,7 +604,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
   }
 
   _closeMenu(e) {
-    let dr = this._getIronDropdown();
+    const dr = this._getIronDropdown();
     this.dropdownIsClosing = true;
     dr.close();
   }
@@ -621,7 +626,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
   }
 
   notifyDropdownResize() {
-    let ironDropdown = this._getIronDropdown();
+    const ironDropdown = this._getIronDropdown();
     ironDropdown.notifyResize();
   }
 
@@ -630,7 +635,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
    * @returns {boolean}
    */
   isIEBrowser() {
-    let userAgent = window.navigator.userAgent;
+    const userAgent = window.navigator.userAgent;
     return userAgent.indexOf('Trident/') > -1;
   }
 
