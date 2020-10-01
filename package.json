@@ -26,7 +26,8 @@
     "lint": "npm run lint:javascript && polymer lint && exit 0",
     "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore && exit 0",
     "test": "polymer test",
-    "gen-typings": "gen-typescript-declarations --deleteExisting --outDir './'"
+    "gen-typings": "gen-typescript-declarations --deleteExisting --outDir './'",
+    "publish": "git push --tags && npm publish"
   },
   "resolutions": {
     "inherits": "2.0.3",
@@ -53,11 +54,15 @@
     "acorn": ">=7.1.1",
     "minimist": ">=0.2.1",
     "lodash-es": ">=4.17.14",
-    "lodash": ">=4.17.12",
+    "lodash": ">=4.17.19",
     "diff": ">=3.5.0",
-    "growl": ">=1.10.0"
+    "growl": ">=1.10.0",
+    "prismjs": ">=1.21.0"
   },
   "engines": {
     "yarn": ">= 1.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
