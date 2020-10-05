@@ -459,10 +459,12 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
       const searchInputWrapper = this._getSearchox();
       const inputComputedtStyle = window.getComputedStyle(searchInputWrapper);
       searchboxHeight = Number(inputComputedtStyle.height.replace('px', ''));
-      searchboxHeight += Number(inputComputedtStyle.paddingTop.replace('px', ''));
-      searchboxHeight += Number(inputComputedtStyle.paddingBottom.replace('px', ''));
-      searchboxHeight += Number(inputComputedtStyle.paddingBlockEnd.replace('px', ''));
-      searchboxHeight += Number(inputComputedtStyle.paddingBlockStart.replace('px', ''));
+      if (this.nodeName === 'ETOOLS-DROPDOWN-MULTI') {
+        searchboxHeight += Number(inputComputedtStyle.paddingTop.replace('px', ''));
+        searchboxHeight += Number(inputComputedtStyle.paddingBottom.replace('px', ''));
+        searchboxHeight += Number(inputComputedtStyle.paddingBlockEnd.replace('px', ''));
+        searchboxHeight += Number(inputComputedtStyle.paddingBlockStart.replace('px', ''));
+      }
     }
     return searchboxHeight;
   }
