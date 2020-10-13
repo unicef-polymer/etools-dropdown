@@ -123,7 +123,11 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
         type: String,
         computed: '_getElementTitle(selectedItems)',
         reflectToAttribute: true
-      }
+      },
+      prevSelectedItems: {
+        type: Array,
+        value: [],
+      },
     };
   }
 
@@ -186,6 +190,10 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
   }
 
   _selectedItemsChanged(selectedItems) {
+    if(JSON.stringify(this.prevSelectedItems) === JSON.stringify(selectedItems)) {
+      return;
+    }
+    this.prevSelectedItems = selectedItems;
     this._updateDrdropdownMenuPosition();
 
     if (this._isUndefined(selectedItems)) {
@@ -250,10 +258,12 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
   }
 
   _updateDrdropdownMenuPosition() {
-    setTimeout(() => {
-      this._setDropdownMenuVerticalOffset();
-      this._getIronDropdown()._updateOverlayPosition();
-    }, 10);
+    if(this._getIronDropdown().opened) {
+      setTimeout(() => {
+        this._closeMenu();
+        this._openMenu();
+      });
+    }
   }
 
   /**
