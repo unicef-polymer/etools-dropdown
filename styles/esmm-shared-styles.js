@@ -44,11 +44,16 @@ $_documentContainer.innerHTML = `<custom-style>
 
       #dropdownMenu {
         position: var(--esmm-dropdown-menu-position, absolute) !important;
+        display: flex;
+        flex-direction: column;
       }
 
       #ironDrContent {
         background-color: var(--esmm-bg-color, #ffffff);
-        overflow: hidden;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
       }
 
       #optionsList {

@@ -58,6 +58,8 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
         #dropdown-controls #searchbox {
           padding-top: 0;
         }
+
+
       </style>
 
       <etools-ajax id="missingOptionsAjax" params="[[ajaxParams]]" on-success="handleMissingOptionsReqResponse"
@@ -112,6 +114,10 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
         type: Array,
         value: [],
         notify: true
+      },
+      prevSelectedItems: {
+        type: Array,
+        value: [],
       },
       /** Array of not found values (in options list) */
       notFoundOptions: {
@@ -186,7 +192,13 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
   }
 
   _selectedItemsChanged(selectedItems) {
-    this._updateDrdropdownMenuPosition();
+    if(JSON.stringify(this.prevSelectedItems) !== JSON.stringify(selectedItems))
+    {
+      this.prevSelectedItems = selectedItems;
+      setTimeout(() => {
+        this._setDropdownMenuVerticalOffset();
+      }, 10);
+    }
 
     if (this._isUndefined(selectedItems)) {
       return;
@@ -247,13 +259,6 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     if (this.autoValidate) {
       this.validate(this.selectedValues);
     }
-  }
-
-  _updateDrdropdownMenuPosition() {
-    setTimeout(() => {
-      this._setDropdownMenuVerticalOffset();
-      this._getIronDropdown()._updateOverlayPosition();
-    }, 10);
   }
 
   /**
