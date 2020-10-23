@@ -59,6 +59,7 @@ $_documentContainer.innerHTML = `<custom-style>
       #optionsList {
         overflow-x: hidden;
         overflow-y: auto;
+        max-height: 100vh !important;
       }
 
     </style>
