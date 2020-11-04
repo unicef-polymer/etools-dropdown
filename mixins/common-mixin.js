@@ -500,7 +500,22 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
 
   _setDropdownMenuVerticalOffset() {
     // substract 8px which represents paper-input-container top-bottom padding
-    this.verticalOffset = this._getPaperInputContainer().getBoundingClientRect().height - 8;
+    const verticalOffset = this._getPaperInputContainer().getBoundingClientRect().height - 8;
+    if (verticalOffset !== this.verticalOffset) {
+      this.verticalOffset = verticalOffset;
+      this._preserveListScrollPosition();
+    }
+  }
+
+  _preserveListScrollPosition() {
+    const paperListBox = this._getOptionsList().shadowRoot.querySelector("paper-listbox");
+    const scrollTop = paperListBox.scrollTop;
+    if (scrollTop > 0) {
+      setTimeout(() => {
+        console.log('scrollTo:' + scrollTop);
+        paperListBox.scrollTop = scrollTop;
+      }, 10);
+    }
   }
 
   /**
