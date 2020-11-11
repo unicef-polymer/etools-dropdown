@@ -507,13 +507,15 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
     }
   }
 
+  // if dropdown is in dialog and user scroll down to select an item, after selection the option list will be
+  // scrolled up, this method will preserve option list scroll position after selection
   _preserveListScrollPosition() {
     const paperListBox = this._getOptionsList().shadowRoot.querySelector('paper-listbox');
     const scrollTop = paperListBox.scrollTop;
     if (scrollTop > 0) {
       setTimeout(() => {
         paperListBox.scrollTop = scrollTop;
-      }, 10);
+      }, 50);
     }
   }
 
