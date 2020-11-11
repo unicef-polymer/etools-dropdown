@@ -23,7 +23,7 @@ import './styles/esmm-shared-styles.js';
  * @appliesMixin EtoolsLogsMixin
  */
 const MultiDropdownRequiredMixins = MissingOptions(CommonFunctionality(
-  EtoolsLogsMixin(PolymerElement)));
+    EtoolsLogsMixin(PolymerElement)));
 
 /**
  * `etools-dropdown-multi`
@@ -181,10 +181,10 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       this._setAnyNotFoundOptions(this.selectedItems, selectedValues);
       return;
     }
-    let selectedItems = this.options.filter((item) => {
-      return (selectedValues instanceof Array && item[this.optionValue])
-        ? selectedValues.includes(item[this.optionValue].toString())
-        : false;
+    const selectedItems = this.options.filter((item) => {
+      return (selectedValues instanceof Array && item[this.optionValue]) ?
+        selectedValues.includes(item[this.optionValue].toString()) :
+        false;
     });
 
     this._setAnyNotFoundOptions(selectedItems, selectedValues);
@@ -192,7 +192,7 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
   }
 
   _selectedItemsChanged(selectedItems) {
-    if(JSON.stringify(this.prevSelectedItems) !== JSON.stringify(selectedItems))
+    if (JSON.stringify(this.prevSelectedItems) !== JSON.stringify(selectedItems))
     {
       this.prevSelectedItems = selectedItems;
       setTimeout(() => {
@@ -209,11 +209,11 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     }
 
     this._debouncer = Debouncer.debounce(
-      this._debouncer,
-      timeOut.after(10),
-      () => {
-        this._fireChangeEvent();
-      }
+        this._debouncer,
+        timeOut.after(10),
+        () => {
+          this._fireChangeEvent();
+        }
     );
   }
 
@@ -275,8 +275,8 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     this.requestMissingOptions(notFoundSelectedValues);
     // show warning
     let warnMsg = 'Selected value ';
-    let notFoundValues = (notFoundSelectedValues instanceof Array ? notFoundSelectedValues.join(', ')
-      : notFoundSelectedValues);
+    let notFoundValues = (notFoundSelectedValues instanceof Array ? notFoundSelectedValues.join(', ') :
+      notFoundSelectedValues);
     warnMsg += notFoundValues + ' not found in dropdown\'s options!';
     this.logWarn(warnMsg, 'etools-esmm ' + this.label, null, true);
   }

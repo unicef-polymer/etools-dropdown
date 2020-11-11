@@ -500,7 +500,23 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
 
   _setDropdownMenuVerticalOffset() {
     // substract 8px which represents paper-input-container top-bottom padding
-    this.verticalOffset = this._getPaperInputContainer().getBoundingClientRect().height - 8;
+    const verticalOffset = this._getPaperInputContainer().getBoundingClientRect().height - 8;
+    if (verticalOffset !== this.verticalOffset) {
+      this._preserveListScrollPosition();
+      this.verticalOffset = verticalOffset;
+    }
+  }
+
+  // if dropdown is in dialog and user scroll down to select an item, after selection the option list will be
+  // scrolled up, this method will preserve option list scroll position after selection
+  _preserveListScrollPosition() {
+    const paperListBox = this._getOptionsList().shadowRoot.querySelector('paper-listbox');
+    const scrollTop = paperListBox.scrollTop;
+    if (scrollTop > 0) {
+      setTimeout(() => {
+        paperListBox.scrollTop = scrollTop;
+      }, 50);
+    }
   }
 
   /**
