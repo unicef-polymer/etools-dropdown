@@ -295,11 +295,6 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
     optionsList.style.maxHeight = 'none';
   }
 
-  _dropdownOpenedDownwards(overlayCoord) {
-    const paperContainerCoords = this.$.main.getBoundingClientRect();
-    return Math.abs(overlayCoord.top - paperContainerCoords.top) <= 10;
-  }
-
   _noOptions() {
     return (!this.options || !this.options.length);
   }
@@ -401,113 +396,6 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
       (shownOptionsLength === 1 && this.shownOptions[0][this.optionValue] === null);
   }
 
-  _validCoordinates(coords) {
-    return !(coords.x === 0 && coords.y === 0 &&
-      coords.width === 0 && coords.height === 0 &&
-      coords.left === 0 && coords.right === 0 &&
-      coords.top === 0 && coords.bottom === 0);
-  }
-
-  _bottomTooCloseToViewportEdge(dropdownBottom) {
-    const viewportH = this._getViewportHeight();
-    return (viewportH - dropdownBottom) < 10;
-  }
-
-  _dropdownBottomOutsideViewPort(openedDropdownCoord) {
-    const viewportH = this._getViewportHeight();
-    const dropdownBottomY = openedDropdownCoord.top + openedDropdownCoord.height;
-    const diff = viewportH - dropdownBottomY;
-    return diff <= 0;
-  }
-
-  _getViewportHeight() {
-    return Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-  }
-
-  // TODO: this might be removed as support IE11 has ended
-  _recalculateOptionsListHeightForIE11(newComputedHeight, openedDropdownCoord, drControlsHeight) {
-    if (this.isIEBrowser()) {
-      const viewportH = this._getViewportHeight();
-      /**
-       * - if newComputedHeight is bigger than IE11 viewport we need to recalculate list height
-       * or
-       * - recheck bottom margin if it's visible, it might still be under viewport bottom limit in IE11
-       * possible dynamicAlign issue in IE11
-       */
-      if (this._dropdownOpenedDownwards(openedDropdownCoord) &&
-        (newComputedHeight > viewportH || this._dropdownBottomOutsideViewPort(openedDropdownCoord))) {
-        newComputedHeight = this._getNewHeightRelatedToBottomViewportEdge(openedDropdownCoord, drControlsHeight);
-      }
-
-      /**
-       * There is another case when the top coordinate of the dropdown is negative
-       * and the height is bigger than the viewport height
-       */
-      if (!this._dropdownOpenedDownwards(openedDropdownCoord) && newComputedHeight > viewportH) {
-        const maxDropdownHeight = viewportH - openedDropdownCoord.bottom;
-        newComputedHeight = viewportH - maxDropdownHeight - drControlsHeight - 60;
-        const ironDropdown = this._getIronDropdown();
-        ironDropdown.style.top = '60px'; // adjust iron dropdown top to be able to see it, ugly
-      }
-    }
-    return newComputedHeight;
-  }
-
-  _getSearchFieldHeight() {
-    let searchboxHeight = 0;
-    if (!this.hideSearch) {
-      const searchInputWrapper = this._getSearchox();
-      const inputComputedtStyle = window.getComputedStyle(searchInputWrapper);
-      searchboxHeight = Number(inputComputedtStyle.height.replace('px', ''));
-      if (this.nodeName === 'ETOOLS-DROPDOWN-MULTI') {
-        searchboxHeight += Number(inputComputedtStyle.paddingTop.replace('px', ''));
-        searchboxHeight += Number(inputComputedtStyle.paddingBottom.replace('px', ''));
-        searchboxHeight += Number(inputComputedtStyle.paddingBlockEnd.replace('px', ''));
-        searchboxHeight += Number(inputComputedtStyle.paddingBlockStart.replace('px', ''));
-      }
-    }
-    return searchboxHeight;
-  }
-
-  _getNewHeightRelatedToBottomViewportEdge(openedDropdownCoord, drControlsHeight) {
-    const viewportH = this._getViewportHeight();
-    return viewportH - openedDropdownCoord.top - drControlsHeight - this.viewportEdgeMargin;
-  }
-
-  _resizeOptionsListHeight() {
-    const ironDrContent = this._getIronDropdownContent();
-
-    const dropdownContentHeightCheck = setInterval(function() {
-      // opened dropdown coordinates
-      const openedDropdownCoord = ironDrContent.getBoundingClientRect();
-
-      // don't do anything until maxHeight is set and the dropdown has been opened
-      if (ironDrContent.style.maxHeight && this._validCoordinates(openedDropdownCoord)) {
-        clearInterval(dropdownContentHeightCheck);
-        const drMaxHeight = Number(ironDrContent.style.maxHeight.replace('px', ''));
-        const searchboxHeight = this._getSearchFieldHeight();
-        const dropdownControls = this.querySelector('#dropdown-controls');
-        const dropdownControlsTopPadding = dropdownControls ?
-          dropdownControls.style.paddingTop.replace('px', '') :
-          0;
-
-        // for browsers
-        let listOptionsComputedHeight = drMaxHeight - searchboxHeight - dropdownControlsTopPadding;
-        if (this._dropdownOpenedDownwards(openedDropdownCoord) &&
-          this._bottomTooCloseToViewportEdge(drMaxHeight + openedDropdownCoord.top)) {
-          listOptionsComputedHeight -= this.viewportEdgeMargin;
-        }
-
-        // check if height is correctly calculated for IE11 and recalculate if needed
-        listOptionsComputedHeight = this._recalculateOptionsListHeightForIE11(listOptionsComputedHeight,
-            openedDropdownCoord, searchboxHeight + dropdownControlsTopPadding);
-
-        const optionsList = this._getOptionsList();
-        optionsList.style.maxHeight = listOptionsComputedHeight + 'px';
-      }
-    }.bind(this), 0);
-  }
-
   _onDropdownOpen() {
 
     setTimeout(() => {
@@ -515,7 +403,6 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
       if (!this.autoWidth) {
         this._setDropdownWidth();
       }
-      this._resizeOptionsListHeight();
       // when inside a paper-dialog the dropdown opens somewhere in the background and
       // we need to force repositioning
       this.notifyDropdownResize();
@@ -613,7 +500,23 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
 
   _setDropdownMenuVerticalOffset() {
     // substract 8px which represents paper-input-container top-bottom padding
-    this.verticalOffset = this._getPaperInputContainer().getBoundingClientRect().height - 8;
+    const verticalOffset = this._getPaperInputContainer().getBoundingClientRect().height - 8;
+    if (verticalOffset !== this.verticalOffset) {
+      this._preserveListScrollPosition();
+      this.verticalOffset = verticalOffset;
+    }
+  }
+
+  // if dropdown is in dialog and user scroll down to select an item, after selection the option list will be
+  // scrolled up, this method will preserve option list scroll position after selection
+  _preserveListScrollPosition() {
+    const paperListBox = this._getOptionsList().shadowRoot.querySelector('paper-listbox');
+    const scrollTop = paperListBox.scrollTop;
+    if (scrollTop > 0) {
+      setTimeout(() => {
+        paperListBox.scrollTop = scrollTop;
+      }, 50);
+    }
   }
 
   /**

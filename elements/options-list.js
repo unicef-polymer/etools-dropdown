@@ -20,7 +20,11 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
     return html`
       <style>
         :host {
-          display: block;
+          display: flex;
+          flex-direction: column;
+          overflow-x: hidden;
+          overflow-y: auto;
+          width:100%;
 
           --paper-item-icon: {
             width: auto;
@@ -29,6 +33,9 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
         }
 
         paper-listbox {
+          flex-grow: 1;
+          overflow: auto;
+          min-height: 0;
           width: 100%;
           padding: 0;
         }
@@ -67,10 +74,11 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
 
       <paper-listbox multi="[[multi]]" attr-for-selected="internal-id" selected="[[selected]]"
                      selected-values="{{selectedValues}}">
+
         <template is="dom-repeat" items="[[shownOptions]]">
           <paper-icon-item disabled\$="[[item.disableSelection]]" internal-id\$="[[getValue(item)]]"
-                           on-tap="_itemSelected" class\$="[[item.cssClass]] [[_getSelectedClass(item)]]"
-                           title\$="[[_getItemTitle(item)]]">
+                          on-tap="_itemSelected" class\$="[[item.cssClass]] [[_getSelectedClass(item)]]"
+                          title\$="[[_getItemTitle(item)]]">
 
             <iron-icon class="tick-icon" icon="check" slot="item-icon"></iron-icon>
             <paper-item-body two-line\$="[[twoLinesLabel]]">

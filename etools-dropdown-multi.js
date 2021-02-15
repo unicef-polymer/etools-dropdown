@@ -23,7 +23,7 @@ import './styles/esmm-shared-styles.js';
  * @appliesMixin EtoolsLogsMixin
  */
 const MultiDropdownRequiredMixins = MissingOptions(CommonFunctionality(
-  EtoolsLogsMixin(PolymerElement)));
+    EtoolsLogsMixin(PolymerElement)));
 
 /**
  * `etools-dropdown-multi`
@@ -58,6 +58,8 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
         #dropdown-controls #searchbox {
           padding-top: 0;
         }
+
+
       </style>
 
       <etools-ajax id="missingOptionsAjax" params="[[ajaxParams]]" on-success="handleMissingOptionsReqResponse"
@@ -112,6 +114,10 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
         type: Array,
         value: [],
         notify: true
+      },
+      prevSelectedItems: {
+        type: Array,
+        value: [],
       },
       /** Array of not found values (in options list) */
       notFoundOptions: {
@@ -175,10 +181,10 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       this._setAnyNotFoundOptions(this.selectedItems, selectedValues);
       return;
     }
-    let selectedItems = this.options.filter((item) => {
-      return (selectedValues instanceof Array && item[this.optionValue])
-        ? selectedValues.includes(item[this.optionValue].toString())
-        : false;
+    const selectedItems = this.options.filter((item) => {
+      return (selectedValues instanceof Array && item[this.optionValue]) ?
+        selectedValues.includes(item[this.optionValue].toString()) :
+        false;
     });
 
     this._setAnyNotFoundOptions(selectedItems, selectedValues);
@@ -186,7 +192,13 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
   }
 
   _selectedItemsChanged(selectedItems) {
-    this._updateDrdropdownMenuPosition();
+    if (JSON.stringify(this.prevSelectedItems) !== JSON.stringify(selectedItems))
+    {
+      this.prevSelectedItems = selectedItems;
+      setTimeout(() => {
+        this._setDropdownMenuVerticalOffset();
+      }, 10);
+    }
 
     if (this._isUndefined(selectedItems)) {
       return;
@@ -197,11 +209,11 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     }
 
     this._debouncer = Debouncer.debounce(
-      this._debouncer,
-      timeOut.after(10),
-      () => {
-        this._fireChangeEvent();
-      }
+        this._debouncer,
+        timeOut.after(10),
+        () => {
+          this._fireChangeEvent();
+        }
     );
   }
 
@@ -249,13 +261,6 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     }
   }
 
-  _updateDrdropdownMenuPosition() {
-    setTimeout(() => {
-      this._setDropdownMenuVerticalOffset();
-      this._getIronDropdown()._updateOverlayPosition();
-    }, 10);
-  }
-
   /**
    * This observer makes sure request for missing option is triggered only after the url is set also.
    * notFoundOption is actually this.selected
@@ -270,8 +275,8 @@ class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     this.requestMissingOptions(notFoundSelectedValues);
     // show warning
     let warnMsg = 'Selected value ';
-    let notFoundValues = (notFoundSelectedValues instanceof Array ? notFoundSelectedValues.join(', ')
-      : notFoundSelectedValues);
+    let notFoundValues = (notFoundSelectedValues instanceof Array ? notFoundSelectedValues.join(', ') :
+      notFoundSelectedValues);
     warnMsg += notFoundValues + ' not found in dropdown\'s options!';
     this.logWarn(warnMsg, 'etools-esmm ' + this.label, null, true);
   }
