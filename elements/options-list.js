@@ -7,7 +7,6 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/paper-item/paper-icon-item.js';
 import '@polymer/paper-item/paper-item-body.js';
-import '@polymer/paper-checkbox/paper-checkbox';
 import {ListItemUtils} from '../mixins/list-item-utils-mixin.js';
 
 /**
@@ -50,12 +49,20 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
           display: none;
         }
 
+        paper-icon-item .check-box {
+          display: flex;
+        }
+
         paper-icon-item.iron-selected {
           background: var(--esmm-list-item-selected-color, #dcdcdc);
         }
 
         paper-icon-item.iron-selected .tick-icon {
           display: flex;
+        }
+
+        paper-icon-item.iron-selected .check-box {
+          display: none;
         }
 
         .warning {
@@ -74,7 +81,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
       </style>
 
       <paper-listbox multi="[[multi]]" attr-for-selected="internal-id" selected="[[selected]]"
-          selectable="[[_getSelectable()]]" selected-values="{{selectedValues}}">
+        selected-values="{{selectedValues}}">
 
         <template is="dom-repeat" items="[[shownOptions]]">
 
@@ -82,13 +89,13 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
                           on-tap="_itemSelected" class\$="[[item.cssClass]] [[_getSelectedClass(item)]]"
                           title\$="[[_getItemTitle(item)]]">
 
-            <template is="dom-if" if="[[!multi]]">
-              <iron-icon class="tick-icon" icon="check" slot="item-icon"></iron-icon>
-            </template>
-            <template is="dom-if" if="[[multi]]">
-              <paper-checkbox slot="item-icon" on-change="_multiCheckChanged" checked="[[_getIsSelected(item)]]">
-              </paper-checkbox>
-            </template>
+              <template is="dom-if" if="[[multi]]">
+                <iron-icon class="check-box" icon="check-box-outline-blank" slot="item-icon"></iron-icon>
+                <iron-icon class="tick-icon" icon="check-box" slot="item-icon"></iron-icon>
+              </template>
+              <template is="dom-if" if="[[!multi]]">
+                <iron-icon class="tick-icon" icon="check" slot="item-icon"></iron-icon>
+              </template>
 
             <paper-item-body two-line\$="[[twoLinesLabel]]">
 
@@ -169,7 +176,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
       }
     } else {
       e.stopImmediatePropagation();
-      const selectedValue = e.model.item[this.optionValue];
+      let selectedValue = e.model.item[this.optionValue];
       this.set('selected', selectedValue);
       this.dispatchEvent(new CustomEvent('close-etools-dropdown', {
         bubbles: true,
@@ -221,32 +228,12 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
     return '';
   }
 
-  _getIsSelected(item) {
-    return this.selectedValues.indexOf(this._getItemValueByOptionValue(item).toString()) > -1 ;
-  }
-
   _getItemValueByOptionValue(item) {
-    const val = item[this.optionValue];
+    let val = item[this.optionValue];
     if (val === null || val === undefined) {
       return -1;
     }
     return val;
-  }
-
-  _getSelectable() {
-    return this.multi ? 'none' : '';
-  }
-
-  _multiCheckChanged(e) {
-    const paperItem = e.target.closest('paper-icon-item');
-    const internalId = paperItem.getAttribute('internal-id');
-    if (e.target.checked) {
-      this.selectedValues = [...this.selectedValues, internalId];
-      paperItem.classList.add('iron-selected');
-    } else {
-      this.selectedValues = this.selectedValues.filter(val => val !== internalId);
-      paperItem.classList.remove('iron-selected');
-    }
   }
 }
 
