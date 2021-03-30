@@ -51,6 +51,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
 
         paper-icon-item .check-box {
           display: flex;
+          color: var(--primary-color);
         }
 
         paper-icon-item.iron-selected {
@@ -59,6 +60,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
 
         paper-icon-item.iron-selected .tick-icon {
           display: flex;
+          color: var(--primary-color);
         }
 
         paper-icon-item.iron-selected .check-box {
