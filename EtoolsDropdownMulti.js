@@ -38,10 +38,6 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     // language=HTML
     return html`
       <style include="paper-material-styles esmm-shared-styles">
-        #dropdown-controls {
-          padding-top: 14px;
-        }
-
         :host([hide-search]) #dropdown-controls {
           padding-top: 20px;
         }
@@ -54,7 +50,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
         .close-btn {
           float: right;
           text-align: right;
-          margin: 0px 2px;
+          margin: 2px 16px;
           font-size: 12px;
           color: var(--paper-input-prefix_-_color);
         }
@@ -77,12 +73,9 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
                      no-cancel-on-outside-click allow-click-through with-backdrop="[[withBackdrop]]">
 
         <div id="ironDrContent" class="paper-material" elevation="1" slot="dropdown-content">
+          <span class="close-btn" part="esmm-close-btn" title="[[closeText]]" hidden$="{{hideClose}}" on-tap="_closeMenu">[[closeText]]</span>
           <div id="dropdown-controls">
             <esmm-searchbox-input id="searchbox" search="{{search}}" hidden$="{{hideSearch}}"></esmm-searchbox-input>
-            <span class="close-btn" part="edm-close-btn" title="[[closeText]]" hidden$="{{hideClose}}"
-              on-tap="_closeMenu">
-              [[closeText]]
-            </span>
           </div>
 
           <esmm-options-list id="optionsList" shown-options="[[shownOptions]]" multi=""
@@ -93,10 +86,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
                              no-options-available="[[noOptionsAvailable]]"
                              capitalize="[[capitalize]]">
           </esmm-options-list>
-          <span title="[[closeText]]" class="close-btn" part="edm-close-btn" hidden$="{{hideClose}}"
-            on-tap="_closeMenu">
-            [[closeText]]
-          </span>
+          <span title="[[closeText]]" class="close-btn" part="esmm-close-btn" hidden$="{{hideClose}}" on-tap="_closeMenu">[[closeText]]</span>
         </div>
 
       </iron-dropdown>
