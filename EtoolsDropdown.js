@@ -44,7 +44,6 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
             cursor: var(--esmm-select-cursor);
           }
         }
-
         #main {
           width: 100%;
         }
@@ -53,6 +52,17 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
           @apply --esmm-icons;
         }
 
+        paper-input {
+        --paper-input-container-label: {
+              @apply --required-star-style;
+              position: initial !important;
+              font-size: 12px;
+              line-height: 16px;
+          }
+          --paper-font-caption: {
+            display: none
+          }
+        }
       </style>
 
       <etools-ajax id="missingOptionsAjax" params="[[ajaxParams]]" on-success="handleMissingOptionsReqResponse"
@@ -63,7 +73,9 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
                    value="[[getLabel(selectedItem)]]" disabled="[[disabled]]"
                    invalid="[[invalid]]" error-message="[[_getErrorMessage(errorMessage, invalid)]]" readonly
                    on-focus="onInputFocus" on-tap="_openMenu">
+
         <iron-icon icon="arrow-drop-down" slot="suffix" hidden\$="[[readonly]]"></iron-icon>
+        <slot name="label-suffix"></slot>
       </paper-input>
 
       <iron-dropdown id="dropdownMenu" horizontal-align="[[horizontalAlign]]" vertical-offset="[[verticalOffset]]"
@@ -133,6 +145,27 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
       '_selectedAndOptionsChanged(selected, options)',
       '_notFoundOptionAndUrlChanged(notFoundOption, url)'
     ];
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this._setupLabelSuffixSlot();
+  }
+
+  // can add content after label by using slot='label-suffix', below we get content from slot and add it after label
+  // for this it was necessary to change --paper-input-container-label position from absolute
+  _setupLabelSuffixSlot() {
+    const labelSuffixSlot = this.$.main.querySelector('slot[name="label-suffix"]');
+    const nodesToAddAfterLabel = labelSuffixSlot ? labelSuffixSlot.assignedNodes() : [];
+    if (nodesToAddAfterLabel.length) {
+      const labelContainer = (this.$.main.$.container.querySelector('label') || {}).parentNode;
+      if (labelContainer) {
+        nodesToAddAfterLabel.forEach((node) => {
+          node.slot = 'label';
+          labelContainer.appendChild(node);
+        });
+      }
+    }
   }
 
   _selectedAndOptionsChanged(selected, options) {
