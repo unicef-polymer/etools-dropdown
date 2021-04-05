@@ -160,6 +160,11 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
     if (nodesToAddAfterLabel.length) {
       const labelContainer = (this.$.main.$.container.querySelector('label') || {}).parentNode;
       if (labelContainer) {
+        const labelSlot = labelContainer.$.labelAndInputContainer.querySelector('[name="label"]');
+        labelSlot.style.display = 'block';
+        labelSlot.style.overflow = 'hidden';
+        labelSlot.style.whiteSpace = 'nowrap';
+        labelSlot.style.textOverflow ='ellipsis';
         nodesToAddAfterLabel.forEach((node) => {
           node.slot = 'label';
           labelContainer.appendChild(node);
