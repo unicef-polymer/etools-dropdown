@@ -49,12 +49,22 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
           display: none;
         }
 
+        paper-icon-item .check-box {
+          display: flex;
+          color: var(--primary-color);
+        }
+
         paper-icon-item.iron-selected {
           background: var(--esmm-list-item-selected-color, #dcdcdc);
         }
 
         paper-icon-item.iron-selected .tick-icon {
           display: flex;
+          color: var(--primary-color);
+        }
+
+        paper-icon-item.iron-selected .check-box {
+          display: none;
         }
 
         .warning {
@@ -73,14 +83,22 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
       </style>
 
       <paper-listbox multi="[[multi]]" attr-for-selected="internal-id" selected="[[selected]]"
-                     selected-values="{{selectedValues}}">
+        selected-values="{{selectedValues}}">
 
         <template is="dom-repeat" items="[[shownOptions]]">
+
           <paper-icon-item disabled\$="[[item.disableSelection]]" internal-id\$="[[getValue(item)]]"
                           on-tap="_itemSelected" class\$="[[item.cssClass]] [[_getSelectedClass(item)]]"
                           title\$="[[_getItemTitle(item)]]">
 
-            <iron-icon class="tick-icon" icon="check" slot="item-icon"></iron-icon>
+              <template is="dom-if" if="[[multi]]">
+                <iron-icon class="check-box" icon="check-box-outline-blank" slot="item-icon"></iron-icon>
+                <iron-icon class="tick-icon" icon="check-box" slot="item-icon"></iron-icon>
+              </template>
+              <template is="dom-if" if="[[!multi]]">
+                <iron-icon class="tick-icon" icon="check" slot="item-icon"></iron-icon>
+              </template>
+
             <paper-item-body two-line\$="[[twoLinesLabel]]">
 
               <template is="dom-if" if="[[twoLinesLabel]]">

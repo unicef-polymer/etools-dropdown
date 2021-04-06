@@ -38,28 +38,22 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     // language=HTML
     return html`
       <style include="paper-material-styles esmm-shared-styles">
-        #close-btn {
-          position: absolute;
-          top: 2px;
-          right: 2px;
-          width: 16px;
-          height: 16px;
-          color: var(--paper-input-prefix_-_color);
-        }
-
-        #dropdown-controls {
-          padding-top: 14px;
-        }
-
         :host([hide-search]) #dropdown-controls {
           padding-top: 20px;
         }
 
         #dropdown-controls #searchbox {
-          padding-top: 0;
+          padding: 0px 16px;
+          margin-bottom: -4px;
         }
 
-
+        .close-btn {
+          float: right;
+          text-align: right;
+          margin: 2px 16px;
+          font-size: 12px;
+          color: var(--paper-input-prefix_-_color);
+        }
       </style>
 
       <etools-ajax id="missingOptionsAjax" params="[[ajaxParams]]" on-success="handleMissingOptionsReqResponse"
@@ -79,11 +73,12 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
                      no-cancel-on-outside-click allow-click-through with-backdrop="[[withBackdrop]]">
 
         <div id="ironDrContent" class="paper-material" elevation="1" slot="dropdown-content">
+          <span class="close-btn" part="esmm-close-btn" title="[[closeText]]" hidden$="{{hideClose}}"
+            on-tap="_closeMenu">
+            [[closeText]]
+          </span>
           <div id="dropdown-controls">
             <esmm-searchbox-input id="searchbox" search="{{search}}" hidden$="{{hideSearch}}"></esmm-searchbox-input>
-            <iron-icon id="close-btn" icon="close" title="Close" hidden$="{{hideClose}}"
-              on-tap="_closeMenu">
-            </iron-icon>
           </div>
 
           <esmm-options-list id="optionsList" shown-options="[[shownOptions]]" multi=""
@@ -92,7 +87,12 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
                              show-no-search-results-warning="[[showNoSearchResultsWarning]]"
                              show-limit-warning="[[showLimitWarning]]" shown-options-limit="[[shownOptionsLimit]]"
                              no-options-available="[[noOptionsAvailable]]"
-                             capitalize="[[capitalize]]"></esmm-options-list>
+                             capitalize="[[capitalize]]">
+          </esmm-options-list>
+          <span title="[[closeText]]" class="close-btn" part="esmm-close-btn" hidden$="{{hideClose}}"
+            on-tap="_closeMenu">
+            [[closeText]]
+          </span>
         </div>
 
       </iron-dropdown>
@@ -131,6 +131,11 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
         type: String,
         computed: '_getElementTitle(selectedItems)',
         reflectToAttribute: true
+      },
+      closeText: {
+        type: String,
+        reflectToAttribute: true,
+        value: 'Close'
       }
     };
   }
