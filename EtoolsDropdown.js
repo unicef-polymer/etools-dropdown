@@ -6,7 +6,7 @@ import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-dropdown/iron-dropdown.js';
 import '@polymer/neon-animation/neon-animations.js';
-import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-input/paper-input-container.js';
 import '@polymer/paper-styles/element-styles/paper-material-styles.js';
 import EtoolsLogsMixin from '@unicef-polymer/etools-behaviors/etools-logs-mixin.js';
 import '@unicef-polymer/etools-ajax/etools-ajax.js';
@@ -38,43 +38,106 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
     // language=HTML
     return html`
       <style include="paper-material-styles esmm-shared-styles">
-
         :host {
-          --paper-input-container-input: {
+          --paper-input-container: {
             cursor: var(--esmm-select-cursor);
           }
         }
-
         #main {
           width: 100%;
         }
-
         #main iron-icon {
           @apply --esmm-icons;
         }
+        .label-container > * {
+          @apply --paper-font-common-nowrap;
+          @apply --paper-font-subhead;
+        }
+        .label-container :first-child {
+          @apply --paper-input-container-label;
+        }
+        .label-container :not(:first-child)::slotted(*) {
+          display: inline;
+          flex-direction: row;
+        }
+        .label-container {
+          overflow: hidden !important;
+          white-space: nowrap !important;
+          text-overflow: ellipsis !important;
+          width: 133% !important;
+          max-width: 133% !important;
 
+          position: absolute;
+          top: 0;
+          left: 0;
+          font: inherit;
+          color: var(--paper-input-container-color, var(--secondary-text-color));
+          -webkit-transition: -webkit-transform 0.25s, width 0.25s;
+          transition: transform 0.25s, width 0.25s;
+          -webkit-transform-origin: left top;
+          transform-origin: left top;
+          /* Fix for safari not focusing 0-height date/time inputs with -webkit-apperance: none; */
+          min-height: 1px;
+          -webkit-transform: translateY(-75%) scale(0.75);
+          transform: translateY(-75%) scale(0.75);
+        }
+
+        iron-input > input {
+          @apply --paper-input-container-shared-input-style;
+          font-family: inherit;
+          font-weight: inherit;
+          font-size: inherit;
+          letter-spacing: inherit;
+          word-spacing: inherit;
+          line-height: inherit;
+          text-shadow: inherit;
+          color: inherit;
+          cursor: inherit;
+        }
       </style>
-
       <etools-ajax id="missingOptionsAjax" params="[[ajaxParams]]" on-success="handleMissingOptionsReqResponse"
                    on-fail="handleMissingOptionsReqError"></etools-ajax>
 
-      <paper-input id="main" label="[[label]]" placeholder="[[placeholder]]" always-float-label="[[alwaysFloatLabel]]"
-                   no-label-float="[[noLabelFloat]]"
-                   value="[[getLabel(selectedItem)]]" disabled="[[disabled]]"
-                   invalid="[[invalid]]" error-message="[[_getErrorMessage(errorMessage, invalid)]]" readonly
-                   on-focus="onInputFocus" on-tap="_openMenu">
+      <paper-input-container id="main" no-label-float="[[noLabelFloat]]"
+          always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
+          auto-validate$="[[autoValidate]]" disabled$="[[disabled]]" invalid="[[invalid]]"
+          on-focus="onInputFocus" on-tap="_openMenu">
+
+        <slot name="prefix" slot="prefix"></slot>
+
+        <div class="label-container" slot="label">
+          <label hidden$="[[!label]]" aria-hidden="true" for$="[[_inputId]]">[[label]]</label>
+          <slot name="label-suffix"></slot>
+        </div>
+
+        <!-- Need to bind maxlength so that the paper-input-char-counter works correctly -->
+        <iron-input bind-value="[[getLabel(selectedItem)]]" slot="input" class="input-element" id$="[[_inputId]]" maxlength$="[[maxlength]]"
+              allowed-pattern="[[allowedPattern]]" invalid="{{invalid}}" validator="[[validator]]">
+          <input aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" disabled$="[[disabled]]"
+              title$="[[title]]" type$="[[type]]" pattern$="[[pattern]]" required$="[[required]]" autocomplete$="[[autocomplete]]"
+              autofocus$="[[autofocus]]" inputmode$="[[inputmode]]" minlength$="[[minlength]]" maxlength$="[[maxlength]]"
+              min$="[[min]]" max$="[[max]]" step$="[[step]]" name$="[[name]]" placeholder$="[[placeholder]]"
+              readonly$="[[readonly]]" list$="[[list]]" size$="[[size]]" autocapitalize$="[[autocapitalize]]"
+              autocorrect$="[[autocorrect]]" on-change="_onChange" tabindex$="[[tabIndex]]" autosave$="[[autosave]]" results$="[[results]]"
+              accept$="[[accept]]" multiple$="[[multiple]]" role$="[[inputRole]]" aria-haspopup$="[[inputAriaHaspopup]]">
+        </iron-input>
+
         <iron-icon icon="arrow-drop-down" slot="suffix" hidden\$="[[readonly]]"></iron-icon>
-      </paper-input>
+
+        <template is="dom-if" if="[[errorMessage]]">
+          <paper-input-error aria-live="assertive" slot="add-on">[[errorMessage]]</paper-input-error>
+        </template>
+
+    </paper-input-container>
+
 
       <iron-dropdown id="dropdownMenu" horizontal-align="[[horizontalAlign]]" vertical-offset="[[verticalOffset]]"
                      dynamic-align="[[!noDynamicAlign]]" on-iron-overlay-opened="_onDropdownOpen"
                      on-iron-overlay-closed="_onDropdownClose" disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
                      no-cancel-on-outside-click allow-click-through
                      with-backdrop="[[withBackdrop]]">
-
         <div id="ironDrContent" class="paper-material" elevation="1" slot="dropdown-content">
           <esmm-searchbox-input id="searchbox" search="{{search}}" hidden\$="{{hideSearch}}"></esmm-searchbox-input>
-
           <esmm-options-list id="optionsList" shown-options="[[shownOptions]]" selected="{{selected}}"
                              two-lines-label="[[twoLinesLabel]]" option-value="[[optionValue]]"
                              option-label="[[optionLabel]]"
@@ -83,7 +146,6 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
                              no-options-available="[[noOptionsAvailable]]" none-option-label="[[noneOptionLabel]]"
                              capitalize="[[capitalize]]" on-close-etools-dropdown="_closeMenu"></esmm-options-list>
         </div>
-
       </iron-dropdown>
     `;
   }
@@ -243,4 +305,3 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
     }));
   }
 }
-
