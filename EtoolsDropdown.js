@@ -42,46 +42,18 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
           --paper-input-container: {
             cursor: var(--esmm-select-cursor);
           }
+          --paper-input-suffix: {
+            bottom: auto;
+            right: auto;
+            position: static;
+          }
         }
         #main {
-          width: 100%;
+          width: 133%;
         }
         #main iron-icon {
           @apply --esmm-icons;
         }
-        .label-container > * {
-          @apply --paper-font-common-nowrap;
-          @apply --paper-font-subhead;
-        }
-        .label-container :first-child {
-          @apply --paper-input-container-label;
-        }
-        .label-container :not(:first-child)::slotted(*) {
-          display: inline;
-          flex-direction: row;
-        }
-        .label-container {
-          overflow: hidden !important;
-          white-space: nowrap !important;
-          text-overflow: ellipsis !important;
-          width: 133% !important;
-          max-width: 133% !important;
-
-          position: absolute;
-          top: 0;
-          left: 0;
-          font: inherit;
-          color: var(--paper-input-container-color, var(--secondary-text-color));
-          -webkit-transition: -webkit-transform 0.25s, width 0.25s;
-          transition: transform 0.25s, width 0.25s;
-          -webkit-transform-origin: left top;
-          transform-origin: left top;
-          /* Fix for safari not focusing 0-height date/time inputs with -webkit-apperance: none; */
-          min-height: 1px;
-          -webkit-transform: translateY(-75%) scale(0.75);
-          transform: translateY(-75%) scale(0.75);
-        }
-
         iron-input > input {
           @apply --paper-input-container-shared-input-style;
           font-family: inherit;
@@ -94,24 +66,39 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
           color: inherit;
           cursor: inherit;
         }
+        #label-container {
+          overflow: visible;
+          max-width: 133%;
+        }
+        .label-slot-container {
+          position: relative;
+          display: inline !important;
+          overflow: hidden !important;
+          white-space: nowrap !important;
+          text-overflow: ellipsis !important;
+        }
+        .label-slot-container > * {
+          float: left;
+        }
       </style>
       <etools-ajax id="missingOptionsAjax" params="[[ajaxParams]]" on-success="handleMissingOptionsReqResponse"
                    on-fail="handleMissingOptionsReqError"></etools-ajax>
-
       <paper-input-container id="main" no-label-float="[[noLabelFloat]]"
-          always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
+          always-float-label
           auto-validate$="[[autoValidate]]" disabled$="[[disabled]]" invalid="[[invalid]]"
           on-focus="onInputFocus" on-tap="_openMenu">
 
         <slot name="prefix" slot="prefix"></slot>
 
-        <div class="label-container" slot="label">
-          <label hidden$="[[!label]]" aria-hidden="true" for$="[[_inputId]]">[[label]]</label>
-          <slot name="label-suffix"></slot>
+        <div id="label-container" part="esmm-label-container" class="paper-input-label" slot="label">
+            <div class="label-slot-container" part="esmm-label-slot-container">
+                <label hidden$="[[!label]]" aria-hidden="true" part="esmm-paper-label" class="paper-input-label" for$="[[_inputId]]">[[label]]</label>
+                <slot name="label-suffix"></slot>
+            </div>
         </div>
 
         <!-- Need to bind maxlength so that the paper-input-char-counter works correctly -->
-        <iron-input bind-value="[[getLabel(selectedItem)]]" slot="input" class="input-element" id$="[[_inputId]]" maxlength$="[[maxlength]]"
+        <iron-input bind-value="[[getLabel(selectedItem)]]" slot="input" class="paper-input-input" id$="[[_inputId]]" maxlength$="[[maxlength]]"
               allowed-pattern="[[allowedPattern]]" invalid="{{invalid}}" validator="[[validator]]">
           <input aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" disabled$="[[disabled]]"
               title$="[[title]]" type$="[[type]]" pattern$="[[pattern]]" required$="[[required]]" autocomplete$="[[autocomplete]]"
@@ -129,8 +116,6 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
         </template>
 
     </paper-input-container>
-
-
       <iron-dropdown id="dropdownMenu" horizontal-align="[[horizontalAlign]]" vertical-offset="[[verticalOffset]]"
                      dynamic-align="[[!noDynamicAlign]]" on-iron-overlay-opened="_onDropdownOpen"
                      on-iron-overlay-closed="_onDropdownClose" disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
