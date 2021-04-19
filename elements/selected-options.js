@@ -73,14 +73,34 @@ class EsmmSelectedOptions extends ListItemUtils(PolymerElement) {
         .placeholder {
           color: var(--esmm-multi-placeholder-color, rgba(0, 0, 0, 0.54));
         }
-
+        #label-container {
+          overflow: visible;
+          max-width: 133%;
+        }
+        .label-slot-container {
+          position: relative;
+          display: inline;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        .label-slot-container > * {
+          float: left;
+        }
       </style>
 
       <paper-input-container id="container" tabindex="1" no-label-float="[[noLabelFloat]]"
                              always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel, placeholder)]]"
                              auto-validate\$="[[autoValidate]]" disabled\$="[[disabled]]" invalid="[[invalid]]">
 
-        <label hidden\$="[[!label]]" aria-hidden="true" for="selected-items-wrapper" slot="label">[[label]]</label>
+        <div id="label-container" part="esmm-label-container" class="paper-input-label" slot="label">
+          <label hidden$="[[!label]]" aria-hidden="true" part="esmm-label" class="paper-input-label"
+            for$="selected-items-wrapper">[[label]]
+          </label>
+          <div class="label-slot-container" part="esmm-label-suffix">
+              <slot name="input-label-suffix"></slot>
+          </div>
+        </div>
 
         <div slot="input" class="paper-input-input">
         <span class="placeholder" hidden\$="[[_hidePlaceholder]]">
