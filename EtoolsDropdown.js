@@ -56,15 +56,6 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
         }
         iron-input > input {
           @apply --paper-input-container-shared-input-style;
-          font-family: inherit;
-          font-weight: inherit;
-          font-size: inherit;
-          letter-spacing: inherit;
-          word-spacing: inherit;
-          line-height: inherit;
-          text-shadow: inherit;
-          color: inherit;
-          cursor: inherit;
         }
         #label-container {
           overflow: visible;
@@ -72,10 +63,10 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
         }
         .label-slot-container {
           position: relative;
-          display: inline !important;
-          overflow: hidden !important;
-          white-space: nowrap !important;
-          text-overflow: ellipsis !important;
+          display: inline;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
         .label-slot-container > * {
           float: left;
@@ -91,8 +82,8 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
         <slot name="prefix" slot="prefix"></slot>
 
         <div id="label-container" part="esmm-label-container" class="paper-input-label" slot="label">
-            <div class="label-slot-container" part="esmm-label-slot-container">
-                <label hidden$="[[!label]]" aria-hidden="true" part="esmm-paper-label" class="paper-input-label" for$="[[_inputId]]">[[label]]</label>
+            <label hidden$="[[!label]]" aria-hidden="true" part="esmm-label" class="paper-input-label" for$="[[_inputId]]">[[label]]</label>
+            <div class="label-slot-container" part="esmm-label-suffix">
                 <slot name="label-suffix"></slot>
             </div>
         </div>
