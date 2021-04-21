@@ -41,12 +41,10 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
         :host([hide-search]) #dropdown-controls {
           padding-top: 20px;
         }
-
         #dropdown-controls #searchbox {
           padding: 0px 16px;
           margin-bottom: -4px;
         }
-
         .close-btn {
           float: right;
           text-align: right;
@@ -59,13 +57,19 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       <etools-ajax id="missingOptionsAjax" params="[[ajaxParams]]" on-success="handleMissingOptionsReqResponse"
                    on-fail="handleMissingOptionsReqError"></etools-ajax>
 
+
       <esmm-selected-options id="main" selected-items="[[selectedItems]]" label="[[label]]"
                              placeholder="[[placeholder]]" always-float-label="[[alwaysFloatLabel]]"
                              no-label-float="[[noLabelFloat]]" two-lines-label="[[twoLinesLabel]]"
                              capitalize="[[capitalize]]" readonly="[[readonly]]" disabled="[[disabled]]"
                              invalid="[[invalid]]" option-value="[[optionValue]]" option-label="[[optionLabel]]"
                              error-message="[[_getErrorMessage(errorMessage, invalid)]]" on-focus="onInputFocus"
-                             on-tap="_openMenu"></esmm-selected-options>
+                             on-tap="_openMenu"
+                             exportparts="esmm-label-container, esmm-label, esmm-label-suffix">
+          <span slot="input-label-suffix">
+            <slot name="label-suffix"></slot>
+          </span>
+      </esmm-selected-options>
 
       <iron-dropdown id="dropdownMenu" horizontal-align="[[horizontalAlign]]" vertical-offset="[[verticalOffset]]"
                      dynamic-align="[[!noDynamicAlign]]" on-iron-overlay-opened="_onDropdownOpen"

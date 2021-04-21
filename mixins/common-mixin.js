@@ -481,6 +481,9 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
   }
 
   _getPaperInputContainer() {
+    if (this.tagName === 'ETOOLS-DROPDOWN') {
+      return this.$.main;
+    }
     return this.$.main.$.container;
   }
 
