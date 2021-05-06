@@ -23,7 +23,7 @@ import './styles/esmm-shared-styles.js';
  * @appliesMixin EtoolsLogsMixin
  */
 const DropdownRequiredMixins = MissingOptions(CommonFunctionality(
-    EtoolsLogsMixin(PolymerElement)));
+  EtoolsLogsMixin(PolymerElement)));
 
 /**
  * `etools-dropdown`
@@ -76,7 +76,7 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
                    on-fail="handleMissingOptionsReqError"></etools-ajax>
       <paper-input-container id="main" no-label-float="[[noLabelFloat]]"
           always-float-label
-          auto-validate$="[[autoValidate]]" disabled$="[[disabled]]" invalid="[[invalid]]"
+          auto-validate$="[[_getAutoValidate()]]" disabled$="[[disabled]]" invalid="[[invalid]]"
           on-focus="onInputFocus" on-tap="_openMenu">
 
         <slot name="prefix" slot="prefix"></slot>
@@ -180,11 +180,11 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
     }
 
     this._debouncer = Debouncer.debounce(
-        this._debouncer,
-        timeOut.after(20),
-        () => {
-          this._fireChangeEvent();
-        }
+      this._debouncer,
+      timeOut.after(20),
+      () => {
+        this._fireChangeEvent();
+      }
     );
   }
 
@@ -215,6 +215,10 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
     } else {
       this.set('selectedItem', selectedItem);
     }
+  }
+
+  _getAutoValidate() {
+    return this.autoValidate && this.focusedAtLeastOnce;
   }
 
   _getItemFromOptions(value) {

@@ -100,6 +100,10 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
         type: Boolean,
         value: false
       },
+      focusedAtLeastOnce: {
+        type: Boolean,
+        value: false
+      },
       /** Limit displayed options */
       shownOptionsLimit: {
         type: Number,
@@ -354,7 +358,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
     if (search) {
       shownOptions = options.filter(this._itemContainsSearchString.bind(this));
       shownOptions = this._trimByShownOptionsLimit(shownOptions);
-    } else if ((options.length > this.shownOptionsLimit) || this.showLimitWarning ) {
+    } else if ((options.length > this.shownOptionsLimit) || this.showLimitWarning) {
       shownOptions = this._trimByShownOptionsLimit(options);
     }
 
@@ -530,6 +534,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
     if (this.disableOnFocusHandling || this.dropdownIsClosing) {
       return;
     }
+    this.focusedAtLeastOnce = true;
     this._openMenu(e);
   }
 
