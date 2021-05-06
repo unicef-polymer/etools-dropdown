@@ -218,7 +218,7 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
   }
 
   _getAutoValidate() {
-    return this.autoValidate && this.focused;
+    return this.autoValidate && this.focusedAtLeastOnce;
   }
 
   _getItemFromOptions(value) {

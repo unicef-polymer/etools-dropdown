@@ -100,7 +100,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
         type: Boolean,
         value: false
       },
-      focused: {
+      focusedAtLeastOnce: {
         type: Boolean,
         value: false
       },
@@ -534,7 +534,7 @@ export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(L
     if (this.disableOnFocusHandling || this.dropdownIsClosing) {
       return;
     }
-    this.focused = true;
+    this.focusedAtLeastOnce = true;
     this._openMenu(e);
   }
 
