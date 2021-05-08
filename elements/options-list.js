@@ -51,7 +51,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
 
         paper-icon-item .check-box {
           display: flex;
-          color: var(--primary-color);
+          color: var(--primary-text-color);
         }
 
         paper-icon-item.iron-selected {
