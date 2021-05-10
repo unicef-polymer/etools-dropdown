@@ -52,8 +52,6 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
           font-size: 12px;
           color: var(--primary-color);
           font-weight: 500;
-        }
-        .close-bottom {
           border-top: solid 1px var(--paper-input-container-label_-_color);
         }
       </style>
@@ -93,7 +91,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
                              no-options-available="[[noOptionsAvailable]]"
                              capitalize="[[capitalize]]">
           </esmm-options-list>
-          <span title="[[closeText]]" class="close-btn close-bottom" part="esmm-close-btn" hidden$="{{hideClose}}"
+          <span title="[[closeText]]" class="close-btn" part="esmm-close-btn" hidden$="{{hideClose}}"
             on-tap="_closeMenu">
             [[closeText]]
           </span>
