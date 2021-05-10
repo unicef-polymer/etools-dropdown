@@ -42,19 +42,16 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
           padding-top: 20px;
         }
         #dropdown-controls #searchbox {
-          padding: 0px 16px;
+          padding: 8px 16px;
           margin-bottom: -4px;
         }
         .close-btn {
           float: right;
           text-align: right;
-          padding: 6px 16px;
+          padding: 10px 16px;
           font-size: 12px;
           color: var(--primary-color);
           font-weight: 500;
-        }
-        .close-top {
-          border-bottom: solid 1px var(--paper-input-container-label_-_color);
         }
         .close-bottom {
           border-top: solid 1px var(--paper-input-container-label_-_color);
@@ -84,10 +81,6 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
                      no-cancel-on-outside-click allow-click-through with-backdrop="[[withBackdrop]]">
 
         <div id="ironDrContent" class="paper-material" elevation="1" slot="dropdown-content">
-          <span class="close-btn close-top" part="esmm-close-btn" title="[[closeText]]" hidden$="{{hideClose}}"
-            on-tap="_closeMenu">
-            [[closeText]]
-          </span>
           <div id="dropdown-controls">
             <esmm-searchbox-input id="searchbox" search="{{search}}" hidden$="{{hideSearch}}"></esmm-searchbox-input>
           </div>
