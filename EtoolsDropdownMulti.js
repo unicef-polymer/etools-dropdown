@@ -23,7 +23,7 @@ import './styles/esmm-shared-styles.js';
  * @appliesMixin EtoolsLogsMixin
  */
 const MultiDropdownRequiredMixins = MissingOptions(CommonFunctionality(
-    EtoolsLogsMixin(PolymerElement)));
+  EtoolsLogsMixin(PolymerElement)));
 
 /**
  * `etools-dropdown-multi`
@@ -42,15 +42,17 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
           padding-top: 20px;
         }
         #dropdown-controls #searchbox {
-          padding: 0px 16px;
+          padding: 8px 16px;
           margin-bottom: -4px;
         }
         .close-btn {
           float: right;
           text-align: right;
-          margin: 2px 16px;
+          padding: 10px 16px;
           font-size: 12px;
-          color: var(--paper-input-prefix_-_color);
+          color: var(--primary-color);
+          font-weight: 500;
+          border-top: solid 1px var(--paper-input-container-label_-_color);
         }
       </style>
 
@@ -77,10 +79,6 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
                      no-cancel-on-outside-click allow-click-through with-backdrop="[[withBackdrop]]">
 
         <div id="ironDrContent" class="paper-material" elevation="1" slot="dropdown-content">
-          <span class="close-btn" part="esmm-close-btn" title="[[closeText]]" hidden$="{{hideClose}}"
-            on-tap="_closeMenu">
-            [[closeText]]
-          </span>
           <div id="dropdown-controls">
             <esmm-searchbox-input id="searchbox" search="{{search}}" hidden$="{{hideSearch}}"></esmm-searchbox-input>
           </div>
@@ -139,7 +137,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       closeText: {
         type: String,
         reflectToAttribute: true,
-        value: 'Close'
+        value: 'CLOSE'
       }
     };
   }
@@ -203,8 +201,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
   }
 
   _selectedItemsChanged(selectedItems) {
-    if (JSON.stringify(this.prevSelectedItems) !== JSON.stringify(selectedItems))
-    {
+    if (JSON.stringify(this.prevSelectedItems) !== JSON.stringify(selectedItems)) {
       this.prevSelectedItems = selectedItems;
       setTimeout(() => {
         this._setDropdownMenuVerticalOffset();
@@ -220,11 +217,11 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     }
 
     this._debouncer = Debouncer.debounce(
-        this._debouncer,
-        timeOut.after(10),
-        () => {
-          this._fireChangeEvent();
-        }
+      this._debouncer,
+      timeOut.after(10),
+      () => {
+        this._fireChangeEvent();
+      }
     );
   }
 

@@ -53,8 +53,8 @@
     "acorn": "^8.0.5",
     "diff": "^5.0.0",
     "growl": ">=1.10.0",
-    "lodash": ">=4.17.19",
-    "lodash-es": "^4.17.20",
+    "lodash": ">=4.17.21",
+    "lodash-es": "^4.17.21",
     "minimist": ">=0.2.1",
     "prismjs": ">=1.21.0",
     "web-animations-js": "^2.3.2"
