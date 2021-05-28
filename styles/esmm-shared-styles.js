@@ -62,6 +62,10 @@ $_documentContainer.innerHTML = `<custom-style>
         max-height: 100vh !important;
       }
 
+      .rounded {
+        border-radius: 4px;
+      }
+
     </style>
   </template>
 </dom-module>`;
