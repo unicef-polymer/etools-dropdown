@@ -23,7 +23,11 @@ import './styles/esmm-shared-styles.js';
  * @appliesMixin EtoolsLogsMixin
  */
 const MultiDropdownRequiredMixins = MissingOptions(CommonFunctionality(
+<<<<<<< HEAD
   EtoolsLogsMixin(PolymerElement)));
+=======
+    EtoolsLogsMixin(PolymerElement)));
+>>>>>>> master
 
 /**
  * `etools-dropdown-multi`
@@ -58,7 +62,6 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
 
       <etools-ajax id="missingOptionsAjax" params="[[ajaxParams]]" on-success="handleMissingOptionsReqResponse"
                    on-fail="handleMissingOptionsReqError"></etools-ajax>
-
 
       <esmm-selected-options id="main" selected-items="[[selectedItems]]" label="[[label]]"
                              placeholder="[[placeholder]]" always-float-label="[[alwaysFloatLabel]]"
