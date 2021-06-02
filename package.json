@@ -1,7 +1,7 @@
 {
   "name": "@unicef-polymer/etools-dropdown",
   "description": "Polymer 3 dropdown element with searchable options, single and multiple selection",
-  "version": "3.3.0",
+  "version": "3.4.4",
   "homepage": "https://github.com/unicef-polymer/etools-dropdown",
   "repository": {
     "type": "git",
@@ -20,6 +20,8 @@
     "eslint": "^7.20.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-html": "^6.1.1",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.2.0",
     "wct-browser-legacy": "^1.0.2"
   },
   "scripts": {
@@ -53,8 +55,8 @@
     "acorn": "^8.0.5",
     "diff": "^5.0.0",
     "growl": ">=1.10.0",
-    "lodash": ">=4.17.19",
-    "lodash-es": "^4.17.20",
+    "lodash": ">=4.17.21",
+    "lodash-es": "^4.17.21",
     "minimist": ">=0.2.1",
     "prismjs": ">=1.21.0",
     "web-animations-js": "^2.3.2"
