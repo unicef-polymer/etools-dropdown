@@ -24,12 +24,12 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
           flex-direction: column;
           overflow-x: hidden;
           overflow-y: auto;
-          width:100%;
+          width: 100%;
 
           --paper-item-icon: {
             width: auto;
             margin-right: 8px;
-          };
+          }
         }
 
         paper-listbox {
@@ -51,7 +51,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
 
         paper-icon-item .check-box {
           display: flex;
-          color: var(--primary-text-color);
+          color: var(--secondary-text-color);
         }
 
         paper-icon-item.iron-selected {
@@ -72,7 +72,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
           font-size: 12px;
           line-height: 16px;
           color: rgba(0, 0, 0, 0.54);
-          background-color: #EEEEEE;
+          background-color: #eeeeee;
           padding-top: 8px;
           padding-bottom: 8px;
         }
@@ -82,25 +82,29 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
         }
       </style>
 
-      <paper-listbox multi="[[multi]]" attr-for-selected="internal-id" selected="[[selected]]"
-        selected-values="{{selectedValues}}">
-
+      <paper-listbox
+        multi="[[multi]]"
+        attr-for-selected="internal-id"
+        selected="[[selected]]"
+        selected-values="{{selectedValues}}"
+      >
         <template is="dom-repeat" items="[[shownOptions]]">
+          <paper-icon-item
+            disabled$="[[item.disableSelection]]"
+            internal-id$="[[getValue(item)]]"
+            on-tap="_itemSelected"
+            class$="[[item.cssClass]] [[_getSelectedClass(item)]]"
+            title$="[[_getItemTitle(item)]]"
+          >
+            <template is="dom-if" if="[[multi]]">
+              <iron-icon class="check-box" icon="check-box-outline-blank" slot="item-icon"></iron-icon>
+              <iron-icon class="tick-icon" icon="check-box" slot="item-icon"></iron-icon>
+            </template>
+            <template is="dom-if" if="[[!multi]]">
+              <iron-icon class="tick-icon" icon="check" slot="item-icon"></iron-icon>
+            </template>
 
-          <paper-icon-item disabled\$="[[item.disableSelection]]" internal-id\$="[[getValue(item)]]"
-                          on-tap="_itemSelected" class\$="[[item.cssClass]] [[_getSelectedClass(item)]]"
-                          title\$="[[_getItemTitle(item)]]">
-
-              <template is="dom-if" if="[[multi]]">
-                <iron-icon class="check-box" icon="check-box-outline-blank" slot="item-icon"></iron-icon>
-                <iron-icon class="tick-icon" icon="check-box" slot="item-icon"></iron-icon>
-              </template>
-              <template is="dom-if" if="[[!multi]]">
-                <iron-icon class="tick-icon" icon="check" slot="item-icon"></iron-icon>
-              </template>
-
-            <paper-item-body two-line\$="[[twoLinesLabel]]">
-
+            <paper-item-body two-line$="[[twoLinesLabel]]">
               <template is="dom-if" if="[[twoLinesLabel]]">
                 <div>[[getPrimaryLabel(item.label)]]</div>
                 <div secondary="">[[getSecondaryLabel(item.label)]]</div>
@@ -109,24 +113,19 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
               <template is="dom-if" if="[[!twoLinesLabel]]">
                 <span>[[getLabel(item)]]</span>
               </template>
-
             </paper-item-body>
-
           </paper-icon-item>
-
         </template>
 
-        <paper-item hidden\$="[[!showNoSearchResultsWarning]]" class="warning" disabled="">
+        <paper-item hidden$="[[!showNoSearchResultsWarning]]" class="warning" disabled="">
           No results found. Try other keywords.
         </paper-item>
 
-        <paper-item hidden\$="[[!showLimitWarning]]" class="warning" disabled="">
+        <paper-item hidden$="[[!showLimitWarning]]" class="warning" disabled="">
           More than [[shownOptionsLimit]] items, use the search function to reveal more.
         </paper-item>
 
-        <paper-item hidden\$="[[!noOptionsAvailable]]" class="warning" disabled="">
-          No options available.
-        </paper-item>
+        <paper-item hidden$="[[!noOptionsAvailable]]" class="warning" disabled=""> No options available. </paper-item>
       </paper-listbox>
     `;
   }
@@ -180,10 +179,12 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
       e.stopImmediatePropagation();
       let selectedValue = e.model.item[this.optionValue];
       this.set('selected', selectedValue);
-      this.dispatchEvent(new CustomEvent('close-etools-dropdown', {
-        bubbles: true,
-        composed: true
-      }));
+      this.dispatchEvent(
+        new CustomEvent('close-etools-dropdown', {
+          bubbles: true,
+          composed: true
+        })
+      );
     }
   }
 
@@ -214,7 +215,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
    * @private
    */
   _getSelectedClassSingle(item) {
-    return (this.selected && this.selected === item[this.optionValue]) ? 'iron-selected' : '';
+    return this.selected && this.selected === item[this.optionValue] ? 'iron-selected' : '';
   }
 
   /**

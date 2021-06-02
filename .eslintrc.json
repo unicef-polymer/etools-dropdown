@@ -1,7 +1,8 @@
 {
   "extends": [
     "eslint:recommended",
-    "google"
+    "google",
+    "plugin:prettier/recommended" // Enables eslint-plugin-prettier and eslint-config-prettier.
   ],
   "parserOptions": {
     "ecmaVersion": 6,
@@ -10,9 +11,7 @@
   "env": {
     "browser": true
   },
-  "plugins": [
-    "html"
-  ],
+  "plugins": ["html", "prettier"],
   "rules": {
     "padded-blocks": "off",
     "linebreak-style": "off",
@@ -32,9 +31,12 @@
     "no-var": "off",
     "require-jsdoc": "off",
     "valid-jsdoc": "off",
-    "comma-dangle": [
+    "comma-dangle": ["error", "never"],
+    "no-irregular-whitespace": [
       "error",
-      "never"
+      {
+        "skipTemplates": true
+      }
     ],
     "max-len": [
       "error",
