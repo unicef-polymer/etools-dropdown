@@ -51,7 +51,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
           font-size: 12px;
           color: var(--primary-color);
           font-weight: 500;
-          border-top: solid 1px var(--paper-input-container-color, var(--secondary-text-color));
+          border-top: solid 1px lightgray;
         }
       </style>
 
