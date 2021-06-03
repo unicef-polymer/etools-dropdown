@@ -81,7 +81,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
                      on-iron-overlay-closed="_onDropdownClose" disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
                      no-cancel-on-outside-click allow-click-through with-backdrop="[[withBackdrop]]">
 
-        <div id="ironDrContent" class="paper-material" elevation="1" slot="dropdown-content">
+        <div id="ironDrContent" class="paper-material rounded" elevation="1" slot="dropdown-content">
           <div id="dropdown-controls">
             <esmm-searchbox-input id="searchbox" search="{{search}}" hidden$="{{hideSearch}}"></esmm-searchbox-input>
           </div>
