@@ -22,12 +22,7 @@ import './styles/esmm-shared-styles.js';
  * @appliesMixin EsmmMixins.CommonFunctionality
  * @appliesMixin EtoolsLogsMixin
  */
-const MultiDropdownRequiredMixins = MissingOptions(CommonFunctionality(
-<<<<<<< HEAD
-  EtoolsLogsMixin(PolymerElement)));
-=======
-    EtoolsLogsMixin(PolymerElement)));
->>>>>>> master
+const MultiDropdownRequiredMixins = MissingOptions(CommonFunctionality(EtoolsLogsMixin(PolymerElement)));
 
 /**
  * `etools-dropdown-multi`
@@ -60,46 +55,79 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
         }
       </style>
 
-      <etools-ajax id="missingOptionsAjax" params="[[ajaxParams]]" on-success="handleMissingOptionsReqResponse"
-                   on-fail="handleMissingOptionsReqError"></etools-ajax>
+      <etools-ajax
+        id="missingOptionsAjax"
+        params="[[ajaxParams]]"
+        on-success="handleMissingOptionsReqResponse"
+        on-fail="handleMissingOptionsReqError"
+      ></etools-ajax>
 
-      <esmm-selected-options id="main" selected-items="[[selectedItems]]" label="[[label]]"
-                             placeholder="[[placeholder]]" always-float-label="[[alwaysFloatLabel]]"
-                             no-label-float="[[noLabelFloat]]" two-lines-label="[[twoLinesLabel]]"
-                             capitalize="[[capitalize]]" readonly="[[readonly]]" disabled="[[disabled]]"
-                             invalid="[[invalid]]" option-value="[[optionValue]]" option-label="[[optionLabel]]"
-                             error-message="[[_getErrorMessage(errorMessage, invalid)]]" on-focus="onInputFocus"
-                             on-tap="_openMenu"
-                             exportparts="esmm-label-container, esmm-label, esmm-label-suffix">
-          <span slot="input-label-suffix">
-            <slot name="label-suffix"></slot>
-          </span>
+      <esmm-selected-options
+        id="main"
+        selected-items="[[selectedItems]]"
+        label="[[label]]"
+        placeholder="[[placeholder]]"
+        always-float-label="[[alwaysFloatLabel]]"
+        no-label-float="[[noLabelFloat]]"
+        two-lines-label="[[twoLinesLabel]]"
+        capitalize="[[capitalize]]"
+        readonly="[[readonly]]"
+        disabled="[[disabled]]"
+        invalid="[[invalid]]"
+        option-value="[[optionValue]]"
+        option-label="[[optionLabel]]"
+        error-message="[[_getErrorMessage(errorMessage, invalid)]]"
+        on-focus="onInputFocus"
+        on-tap="_openMenu"
+        exportparts="esmm-label-container, esmm-label, esmm-label-suffix"
+      >
+        <span slot="input-label-suffix">
+          <slot name="label-suffix"></slot>
+        </span>
       </esmm-selected-options>
 
-      <iron-dropdown id="dropdownMenu" horizontal-align="[[horizontalAlign]]" vertical-offset="[[verticalOffset]]"
-                     dynamic-align="[[!noDynamicAlign]]" on-iron-overlay-opened="_onDropdownOpen"
-                     on-iron-overlay-closed="_onDropdownClose" disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
-                     no-cancel-on-outside-click allow-click-through with-backdrop="[[withBackdrop]]">
-
+      <iron-dropdown
+        id="dropdownMenu"
+        horizontal-align="[[horizontalAlign]]"
+        vertical-offset="[[verticalOffset]]"
+        dynamic-align="[[!noDynamicAlign]]"
+        on-iron-overlay-opened="_onDropdownOpen"
+        on-iron-overlay-closed="_onDropdownClose"
+        disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
+        no-cancel-on-outside-click
+        allow-click-through
+        with-backdrop="[[withBackdrop]]"
+      >
         <div id="ironDrContent" class="paper-material rounded" elevation="1" slot="dropdown-content">
           <div id="dropdown-controls">
             <esmm-searchbox-input id="searchbox" search="{{search}}" hidden$="{{hideSearch}}"></esmm-searchbox-input>
           </div>
 
-          <esmm-options-list id="optionsList" shown-options="[[shownOptions]]" multi=""
-                             selected-values="{{selectedValues}}" two-lines-label="[[twoLinesLabel]]"
-                             option-value="[[optionValue]]" option-label="[[optionLabel]]"
-                             show-no-search-results-warning="[[showNoSearchResultsWarning]]"
-                             show-limit-warning="[[showLimitWarning]]" shown-options-limit="[[shownOptionsLimit]]"
-                             no-options-available="[[noOptionsAvailable]]"
-                             capitalize="[[capitalize]]">
+          <esmm-options-list
+            id="optionsList"
+            shown-options="[[shownOptions]]"
+            multi=""
+            selected-values="{{selectedValues}}"
+            two-lines-label="[[twoLinesLabel]]"
+            option-value="[[optionValue]]"
+            option-label="[[optionLabel]]"
+            show-no-search-results-warning="[[showNoSearchResultsWarning]]"
+            show-limit-warning="[[showLimitWarning]]"
+            shown-options-limit="[[shownOptionsLimit]]"
+            no-options-available="[[noOptionsAvailable]]"
+            capitalize="[[capitalize]]"
+          >
           </esmm-options-list>
-          <span title="[[closeText]]" class="close-btn" part="esmm-close-btn" hidden$="{{hideClose}}"
-            on-tap="_closeMenu">
+          <span
+            title="[[closeText]]"
+            class="close-btn"
+            part="esmm-close-btn"
+            hidden$="{{hideClose}}"
+            on-tap="_closeMenu"
+          >
             [[closeText]]
           </span>
         </div>
-
       </iron-dropdown>
     `;
   }
@@ -194,9 +222,9 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       return;
     }
     const selectedItems = this.options.filter((item) => {
-      return (selectedValues instanceof Array && item[this.optionValue]) ?
-        selectedValues.includes(item[this.optionValue].toString()) :
-        false;
+      return selectedValues instanceof Array && item[this.optionValue]
+        ? selectedValues.includes(item[this.optionValue].toString())
+        : false;
     });
 
     this._setAnyNotFoundOptions(selectedItems, selectedValues);
@@ -219,30 +247,28 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       return;
     }
 
-    this._debouncer = Debouncer.debounce(
-      this._debouncer,
-      timeOut.after(10),
-      () => {
-        this._fireChangeEvent();
-      }
-    );
+    this._debouncer = Debouncer.debounce(this._debouncer, timeOut.after(10), () => {
+      this._fireChangeEvent();
+    });
   }
 
   /**
    * @event etools-selected-items-changed
    */
   _fireChangeEvent() {
-    this.dispatchEvent(new CustomEvent('etools-selected-items-changed', {
-      detail: {selectedItems: this.selectedItems},
-      bubbles: true,
-      composed: true
-    }));
+    this.dispatchEvent(
+      new CustomEvent('etools-selected-items-changed', {
+        detail: {selectedItems: this.selectedItems},
+        bubbles: true,
+        composed: true
+      })
+    );
   }
 
   _setAnyNotFoundOptions(selectedItems, selectedValues) {
     // prevent using non array variables
-    selectedItems = (selectedItems instanceof Array) ? selectedItems : [];
-    selectedValues = (selectedValues instanceof Array) ? selectedValues : [];
+    selectedItems = selectedItems instanceof Array ? selectedItems : [];
+    selectedValues = selectedValues instanceof Array ? selectedValues : [];
     if (this._noSelectedItems(selectedItems)) {
       this.notFoundOptions = selectedValues;
     } else if (selectedItems.length < selectedValues.length) {
@@ -286,9 +312,9 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     this.requestMissingOptions(notFoundSelectedValues);
     // show warning
     let warnMsg = 'Selected value ';
-    const notFoundValues = (notFoundSelectedValues instanceof Array ? notFoundSelectedValues.join(', ') :
-      notFoundSelectedValues);
-    warnMsg += notFoundValues + ' not found in dropdown\'s options!';
+    const notFoundValues =
+      notFoundSelectedValues instanceof Array ? notFoundSelectedValues.join(', ') : notFoundSelectedValues;
+    warnMsg += notFoundValues + " not found in dropdown's options!";
     this.logWarn(warnMsg, 'etools-esmm ' + this.label, null, true);
   }
 
@@ -314,15 +340,17 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     if (typeof selectedValues === 'undefined') {
       selectedValues = this.selectedValues;
     }
-    const invalid = (!selectedValues || !selectedValues.length);
+    const invalid = !selectedValues || !selectedValues.length;
     this.set('invalid', invalid);
     return !invalid;
   }
 
   _getValuesFromItems(selectedItems) {
-    return (selectedItems && selectedItems.length > 0) ? selectedItems.map((item) => {
-      return item[this.optionValue].toString();
-    }) : null;
+    return selectedItems && selectedItems.length > 0
+      ? selectedItems.map((item) => {
+          return item[this.optionValue].toString();
+        })
+      : null;
   }
 
   _noSelectedValues(selectedValues) {
@@ -358,5 +386,3 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     return labels.join(' | ');
   }
 }
-
-
