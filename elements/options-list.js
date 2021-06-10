@@ -170,7 +170,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
     return ['_enableInfiniteScroll(showLimitWarning)'];
   }
 
-  enableInfiniteScroll() {
+  _enableInfiniteScroll() {
     var options = {
       root: this.shadowRoot.querySelector('#options-listbox'),
       treshold: 1.0
@@ -186,7 +186,9 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
     observer.observe(this.shadowRoot.querySelector('#infinite-scroll-trigger'));
   }
 
-  loadMoreOptions() {}
+  loadMoreOptions() {
+    console.log('Loading more options');
+  }
 
   /**
    * @event close-etools-dropdown
