@@ -83,6 +83,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
       </style>
 
       <paper-listbox
+        id="options-listbox"
         multi="[[multi]]"
         attr-for-selected="internal-id"
         selected="[[selected]]"
@@ -121,7 +122,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
           No results found. Try other keywords.
         </paper-item>
 
-        <paper-item hidden$="[[!showLimitWarning]]" class="warning" disabled="">
+        <paper-item id="infinite-scroll-trigger" hidden$="[[!showLimitWarning]]" class="warning" disabled="">
           More than [[shownOptionsLimit]] items, use the search function to reveal more.
         </paper-item>
 
@@ -164,6 +165,28 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
       shownOptionsLimit: Number
     };
   }
+
+  static get observers() {
+    return ['_enableInfiniteScroll(showLimitWarning)'];
+  }
+
+  enableInfiniteScroll() {
+    var options = {
+      root: this.shadowRoot.querySelector('#options-listbox'),
+      treshold: 1.0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.intersectionRatio > 0) {
+          this.loadMoreOptions();
+        }
+      });
+    });
+    observer.observe(this.shadowRoot.querySelector('#infinite-scroll-trigger'));
+  }
+
+  loadMoreOptions() {}
 
   /**
    * @event close-etools-dropdown
