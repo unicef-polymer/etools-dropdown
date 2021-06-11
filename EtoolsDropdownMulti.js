@@ -114,8 +114,10 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
             show-no-search-results-warning="[[showNoSearchResultsWarning]]"
             show-limit-warning="[[showLimitWarning]]"
             shown-options-limit="[[shownOptionsLimit]]"
+            shown-options-count="[[shownOptionsLimit]]"
             no-options-available="[[noOptionsAvailable]]"
             capitalize="[[capitalize]]"
+            on-show-more="onShowMore"
           >
           </esmm-options-list>
           <span

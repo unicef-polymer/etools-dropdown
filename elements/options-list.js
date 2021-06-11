@@ -7,6 +7,8 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/paper-item/paper-icon-item.js';
 import '@polymer/paper-item/paper-item-body.js';
+import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
+import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import {ListItemUtils} from '../mixins/list-item-utils-mixin.js';
 
 /**
@@ -123,7 +125,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
         </paper-item>
 
         <paper-item id="infinite-scroll-trigger" hidden$="[[!showLimitWarning]]" class="warning" disabled="">
-          More than [[shownOptionsLimit]] items, use the search function to reveal more.
+          Scroll down to reveal more items.
         </paper-item>
 
         <paper-item hidden$="[[!noOptionsAvailable]]" class="warning" disabled=""> No options available. </paper-item>
@@ -137,6 +139,10 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
 
   static get properties() {
     return {
+      /** The current number of shown options, it increseas by shownOptionsLimit when users scrolls down */
+      shownOptionsCount: {
+        type: Number
+      },
       /** Multi selection flag. If true `selectedValues` array will be used instead `selected` */
       multi: {
         type: Boolean,
@@ -170,6 +176,10 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
     return ['_enableInfiniteScroll(showLimitWarning)'];
   }
 
+  _computeEqualToshownOptionsLimit(shownOptionsLimit) {
+    return shownOptionsLimit;
+  }
+
   _enableInfiniteScroll() {
     var options = {
       root: this.shadowRoot.querySelector('#options-listbox'),
@@ -178,16 +188,25 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.intersectionRatio > 0) {
-          this.loadMoreOptions();
+        if (entry.isIntersecting) {
+          this._debouncer = Debouncer.debounce(this._debouncer, timeOut.after(100), () => {
+            this.showMoreOptions();
+          });
         }
       });
-    });
+    }, options);
     observer.observe(this.shadowRoot.querySelector('#infinite-scroll-trigger'));
   }
 
-  loadMoreOptions() {
-    console.log('Loading more options');
+  showMoreOptions() {
+    this.shownOptionsCount += this.shownOptionsLimit;
+    this.dispatchEvent(
+      new CustomEvent('show-more', {
+        detail: this.shownOptionsCount,
+        bubbles: true,
+        composed: true
+      })
+    );
   }
 
   /**
