@@ -10,6 +10,7 @@ import '@polymer/paper-item/paper-item-body.js';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import {ListItemUtils} from '../mixins/list-item-utils-mixin.js';
+import '@polymer/paper-spinner/paper-spinner';
 
 /**
  * @customElement
@@ -125,7 +126,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
         </paper-item>
 
         <paper-item id="infinite-scroll-trigger" hidden$="[[!showLimitWarning]]" class="warning" disabled="">
-          Scroll down to reveal more items.
+          Scroll down to reveal more items. <paper-spinner active style="padding-inline-start: 3px;"></paper-spinner>
         </paper-item>
 
         <paper-item hidden$="[[!noOptionsAvailable]]" class="warning" disabled=""> No options available. </paper-item>
