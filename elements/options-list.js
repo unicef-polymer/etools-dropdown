@@ -176,10 +176,6 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
     return ['_enableInfiniteScroll(showLimitWarning)'];
   }
 
-  _computeEqualToshownOptionsLimit(shownOptionsLimit) {
-    return shownOptionsLimit;
-  }
-
   _enableInfiniteScroll() {
     var options = {
       root: this.shadowRoot.querySelector('#options-listbox'),
