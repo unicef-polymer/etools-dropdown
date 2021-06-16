@@ -139,7 +139,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
 
   static get properties() {
     return {
-      /** The current number of shown options, it increseas by shownOptionsLimit when users scrolls down */
+      /** The current number of shown options, it increases by shownOptionsLimit when user scrolls down */
       shownOptionsCount: {
         type: Number
       },
