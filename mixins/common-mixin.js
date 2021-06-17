@@ -7,557 +7,573 @@ import EtoolsLogsMixin from '@unicef-polymer/etools-behaviors/etools-logs-mixin.
  * @appliesMixin EtoolsLogsMixin
  * @appliesMixin EsmmMixins.ListItemUtils
  */
-export const CommonFunctionality = superClass => class extends EtoolsLogsMixin(ListItemUtils(superClass)) {
-
-  static get properties() {
-    return {
-      /** Dropdown label */
-      label: {
-        type: String
-      },
-      noLabelFloat: Boolean,
-      alwaysFloatLabel: {
-        type: Boolean,
-        value: true
-      },
-      placeholder: {
-        type: String,
-        value: '—'
-      },
-      required: {
-        type: Boolean,
-        observer: '_requiredChanged',
-        reflectToAttribute: true
-      },
-      errorMessage: {
-        type: String,
-        value: 'This field is required'
-      },
-      autoValidate: {
-        type: Boolean
-      },
-      disabled: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      },
-      readonly: {
-        type: Boolean,
-        value: function() {
-          return false;
+export const CommonFunctionality = (superClass) =>
+  class extends EtoolsLogsMixin(ListItemUtils(superClass)) {
+    static get properties() {
+      return {
+        /** Dropdown label */
+        label: {
+          type: String
         },
-        reflectToAttribute: true,
-        observer: '_readonlyChanged'
-      },
-      invalid: {
-        type: Boolean,
-        value: function() {
-          return false;
+        noLabelFloat: Boolean,
+        alwaysFloatLabel: {
+          type: Boolean,
+          value: true
         },
-        reflectToAttribute: true
-      },
-      /** Makes the dropdown to show top or bottom (or left - right) where it will fit better */
-      noDynamicAlign: {
-        type: Boolean,
-        value: false
-      },
-      search: {
-        type: String
-        // observer: '_searchValueChanged'
-      },
-      /** Array of objects, dropdowns options used to compute shownOptions */
-      options: {
-        type: Array
-      },
-      /** Options seen by user */
-      shownOptions: {
-        type: Array,
-        computed: '_computeShownOptions(options, search, enableNoneOption, options.length)',
-        observer: '_setFocusTarget'
-      },
-      searchedOptionsLength: {
-        type: Number
-      },
-      /**
-       * Flag to show `None` option (first dropdown option)
-       * Used to reset single selection dropdown selected value
-       */
-      enableNoneOption: {
-        type: Boolean,
-        value: false
-      },
-      hideSearch: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      },
-      hideClose: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      },
-      dropdownIsClosing: {
-        type: Boolean,
-        value: false
-      },
-      focusedAtLeastOnce: {
-        type: Boolean,
-        value: false
-      },
-      /** Limit displayed options */
-      shownOptionsLimit: {
-        type: Number,
-        value: 30
-      },
-      /** Flag to show a no options avaliable warning */
-      noOptionsAvailable: {
-        type: Boolean,
-        value: true,
-        computed: '_computeNoOptionsAvailable(options, options.length)'
-      },
-      /** Flag to show the limit of options shown in dropdown */
-      showLimitWarning: {
-        type: Boolean,
-        value: false,
-        computed: '_computeShowLimitWarning(shownOptionsLimit, searchedOptionsLength)'
-      },
-      /** Flag used to show no search result found warning */
-      showNoSearchResultsWarning: {
-        type: Boolean,
-        value: false,
-        computed: '_showNoSearchResultsWarning(noOptionsAvailable, shownOptions.length, options.length)'
-      },
-      /** Stop autofocus from paper-dialog */
-      disableOnFocusHandling: {
-        type: Boolean,
-        value: function() {
-          return this.disableOnFocusHandling || this.isIEBrowser();
+        placeholder: {
+          type: String,
+          value: '—'
         },
-        reflectToAttribute: true
-      },
-      /**
-       * Element that will prevent dropdown to overflow outside it's margins
-       * @type HTMLElement
-       */
-      fitInto: {
-        type: Object,
-        observer: '_setFitInto'
-      },
-      /** Margin added if dropdown bottom is too close to the viewport bottom margin */
-      viewportEdgeMargin: {
-        type: Number,
-        value: 20
-      },
-      /** Vertical offset for dropdownMenu */
-      verticalOffset: {
-        type: Number,
-        value: 0
-      },
-      /**
-       * By default the search string is reset when the dropdown closes
-       * This flag allows the search value to persist after the dropdown is closed
-       */
-      preserveSearchOnClose: {
-        type: Boolean,
-        value: false
-      },
-      /** Flag to trigger `etools-selected-items-changed` event */
-      triggerValueChangeEvent: {
-        type: Boolean,
-        value: false
-      },
-      elemAttached: {
-        type: Boolean,
-        value: false
-      },
-      autoWidth: {
-        type: Boolean,
-        value: false
-      },
-      maxWidth: {
-        type: String,
-        value: ''
-      },
-      minWidth: {
-        type: String,
-        value: ''
-      },
-      horizontalAlign: {
-        type: String,
-        value: 'right'
-      },
-      /* withBackdrop property was added in order to trap the focus within the light DOM of the iron-dropdown.
+        required: {
+          type: Boolean,
+          observer: '_requiredChanged',
+          reflectToAttribute: true
+        },
+        errorMessage: {
+          type: String,
+          value: 'This field is required'
+        },
+        autoValidate: {
+          type: Boolean
+        },
+        disabled: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
+        },
+        readonly: {
+          type: Boolean,
+          value: function () {
+            return false;
+          },
+          reflectToAttribute: true,
+          observer: '_readonlyChanged'
+        },
+        invalid: {
+          type: Boolean,
+          value: function () {
+            return false;
+          },
+          reflectToAttribute: true
+        },
+        /** Makes the dropdown to show top or bottom (or left - right) where it will fit better */
+        noDynamicAlign: {
+          type: Boolean,
+          value: false
+        },
+        search: {
+          type: String
+          // observer: '_searchValueChanged'
+        },
+        /** Array of objects, dropdowns options used to compute shownOptions */
+        options: {
+          type: Array
+        },
+        /** Options seen by user */
+        shownOptions: {
+          type: Array,
+          computed: '_computeShownOptions(options, search, enableNoneOption, _shownOptionsCount, options.length,)',
+          observer: '_setFocusTarget'
+        },
+        searchedOptionsLength: {
+          type: Number
+        },
+        /**
+         * Flag to show `None` option (first dropdown option)
+         * Used to reset single selection dropdown selected value
+         */
+        enableNoneOption: {
+          type: Boolean,
+          value: false
+        },
+        hideSearch: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
+        },
+        hideClose: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
+        },
+        dropdownIsClosing: {
+          type: Boolean,
+          value: false
+        },
+        focusedAtLeastOnce: {
+          type: Boolean,
+          value: false
+        },
+        /** Limit displayed options */
+        shownOptionsLimit: {
+          type: Number,
+          value: 30
+        },
+        /** The current number of shown options, it increseas by shownOptionsLimit when users scrolls down */
+        _shownOptionsCount: {
+          type: Number
+        },
+        /** Flag to show a no options avaliable warning */
+        noOptionsAvailable: {
+          type: Boolean,
+          value: true,
+          computed: '_computeNoOptionsAvailable(options, options.length)'
+        },
+        /** Flag to show the limit of options shown in dropdown */
+        showLimitWarning: {
+          type: Boolean,
+          value: false,
+          computed: '_computeShowLimitWarning(_shownOptionsCount, searchedOptionsLength)'
+        },
+        /** Flag used to show no search result found warning */
+        showNoSearchResultsWarning: {
+          type: Boolean,
+          value: false,
+          computed: '_showNoSearchResultsWarning(noOptionsAvailable, shownOptions.length, options.length)'
+        },
+        /** Stop autofocus from paper-dialog */
+        disableOnFocusHandling: {
+          type: Boolean,
+          value: function () {
+            return this.disableOnFocusHandling || this.isIEBrowser();
+          },
+          reflectToAttribute: true
+        },
+        /**
+         * Element that will prevent dropdown to overflow outside it's margins
+         * @type HTMLElement
+         */
+        fitInto: {
+          type: Object,
+          observer: '_setFitInto'
+        },
+        /** Margin added if dropdown bottom is too close to the viewport bottom margin */
+        viewportEdgeMargin: {
+          type: Number,
+          value: 20
+        },
+        /** Vertical offset for dropdownMenu */
+        verticalOffset: {
+          type: Number,
+          value: 0
+        },
+        /**
+         * By default the search string is reset when the dropdown closes
+         * This flag allows the search value to persist after the dropdown is closed
+         */
+        preserveSearchOnClose: {
+          type: Boolean,
+          value: false
+        },
+        /** Flag to trigger `etools-selected-items-changed` event */
+        triggerValueChangeEvent: {
+          type: Boolean,
+          value: false
+        },
+        elemAttached: {
+          type: Boolean,
+          value: false
+        },
+        autoWidth: {
+          type: Boolean,
+          value: false
+        },
+        maxWidth: {
+          type: String,
+          value: ''
+        },
+        minWidth: {
+          type: String,
+          value: ''
+        },
+        horizontalAlign: {
+          type: String,
+          value: 'right'
+        },
+        /* withBackdrop property was added in order to trap the focus within the light DOM of the iron-dropdown.
          Setting this to true solves a bug in PRP where when you have the etools-dropdown in a paper-dialog,
          and you click on the opened drodpdown's scroll,  the dropdown closes.
       **/
-      withBackdrop: {
-        type: Boolean,
-        reflectToAttribute: true,
-        value: false
+        withBackdrop: {
+          type: Boolean,
+          reflectToAttribute: true,
+          value: false
+        }
+      };
+    }
+
+    connectedCallback() {
+      super.connectedCallback();
+      this._shownOptionsCount = this.shownOptionsLimit;
+
+      // focusout is used because blur acts weirdly on IE
+      this._onFocusOut = this._onFocusOut.bind(this);
+      this.addEventListener('focusout', this._onFocusOut);
+
+      this._setFitInto(this.fitInto);
+      this._setPositionTarget();
+      this._setDropdownWidth();
+      this._disableScrollAction();
+      this.notifyDropdownResize();
+
+      this._setResetSizeHandler();
+      this.elemAttached = true;
+    }
+
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      this.removeEventListener('focusout', this._onFocusOut);
+    }
+
+    _onFocusOut(e) {
+      e.stopImmediatePropagation();
+      this._closeMenu();
+    }
+    _disableScrollAction() {
+      const ironDropdown = this._getIronDropdown();
+      ironDropdown.set('scrollAction', null);
+    }
+    _getDialogContent(d) {
+      const drContent = d.shadowRoot.querySelector('#dialogContent');
+      if (drContent) {
+        return drContent;
+      } else {
+        throw new Error('Element with id="dialogContent" not found in etools-dialog');
       }
-    };
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-
-    // focusout is used because blur acts weirdly on IE
-    this._onFocusOut = this._onFocusOut.bind(this);
-    this.addEventListener('focusout', this._onFocusOut);
-
-    this._setFitInto(this.fitInto);
-    this._setPositionTarget();
-    this._setDropdownWidth();
-    this._disableScrollAction();
-    this.notifyDropdownResize();
-
-    this._setResetSizeHandler();
-    this.elemAttached = true;
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.removeEventListener('focusout', this._onFocusOut);
-  }
-
-  _onFocusOut(e) {
-    e.stopImmediatePropagation();
-    this._closeMenu();
-  }
-  _disableScrollAction() {
-    const ironDropdown = this._getIronDropdown();
-    ironDropdown.set('scrollAction', null);
-  }
-  _getDialogContent(d) {
-    const drContent = d.shadowRoot.querySelector('#dialogContent');
-    if (drContent) {
-      return drContent;
-    } else {
-      throw new Error('Element with id="dialogContent" not found in etools-dialog');
     }
-  }
 
-  _setFitInto(fitInto) {
-    const ironDropdown = this._getIronDropdown();
-    // fitInto element will not let the dropdown to overlap it's margins
-    if (!fitInto && window.EtoolsEsmmFitIntoEl) {
-      ironDropdown.set('fitInto', window.EtoolsEsmmFitIntoEl);
-    }
-    if (fitInto === 'etools-dialog') {
-      try {
-        let rootNodeHost = this.getRootNode().host;
-        let dialogContent = null;
-        while (dialogContent === null && rootNodeHost) {
-          const hostTagName = rootNodeHost.tagName.toLowerCase();
-          // case 1: rootNodeHost is etools-dialog (unlikely, but...)
-          if (hostTagName === 'etools-dialog') {
-            dialogContent = this._getDialogContent(rootNodeHost);
-          } else {
-            // case 2: rootNodeHost is not etools-dialog, but it might contain it
-            const d = rootNodeHost.shadowRoot.querySelector('etools-dialog');
-            if (d instanceof Element) {
-              // etools-dialog found
-              dialogContent = this._getDialogContent(d);
+    _setFitInto(fitInto) {
+      const ironDropdown = this._getIronDropdown();
+      // fitInto element will not let the dropdown to overlap it's margins
+      if (!fitInto && window.EtoolsEsmmFitIntoEl) {
+        ironDropdown.set('fitInto', window.EtoolsEsmmFitIntoEl);
+      }
+      if (fitInto === 'etools-dialog') {
+        try {
+          let rootNodeHost = this.getRootNode().host;
+          let dialogContent = null;
+          while (dialogContent === null && rootNodeHost) {
+            const hostTagName = rootNodeHost.tagName.toLowerCase();
+            // case 1: rootNodeHost is etools-dialog (unlikely, but...)
+            if (hostTagName === 'etools-dialog') {
+              dialogContent = this._getDialogContent(rootNodeHost);
             } else {
-              // etools-dialog not found, repeat
-              rootNodeHost = rootNodeHost.getRootNode().host;
+              // case 2: rootNodeHost is not etools-dialog, but it might contain it
+              const d = rootNodeHost.shadowRoot.querySelector('etools-dialog');
+              if (d instanceof Element) {
+                // etools-dialog found
+                dialogContent = this._getDialogContent(d);
+              } else {
+                // etools-dialog not found, repeat
+                rootNodeHost = rootNodeHost.getRootNode().host;
+              }
             }
           }
+          fitInto = dialogContent;
+        } catch (e) {
+          this.logWarn('Cannot find etools-dialog content element.', 'etools-dropdown', e);
+          fitInto = null;
         }
-        fitInto = dialogContent;
-      } catch (e) {
-        this.logWarn('Cannot find etools-dialog content element.', 'etools-dropdown', e);
-        fitInto = null;
+      }
+      if (fitInto && fitInto instanceof Element) {
+        fitInto.style.position = 'relative';
+        ironDropdown.set('fitInto', fitInto);
       }
     }
-    if (fitInto && fitInto instanceof Element) {
-      fitInto.style.position = 'relative';
-      ironDropdown.set('fitInto', fitInto);
-    }
-  }
 
-  /**
-   * Reset dropdown size on close
-   */
-  _setResetSizeHandler() {
-    const ironDropdown = this._getIronDropdown();
-    ironDropdown.addEventListener('iron-overlay-closed', this.resetIronDropdownSize.bind(this));
-  }
-
-  _isUndefined(prop) {
-    return typeof prop === 'undefined';
-  }
-
-  /**
-   * Reset previous calculated maxHeight,
-   * in this way on each dropdown open action we'll get the same calculated new height.
-   */
-  resetIronDropdownSize() {
-    const ironDrContent = this._getIronDropdownContent();
-    const optionsList = this._getOptionsList();
-    ironDrContent.style.maxHeight = 'none';
-    optionsList.style.maxHeight = 'none';
-  }
-
-  _noOptions() {
-    return (!this.options || !this.options.length);
-  }
-
-  _menuBtnIsDisabled(disabled, readonly) {
-    return disabled || readonly;
-  }
-
-  resetInvalidState() {
-    this.set('invalid', false);
-  }
-
-  _computeNoOptionsAvailable(options, optionsLength) {
-    if (this._isUndefined(options)) {
-      return;
-    }
-    return !Array.isArray(options) || !optionsLength;
-  }
-
-  _readonlyChanged(newValue, oldValue) {
-    if (this._isUndefined(newValue)) {
-      return;
-    }
-    if (newValue) {
-      this.invalid = false;
-    }
-    this._attributeRepaintNeeded(newValue, oldValue);
-  }
-
-  _requiredChanged(newValue, oldValue) {
-    if (this._isUndefined(newValue)) {
-      return;
-    }
-    if (!newValue) {
-      this.invalid = false;
-    }
-    this._attributeRepaintNeeded(newValue, oldValue);
-  }
-
-  /**
-   * Force styles update
-   */
-  _attributeRepaintNeeded(newValue, oldValue) {
-    if (newValue !== undefined && newValue !== oldValue) {
-      this.updateStyles();
-    }
-  }
-
-  _computeShownOptions(options, search, enableNoneOption) {
-    if (this._isUndefined(options) || this._isUndefined(enableNoneOption)) {
-      return;
+    /**
+     * Reset dropdown size on close
+     */
+    _setResetSizeHandler() {
+      const ironDropdown = this._getIronDropdown();
+      ironDropdown.addEventListener('iron-overlay-closed', this.resetIronDropdownSize.bind(this));
     }
 
-    let shownOptions = JSON.parse(JSON.stringify(options));
-    const initialOptionsNo = shownOptions ? shownOptions.length : 0;
-
-    if (search) {
-      shownOptions = options.filter(this._itemContainsSearchString.bind(this));
-      shownOptions = this._trimByShownOptionsLimit(shownOptions);
-    } else if ((options.length > this.shownOptionsLimit) || this.showLimitWarning) {
-      shownOptions = this._trimByShownOptionsLimit(options);
+    _isUndefined(prop) {
+      return typeof prop === 'undefined';
     }
 
-    if (enableNoneOption) {
-      const emptyOption = {cssClass: 'esmm-none-option'};
-      emptyOption[this.optionValue] = null;
-      emptyOption[this.optionLabel] = this.noneOptionLabel;
-      shownOptions.unshift(emptyOption);
+    /**
+     * Reset previous calculated maxHeight,
+     * in this way on each dropdown open action we'll get the same calculated new height.
+     */
+    resetIronDropdownSize() {
+      const ironDrContent = this._getIronDropdownContent();
+      const optionsList = this._getOptionsList();
+      ironDrContent.style.maxHeight = 'none';
+      optionsList.style.maxHeight = 'none';
     }
-    const shownOptionsNo = shownOptions ? shownOptions.length : 0;
-    if (initialOptionsNo !== shownOptionsNo) {
-      this._getIronDropdown()._updateOverlayPosition();
+
+    _noOptions() {
+      return !this.options || !this.options.length;
     }
-    return shownOptions;
-  }
 
-  _trimByShownOptionsLimit(options) {
-    this.set('searchedOptionsLength', options.length);
-    return options.slice(0, Math.min(this.shownOptionsLimit, options.length));
-  }
-
-  _itemContainsSearchString(item) {
-    return item[this.optionLabel] &&
-      item[this.optionLabel].toString().toLowerCase().indexOf(this.search.toLowerCase()) > -1;
-  }
-
-  _computeShowLimitWarning(limit, searchedOptionsLength) {
-    if (this._isUndefined(limit) || this._isUndefined(searchedOptionsLength)) {
-      return false;
+    _menuBtnIsDisabled(disabled, readonly) {
+      return disabled || readonly;
     }
-    return searchedOptionsLength > limit;
-  }
 
-  _showNoSearchResultsWarning(noOptionsAvailable, shownOptionsLength, optionsLength) {
-    if (noOptionsAvailable) {
-      return false;
+    resetInvalidState() {
+      this.set('invalid', false);
     }
-    return (optionsLength > 0 && shownOptionsLength === 0) ||
-      (shownOptionsLength === 1 && this.shownOptions[0][this.optionValue] === null);
-  }
 
-  _onDropdownOpen() {
-
-    setTimeout(() => {
-      // delay on open size updates (fixes open flickering in dialogs)
-      if (!this.autoWidth) {
-        this._setDropdownWidth();
+    _computeNoOptionsAvailable(options, optionsLength) {
+      if (this._isUndefined(options)) {
+        return;
       }
-      // when inside a paper-dialog the dropdown opens somewhere in the background and
-      // we need to force repositioning
-      this.notifyDropdownResize();
-    }, 0);
-  }
-
-  _onDropdownClose() {
-    this.dropdownIsClosing = false;
-    if (!this.preserveSearchOnClose) {
-      this.set('search', '');
-    }
-  }
-
-  _setDropdownWidth() {
-    const ironDropdown = this._getIronDropdown();
-    ironDropdown.style.left = this.offsetLeft + 'px'; // TODO: why is style.left set here?
-    if (!this.autoWidth) {
-      ironDropdown.style.width = this.offsetWidth + 'px';
+      return !Array.isArray(options) || !optionsLength;
     }
 
-    if (this.minWidth && this.minWidth !== '') {
-      ironDropdown.style.minWidth = this.minWidth;
+    _readonlyChanged(newValue, oldValue) {
+      if (this._isUndefined(newValue)) {
+        return;
+      }
+      if (newValue) {
+        this.invalid = false;
+      }
+      this._attributeRepaintNeeded(newValue, oldValue);
     }
 
-    if (this.maxWidth && this.maxWidth !== '') {
-      ironDropdown.style.maxWidth = this.maxWidth;
-    } else {
-      ironDropdown.style.maxWidth = '100%';
+    _requiredChanged(newValue, oldValue) {
+      if (this._isUndefined(newValue)) {
+        return;
+      }
+      if (!newValue) {
+        this.invalid = false;
+      }
+      this._attributeRepaintNeeded(newValue, oldValue);
     }
-  }
 
-  /**
-   * Set focus target after showOptions is set,
-   * and after the paper-icon-items have gotten the chance to be added to the DOM,
-   * but before the dropdown is openned , otherwise ironDropdown will ignore focusTarget
-   *
-   * Setting the focus on a paper-listbox item
-   * enables the 'Go to item that starts with pressed letter' functionality
-   */
-  _setFocusTarget() {
-    if (!this.shownOptions || !this.shownOptions.length) {
-      return;
+    /**
+     * Force styles update
+     */
+    _attributeRepaintNeeded(newValue, oldValue) {
+      if (newValue !== undefined && newValue !== oldValue) {
+        this.updateStyles();
+      }
     }
-    setTimeout(() => {
-      let focusTarget = null;
-      if (this.hideSearch) {
-        focusTarget = this.$.optionsList.shadowRoot.querySelector('paper-icon-item');
-      } else {
-        focusTarget = this._getSearchox().shadowRoot.querySelector('#searchInput');
+
+    _computeShownOptions(options, search, enableNoneOption, _shownOptionsCount) {
+      if (this._isUndefined(options) || this._isUndefined(enableNoneOption)) {
+        return;
       }
 
-      this._getIronDropdown().focusTarget = focusTarget;
-    }, 10);
-  }
+      let shownOptions = JSON.parse(JSON.stringify(options));
+      const initialOptionsNo = shownOptions ? shownOptions.length : 0;
 
-  _setPositionTarget() {
-    // set position target to align dropdown content properly
-    const ironDropdown = this._getIronDropdown();
-    ironDropdown.set('positionTarget', this._getPaperInputContainer());
-  }
+      if (search) {
+        shownOptions = options.filter(this._itemContainsSearchString.bind(this));
+        shownOptions = this._trimByShownOptionsCount(shownOptions);
+      } else if (options.length > this._shownOptionsCount || this.showLimitWarning) {
+        shownOptions = this._trimByShownOptionsCount(options);
+      }
 
-  _getIronDropdown() {
-    return this.$.dropdownMenu;
-  }
-
-  _getIronDropdownContent() {
-    return this.$.ironDrContent;
-  }
-
-  _getOptionsList() {
-    return this.$.optionsList;
-  }
-
-  _getSearchox() {
-    return this.$.searchbox;
-  }
-
-  _getPaperInputContainer() {
-    if (this.tagName === 'ETOOLS-DROPDOWN') {
-      return this.$.main;
+      if (enableNoneOption) {
+        const emptyOption = {cssClass: 'esmm-none-option'};
+        emptyOption[this.optionValue] = null;
+        emptyOption[this.optionLabel] = this.noneOptionLabel;
+        shownOptions.unshift(emptyOption);
+      }
+      const shownOptionsNo = shownOptions ? shownOptions.length : 0;
+      if (initialOptionsNo !== shownOptionsNo) {
+        this._getIronDropdown()._updateOverlayPosition();
+      }
+      return shownOptions;
     }
-    return this.$.main.$.container;
-  }
 
-  _openMenu(e) {
-    const dr = this._getIronDropdown();
-    if (!dr.opened) {
-      this._setDropdownMenuVerticalOffset();
-      dr.open();
+    _trimByShownOptionsCount(options) {
+      this.set('searchedOptionsLength', options.length);
+      return options.slice(0, Math.min(this._shownOptionsCount, options.length));
     }
-  }
 
-  _closeMenu(e) {
-    const dr = this._getIronDropdown();
-    this.dropdownIsClosing = true;
-    dr.close();
-  }
-
-  _setDropdownMenuVerticalOffset() {
-    // substract 8px which represents paper-input-container top-bottom padding
-    const verticalOffset = this._getPaperInputContainer().getBoundingClientRect().height - 8;
-    if (verticalOffset !== this.verticalOffset) {
-      this._preserveListScrollPosition();
-      this.verticalOffset = verticalOffset;
+    _itemContainsSearchString(item) {
+      return (
+        item[this.optionLabel] &&
+        item[this.optionLabel].toString().toLowerCase().indexOf(this.search.toLowerCase()) > -1
+      );
     }
-  }
 
-  // if dropdown is in dialog and user scroll down to select an item, after selection the option list will be
-  // scrolled up, this method will preserve option list scroll position after selection
-  _preserveListScrollPosition() {
-    const paperListBox = this._getOptionsList().shadowRoot.querySelector('paper-listbox');
-    const scrollTop = paperListBox.scrollTop;
-    if (scrollTop > 0) {
+    _computeShowLimitWarning(limit, searchedOptionsLength) {
+      if (this._isUndefined(limit) || this._isUndefined(searchedOptionsLength)) {
+        return false;
+      }
+      return searchedOptionsLength > limit;
+    }
+
+    _computeEqualToShownOptionsLimit(shownOptionsLimit) {
+      return shownOptionsLimit;
+    }
+
+    _showNoSearchResultsWarning(noOptionsAvailable, shownOptionsLength, optionsLength) {
+      if (noOptionsAvailable) {
+        return false;
+      }
+      return (
+        (optionsLength > 0 && shownOptionsLength === 0) ||
+        (shownOptionsLength === 1 && this.shownOptions[0][this.optionValue] === null)
+      );
+    }
+
+    _onDropdownOpen() {
       setTimeout(() => {
-        paperListBox.scrollTop = scrollTop;
-      }, 50);
+        // delay on open size updates (fixes open flickering in dialogs)
+        if (!this.autoWidth) {
+          this._setDropdownWidth();
+        }
+        // when inside a paper-dialog the dropdown opens somewhere in the background and
+        // we need to force repositioning
+        this.notifyDropdownResize();
+      }, 0);
     }
-  }
 
-  /**
-   * On focus received from a previous element (filds navigation in form using Tab)
-   * @param e
-   */
-  onInputFocus(e) {
-    if (this.disableOnFocusHandling || this.dropdownIsClosing) {
-      return;
+    _onDropdownClose() {
+      this.dropdownIsClosing = false;
+      if (!this.preserveSearchOnClose) {
+        this.set('search', '');
+      }
     }
-    this.focusedAtLeastOnce = true;
-    this._openMenu(e);
-  }
 
-  notifyDropdownResize() {
-    const ironDropdown = this._getIronDropdown();
-    ironDropdown.notifyResize();
-  }
+    _setDropdownWidth() {
+      const ironDropdown = this._getIronDropdown();
+      ironDropdown.style.left = this.offsetLeft + 'px'; // TODO: why is style.left set here?
+      if (!this.autoWidth) {
+        ironDropdown.style.width = this.offsetWidth + 'px';
+      }
 
-  /**
-   * Checks for IE11 browser :)
-   * @returns {boolean}
-   */
-  isIEBrowser() {
-    const userAgent = window.navigator.userAgent;
-    return userAgent.indexOf('Trident/') > -1;
-  }
+      if (this.minWidth && this.minWidth !== '') {
+        ironDropdown.style.minWidth = this.minWidth;
+      }
 
-  arrayIsNotEmpty(arr) {
-    return Array.isArray(arr) && arr.length;
-  }
+      if (this.maxWidth && this.maxWidth !== '') {
+        ironDropdown.style.maxWidth = this.maxWidth;
+      } else {
+        ironDropdown.style.maxWidth = '100%';
+      }
+    }
 
-  // prevents the element from rendering an error message container when valid
-  _getErrorMessage(message, invalid) {
-    return invalid ? message : '';
-  }
-};
+    /**
+     * Set focus target after showOptions is set,
+     * and after the paper-icon-items have gotten the chance to be added to the DOM,
+     * but before the dropdown is openned , otherwise ironDropdown will ignore focusTarget
+     *
+     * Setting the focus on a paper-listbox item
+     * enables the 'Go to item that starts with pressed letter' functionality
+     */
+    _setFocusTarget() {
+      if (!this.shownOptions || !this.shownOptions.length) {
+        return;
+      }
+      setTimeout(() => {
+        let focusTarget = null;
+        if (this.hideSearch) {
+          focusTarget = this.$.optionsList.shadowRoot.querySelector('paper-icon-item');
+        } else {
+          focusTarget = this._getSearchox().shadowRoot.querySelector('#searchInput');
+        }
+
+        this._getIronDropdown().focusTarget = focusTarget;
+      }, 10);
+    }
+
+    _setPositionTarget() {
+      // set position target to align dropdown content properly
+      const ironDropdown = this._getIronDropdown();
+      ironDropdown.set('positionTarget', this._getPaperInputContainer());
+    }
+
+    _getIronDropdown() {
+      return this.$.dropdownMenu;
+    }
+
+    _getIronDropdownContent() {
+      return this.$.ironDrContent;
+    }
+
+    _getOptionsList() {
+      return this.$.optionsList;
+    }
+
+    _getSearchox() {
+      return this.$.searchbox;
+    }
+
+    _getPaperInputContainer() {
+      if (this.tagName === 'ETOOLS-DROPDOWN') {
+        return this.$.main;
+      }
+      return this.$.main.$.container;
+    }
+
+    _openMenu(e) {
+      const dr = this._getIronDropdown();
+      if (!dr.opened) {
+        this._setDropdownMenuVerticalOffset();
+        dr.open();
+      }
+    }
+
+    _closeMenu(e) {
+      const dr = this._getIronDropdown();
+      this.dropdownIsClosing = true;
+      dr.close();
+    }
+
+    _setDropdownMenuVerticalOffset() {
+      // substract 8px which represents paper-input-container top-bottom padding
+      const verticalOffset = this._getPaperInputContainer().getBoundingClientRect().height - 8;
+      if (verticalOffset !== this.verticalOffset) {
+        this._preserveListScrollPosition();
+        this.verticalOffset = verticalOffset;
+      }
+    }
+
+    // if dropdown is in dialog and user scroll down to select an item, after selection the option list will be
+    // scrolled up, this method will preserve option list scroll position after selection
+    _preserveListScrollPosition() {
+      const paperListBox = this._getOptionsList().shadowRoot.querySelector('paper-listbox');
+      const scrollTop = paperListBox.scrollTop;
+      if (scrollTop > 0) {
+        setTimeout(() => {
+          paperListBox.scrollTop = scrollTop;
+        }, 50);
+      }
+    }
+
+    /**
+     * On focus received from a previous element (filds navigation in form using Tab)
+     * @param e
+     */
+    onInputFocus(e) {
+      if (this.disableOnFocusHandling || this.dropdownIsClosing) {
+        return;
+      }
+      this.focusedAtLeastOnce = true;
+      this._openMenu(e);
+    }
+
+    notifyDropdownResize() {
+      const ironDropdown = this._getIronDropdown();
+      ironDropdown.notifyResize();
+    }
+
+    /**
+     * Checks for IE11 browser :)
+     * @returns {boolean}
+     */
+    isIEBrowser() {
+      const userAgent = window.navigator.userAgent;
+      return userAgent.indexOf('Trident/') > -1;
+    }
+
+    arrayIsNotEmpty(arr) {
+      return Array.isArray(arr) && arr.length;
+    }
+
+    // prevents the element from rendering an error message container when valid
+    _getErrorMessage(message, invalid) {
+      return invalid ? message : '';
+    }
+
+    onShowMore(e) {
+      this._shownOptionsCount = e.detail;
+    }
+  };

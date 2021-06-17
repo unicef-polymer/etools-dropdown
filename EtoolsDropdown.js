@@ -173,10 +173,12 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
             show-no-search-results-warning="[[showNoSearchResultsWarning]]"
             show-limit-warning="[[showLimitWarning]]"
             shown-options-limit="[[shownOptionsLimit]]"
+            shown-options-count="[[shownOptionsLimit]]"
             no-options-available="[[noOptionsAvailable]]"
             none-option-label="[[noneOptionLabel]]"
             capitalize="[[capitalize]]"
             on-close-etools-dropdown="_closeMenu"
+            on-show-more="onShowMore"
           ></esmm-options-list>
         </div>
       </iron-dropdown>

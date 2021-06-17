@@ -7,7 +7,10 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/paper-item/paper-icon-item.js';
 import '@polymer/paper-item/paper-item-body.js';
+import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
+import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import {ListItemUtils} from '../mixins/list-item-utils-mixin.js';
+import '@polymer/paper-spinner/paper-spinner';
 
 /**
  * @customElement
@@ -83,6 +86,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
       </style>
 
       <paper-listbox
+        id="options-listbox"
         multi="[[multi]]"
         attr-for-selected="internal-id"
         selected="[[selected]]"
@@ -121,8 +125,8 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
           No results found. Try other keywords.
         </paper-item>
 
-        <paper-item hidden$="[[!showLimitWarning]]" class="warning" disabled="">
-          More than [[shownOptionsLimit]] items, use the search function to reveal more.
+        <paper-item id="infinite-scroll-trigger" hidden$="[[!showLimitWarning]]" class="warning" disabled="">
+          Scroll down to reveal more items. <paper-spinner active style="padding-inline-start: 3px;"></paper-spinner>
         </paper-item>
 
         <paper-item hidden$="[[!noOptionsAvailable]]" class="warning" disabled=""> No options available. </paper-item>
@@ -136,6 +140,10 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
 
   static get properties() {
     return {
+      /** The current number of shown options, it increases by shownOptionsLimit when user scrolls down */
+      shownOptionsCount: {
+        type: Number
+      },
       /** Multi selection flag. If true `selectedValues` array will be used instead `selected` */
       multi: {
         type: Boolean,
@@ -163,6 +171,39 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
 
       shownOptionsLimit: Number
     };
+  }
+
+  static get observers() {
+    return ['_enableInfiniteScroll(showLimitWarning)'];
+  }
+
+  _enableInfiniteScroll() {
+    var options = {
+      root: this.shadowRoot.querySelector('#options-listbox'),
+      treshold: 1.0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          this._debouncer = Debouncer.debounce(this._debouncer, timeOut.after(100), () => {
+            this.showMoreOptions();
+          });
+        }
+      });
+    }, options);
+    observer.observe(this.shadowRoot.querySelector('#infinite-scroll-trigger'));
+  }
+
+  showMoreOptions() {
+    this.shownOptionsCount += this.shownOptionsLimit;
+    this.dispatchEvent(
+      new CustomEvent('show-more', {
+        detail: this.shownOptionsCount,
+        bubbles: true,
+        composed: true
+      })
+    );
   }
 
   /**
