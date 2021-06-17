@@ -8487,9 +8487,7 @@
       },
       "slots": [],
       "tagname": "esmm-options-list",
-      "mixins": [
-        "EsmmMixins.ListItemUtils"
-      ]
+      "mixins": ["EsmmMixins.ListItemUtils"]
     },
     {
       "description": "`etools-dropdown`",
@@ -9153,9 +9151,7 @@
       },
       "slots": [],
       "tagname": "etools-dropdown",
-      "mixins": [
-        "DropdownRequiredMixins"
-      ]
+      "mixins": ["DropdownRequiredMixins"]
     },
     {
       "description": "",
@@ -9208,9 +9204,7 @@
       },
       "slots": [],
       "tagname": "esmm-single-selection-demo",
-      "mixins": [
-        "EsmmDemoHelpers.TestData"
-      ]
+      "mixins": ["EsmmDemoHelpers.TestData"]
     },
     {
       "description": "",
@@ -9766,9 +9760,7 @@
       },
       "slots": [],
       "tagname": "esmm-selected-options",
-      "mixins": [
-        "EsmmMixins.ListItemUtils"
-      ]
+      "mixins": ["EsmmMixins.ListItemUtils"]
     },
     {
       "description": "`etools-dropdown-multi`",
@@ -10591,9 +10583,7 @@
       },
       "slots": [],
       "tagname": "etools-dropdown-multi",
-      "mixins": [
-        "MultiDropdownRequiredMixins"
-      ]
+      "mixins": ["MultiDropdownRequiredMixins"]
     },
     {
       "description": "",
@@ -10646,9 +10636,7 @@
       },
       "slots": [],
       "tagname": "esmm-multi-selection-demo",
-      "mixins": [
-        "EsmmDemoHelpers.TestData"
-      ]
+      "mixins": ["EsmmDemoHelpers.TestData"]
     },
     {
       "description": "",
@@ -16283,7 +16271,7 @@
           ]
         },
         {
-          "name": "_trimByShownOptionsLimit",
+          "name": "_trimByShownOptionsCount",
           "description": "",
           "privacy": "protected",
           "sourceRange": {
@@ -17418,10 +17406,7 @@
         "selectors": []
       },
       "slots": [],
-      "mixins": [
-        "EtoolsLogsMixin",
-        "EsmmMixins.ListItemUtils"
-      ]
+      "mixins": ["EtoolsLogsMixin", "EsmmMixins.ListItemUtils"]
     },
     {
       "description": "Missing options helper",
@@ -17917,9 +17902,7 @@
         "selectors": []
       },
       "slots": [],
-      "mixins": [
-        "EtoolsLogsMixin"
-      ]
+      "mixins": ["EtoolsLogsMixin"]
     },
     {
       "description": "",
@@ -18196,11 +18179,7 @@
         "selectors": []
       },
       "slots": [],
-      "mixins": [
-        "EsmmMixins.MissingOptions",
-        "EsmmMixins.CommonFunctionality",
-        "EtoolsLogsMixin"
-      ]
+      "mixins": ["EsmmMixins.MissingOptions", "EsmmMixins.CommonFunctionality", "EtoolsLogsMixin"]
     },
     {
       "description": "",
@@ -18477,11 +18456,7 @@
         "selectors": []
       },
       "slots": [],
-      "mixins": [
-        "EsmmMixins.MissingOptions",
-        "EsmmMixins.CommonFunctionality",
-        "EtoolsLogsMixin"
-      ]
+      "mixins": ["EsmmMixins.MissingOptions", "EsmmMixins.CommonFunctionality", "EtoolsLogsMixin"]
     }
   ]
 }

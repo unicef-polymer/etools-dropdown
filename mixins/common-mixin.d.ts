@@ -8,7 +8,6 @@
  *   mixins/common-mixin.js
  */
 
-
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
 // tslint:disable:no-any describes the API as best we are able today
 
@@ -16,93 +15,91 @@ import {ListItemUtils} from './list-item-utils-mixin.js';
 
 export {CommonFunctionality};
 
-
 /**
  * Common functionality for single selection and multiple selection dropdown
  */
 declare function CommonFunctionality<T extends new (...args: any[]) => {}>(base: T): T & CommonFunctionalityConstructor;
 
 interface CommonFunctionalityConstructor {
-  new(...args: any[]): CommonFunctionality;
+  new (...args: any[]): CommonFunctionality;
 }
 
 export {CommonFunctionalityConstructor};
 
-interface CommonFunctionality extends ListItemUtils{
-
+interface CommonFunctionality extends ListItemUtils {
   /**
    * Dropdown label
    */
-  label: string|null|undefined;
-  noLabelFloat: boolean|null|undefined;
-  alwaysFloatLabel: boolean|null|undefined;
-  placeholder: string|null|undefined;
-  required: boolean|null|undefined;
-  errorMessage: string|null|undefined;
-  autoValidate: boolean|null|undefined;
-  disabled: boolean|null|undefined;
-  readonly: boolean|null|undefined;
-  invalid: boolean|null|undefined;
+  label: string | null | undefined;
+  noLabelFloat: boolean | null | undefined;
+  alwaysFloatLabel: boolean | null | undefined;
+  placeholder: string | null | undefined;
+  required: boolean | null | undefined;
+  errorMessage: string | null | undefined;
+  autoValidate: boolean | null | undefined;
+  disabled: boolean | null | undefined;
+  readonly: boolean | null | undefined;
+  invalid: boolean | null | undefined;
 
   /**
    * Makes the dropdown to show top or bottom (or left - right) where it will fit better
    */
-  noDynamicAlign: boolean|null|undefined;
-  search: string|null|undefined;
+  noDynamicAlign: boolean | null | undefined;
+  search: string | null | undefined;
 
   /**
    * Array of objects, dropdowns options used to compute shownOptions
    */
-  options: any[]|null|undefined;
+  options: any[] | null | undefined;
 
   /**
    * Options seen by user
    */
-  readonly shownOptions: any[]|null|undefined;
-  searchedOptionsLength: number|null|undefined;
+  readonly shownOptions: any[] | null | undefined;
+  searchedOptionsLength: number | null | undefined;
 
   /**
    * Flag to show `None` option (first dropdown option)
    * Used to reset single selection dropdown selected value
    */
-  enableNoneOption: boolean|null|undefined;
-  hideSearch: boolean|null|undefined;
-  dropdownIsClosing: boolean|null|undefined;
+  enableNoneOption: boolean | null | undefined;
+  hideSearch: boolean | null | undefined;
+  dropdownIsClosing: boolean | null | undefined;
 
   /**
    * Limit displayed options
    */
-  shownOptionsLimit: number|null|undefined;
+  shownOptionsLimit: number | null | undefined;
 
   /**
    * Flag to show a no options avaliable warning
    */
-  readonly noOptionsAvailable: boolean|null|undefined;
+  readonly noOptionsAvailable: boolean | null | undefined;
 
   /**
    * Flag to show the limit of options shown in dropdown
    */
-  readonly showLimitWarning: boolean|null|undefined;
+  readonly showLimitWarning: boolean | null | undefined;
 
   /**
    * Flag used to show no search result found warning
    */
-  readonly showNoSearchResultsWarning: boolean|null|undefined;
+  readonly showNoSearchResultsWarning: boolean | null | undefined;
 
   /**
    * Stop autofocus from paper-dialog
    */
-  disableOnFocusHandling: boolean|null|undefined;
+  disableOnFocusHandling: boolean | null | undefined;
 
   /**
    * Element that will prevent dropdown to overflow outside it's margins
    */
-  fitInto: object|null|undefined;
+  fitInto: object | null | undefined;
 
   /**
    * Margin added if dropdown bottom is too close to the viewport bottom margin
    */
-  viewportEdgeMargin: number|null|undefined;
+  viewportEdgeMargin: number | null | undefined;
 
   /**
    * Vertical offset for dropdownMenu
@@ -113,17 +110,17 @@ interface CommonFunctionality extends ListItemUtils{
    * By default the search string is reset when the dropdown closes
    * This flag allows the search value to persist after the dropdown is closed
    */
-  preserveSearchOnClose: boolean|null|undefined;
+  preserveSearchOnClose: boolean | null | undefined;
 
   /**
    * Flag to trigger `etools-selected-items-changed` event
    */
-  triggerValueChangeEvent: boolean|null|undefined;
-  elemAttached: boolean|null|undefined;
-  autoWidth: boolean|null|undefined;
-  maxWidth: string|null|undefined;
-  minWidth: string|null|undefined;
-  horizontalAlign: string|null|undefined;
+  triggerValueChangeEvent: boolean | null | undefined;
+  elemAttached: boolean | null | undefined;
+  autoWidth: boolean | null | undefined;
+  maxWidth: string | null | undefined;
+  minWidth: string | null | undefined;
+  horizontalAlign: string | null | undefined;
   connectedCallback(): void;
   disconnectedCallback(): void;
   _onFocusOut(e: any): void;
@@ -155,7 +152,7 @@ interface CommonFunctionality extends ListItemUtils{
    */
   _attributeRepaintNeeded(newValue: any, oldValue: any): void;
   _computeShownOptions(options: any, search: any, enableNoneOption: any): any;
-  _trimByShownOptionsLimit(options: any): any;
+  _trimByShownOptionsCount(options: any): any;
   _itemContainsSearchString(item: any): any;
   _computeShowLimitWarning(limit: any, searchedOptionsLength: any): any;
   _showNoSearchResultsWarning(noOptionsAvailable: any, shownOptionsLength: any, optionsLength: any): any;
