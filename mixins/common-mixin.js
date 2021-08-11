@@ -381,14 +381,12 @@ export const CommonFunctionality = (superClass) =>
         if (search != this.prevSearch || this.page !== this.prevPage) {
           this.searchChanged = this.prevSearch !== search;
           this.prevSearch = search;
-          const pageChanged = this.prevPage !== this.page;
-          this.prevPage = this.page;
           this.loadDataMethod(this.search, this.page, this.shownOptionsLimit);
-
-          if (pageChanged) {
+          if (this.prevPage !== this.page) {
+            this.prevPage = this.page;
             setTimeout(() => {
               this._getIronDropdown()._updateOverlayPosition();
-            }, 100);
+            }, 200);
           }
           if (this.searchChanged) {
             return;
