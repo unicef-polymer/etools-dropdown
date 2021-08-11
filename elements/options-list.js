@@ -196,6 +196,10 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
   }
 
   showMoreOptions() {
+    if (!this.shownOptions || !this.shownOptions.length) {
+      this.shownOptionsCount = this.shownOptionsLimit;
+      return;
+    }
     this.shownOptionsCount += this.shownOptionsLimit;
     this.dispatchEvent(
       new CustomEvent('show-more', {

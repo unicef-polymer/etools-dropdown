@@ -43,7 +43,7 @@ export const CommonFunctionality = (superClass) =>
         },
         readonly: {
           type: Boolean,
-          value: function () {
+          value: function() {
             return false;
           },
           reflectToAttribute: true,
@@ -51,7 +51,7 @@ export const CommonFunctionality = (superClass) =>
         },
         invalid: {
           type: Boolean,
-          value: function () {
+          value: function() {
             return false;
           },
           reflectToAttribute: true
@@ -72,7 +72,7 @@ export const CommonFunctionality = (superClass) =>
         /** Options seen by user */
         shownOptions: {
           type: Array,
-          computed: '_computeShownOptions(options, search, enableNoneOption, _shownOptionsCount, options.length,)',
+          computed: '_computeShownOptions(options, search, enableNoneOption, _shownOptionsCount, options.length, loadDataMethod)',
           observer: '_setFocusTarget'
         },
         searchedOptionsLength: {
@@ -134,7 +134,7 @@ export const CommonFunctionality = (superClass) =>
         /** Stop autofocus from paper-dialog */
         disableOnFocusHandling: {
           type: Boolean,
-          value: function () {
+          value: function() {
             return this.disableOnFocusHandling || this.isIEBrowser();
           },
           reflectToAttribute: true
@@ -198,12 +198,30 @@ export const CommonFunctionality = (superClass) =>
           type: Boolean,
           reflectToAttribute: true,
           value: false
+        },
+        loadDataMethod: {
+          type: Function
+        },
+        // below properties are used only if loadDataMethod is set
+        page: {
+          type: Number,
+          value: 1
+        },
+        prevPage: {
+          type: Number
+        },
+        prevSearch: {
+          type: String
+        },
+        searchChanged: {
+          type: Boolean,
+          value: false
         }
       };
     }
-
     connectedCallback() {
       super.connectedCallback();
+
       this._shownOptionsCount = this.shownOptionsLimit;
 
       // focusout is used because blur acts weirdly on IE
@@ -353,6 +371,41 @@ export const CommonFunctionality = (superClass) =>
     }
 
     _computeShownOptions(options, search, enableNoneOption, _shownOptionsCount) {
+
+      if (this.loadDataMethod) {
+        if (search != this.prevSearch && this._shownOptionsCount !== this.shownOptionsLimit) {
+          this._shownOptionsCount = this.shownOptionsLimit;
+          return;
+        }
+        this.page = _shownOptionsCount / this.shownOptionsLimit;
+        if (search != this.prevSearch || this.page !== this.prevPage) {
+          this.searchChanged = this.prevSearch !== search;
+          this.prevSearch = search;
+          const pageChanged = this.prevPage !== this.page;
+          this.prevPage = this.page;
+          this.loadDataMethod(this.search, this.page, this.shownOptionsLimit);
+
+          if (pageChanged) {
+            setTimeout(() => {
+              this._getIronDropdown()._updateOverlayPosition();
+            }, 100);
+          }
+          if (this.searchChanged) {
+            return;
+          }
+        }
+        if (!this._isUndefined(options)) {
+          if (this.searchChanged) {
+            setTimeout(() => {
+              this.searchChanged = false;
+              this.notifyDropdownResize();
+            }, 200);
+          }
+          return this._trimByShownOptionsCount(options);
+        }
+        return;
+      }
+
       if (this._isUndefined(options) || this._isUndefined(enableNoneOption)) {
         return;
       }
