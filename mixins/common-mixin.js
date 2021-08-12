@@ -208,7 +208,8 @@ export const CommonFunctionality = (superClass) =>
           value: 1
         },
         prevPage: {
-          type: Number
+          type: Number,
+          value: 1
         },
         prevSearch: {
           type: String
