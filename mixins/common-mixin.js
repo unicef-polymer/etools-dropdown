@@ -374,43 +374,10 @@ export const CommonFunctionality = (superClass) =>
       }
     }
 
-    _computeShownOptions(options, search, enableNoneOption, _shownOptionsCount, _optionsCount, loadDataMethod) {
+    _computeShownOptions(options, search, enableNoneOption, shownOptionsCount, _optionsCount, loadDataMethod) {
       if (typeof (loadDataMethod) === 'function') {
-        if (search != this.prevSearch && this._shownOptionsCount !== this.shownOptionsLimit) {
-          this._shownOptionsCount = this.shownOptionsLimit;
-          return;
-        }
-        this.page = _shownOptionsCount / this.shownOptionsLimit;
-        if (search != this.prevSearch || this.page !== this.prevPage) {
-          this.searchChanged = this.prevSearch !== search;
-          this.pageChanged = this.page !== this.prevPage;
-          this.prevSearch = search;
-          this.prevPage = this.page;
-
-          loadDataMethod(this.search, this.page, (this.shownOptionsLimit + 1));
-
-          if (this.searchChanged) {
-            //if search is changed we return nothing as options to be shown, options (if any) will be set in loadDataMethod
-            return;
-          }
-        }
-        if (!this._isUndefined(options)) {
-          if (this.searchChanged) {
-            // if search was changed need to update dropdown layout (options length can be different than what we had before)
-            setTimeout(() => {
-              this.searchChanged = false;
-              this.notifyDropdownResize();
-            }, 200);
-          } else if (this.pageChanged) {
-            this.pageChanged = false;
-            // if page was changed, options were added to the list, need to scroll up to show them
-            setTimeout(() => {
-              this._getIronDropdown()._updateOverlayPosition();
-            }, 200);
-          }
-          return this._trimByShownOptionsCount(options);
-        }
-        return;
+        // if loadDataMethod property is a function, use it to load options data
+        return this._loadOptionsData(options, search, shownOptionsCount, loadDataMethod);
       }
 
       if (this._isUndefined(options) || this._isUndefined(enableNoneOption)) {
@@ -438,6 +405,45 @@ export const CommonFunctionality = (superClass) =>
         this._getIronDropdown()._updateOverlayPosition();
       }
       return shownOptions;
+    }
+
+    _loadOptionsData(options, search, shownOptionsCount, loadDataMethod) {
+      if (search != this.prevSearch && this._shownOptionsCount !== this.shownOptionsLimit) {
+        // if search changed reset _shownOptionsCount in order to load  the first page for the new search
+        this._shownOptionsCount = this.shownOptionsLimit;
+        return;
+      }
+      this.page = shownOptionsCount / this.shownOptionsLimit;
+      if (search != this.prevSearch || this.page !== this.prevPage) {
+        this.searchChanged = this.prevSearch !== search;
+        this.pageChanged = this.page !== this.prevPage;
+        this.prevSearch = search;
+        this.prevPage = this.page;
+
+        loadDataMethod(this.search, this.page, (this.shownOptionsLimit + 1));
+
+        if (this.searchChanged) {
+          //if search is changed we return nothing as options to be shown, options (if any) will be set in loadDataMethod
+          return;
+        }
+      }
+      if (!this._isUndefined(options)) {
+        if (this.searchChanged) {
+          // if search was changed need to update dropdown layout (options length can be different than what we had before)
+          setTimeout(() => {
+            this.searchChanged = false;
+            this.notifyDropdownResize();
+          }, 200);
+        } else if (this.pageChanged) {
+          this.pageChanged = false;
+          // if page was changed, options were added to the list, need to scroll up to show them
+          setTimeout(() => {
+            this._getIronDropdown()._updateOverlayPosition();
+          }, 200);
+        }
+        return this._trimByShownOptionsCount(options);
+      }
+      return;
     }
 
     _trimByShownOptionsCount(options) {
