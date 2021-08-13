@@ -121,6 +121,13 @@ interface CommonFunctionality extends ListItemUtils {
   maxWidth: string | null | undefined;
   minWidth: string | null | undefined;
   horizontalAlign: string | null | undefined;
+
+  /**
+   * Function, if defined will be called (initially, on search, on scroll)
+   *  to set options dynamically (ex: after making calls on the BE)
+   */
+  loadDataMethod: (search:string, page: number, shownOptionsLimit: number) => void
+
   connectedCallback(): void;
   disconnectedCallback(): void;
   _onFocusOut(e: any): void;

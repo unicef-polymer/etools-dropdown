@@ -199,6 +199,7 @@ export const CommonFunctionality = (superClass) =>
           reflectToAttribute: true,
           value: false
         },
+        // Function, if defined will be called to set options dynamically (ex: after making calls on the BE)
         loadDataMethod: {
           type: Function
         },
@@ -220,6 +221,8 @@ export const CommonFunctionality = (superClass) =>
         }
       };
     }
+
+
     connectedCallback() {
       super.connectedCallback();
 
@@ -371,9 +374,8 @@ export const CommonFunctionality = (superClass) =>
       }
     }
 
-    _computeShownOptions(options, search, enableNoneOption, _shownOptionsCount) {
-
-      if (this.loadDataMethod) {
+    _computeShownOptions(options, search, enableNoneOption, _shownOptionsCount, _optionsCount, loadDataMethod) {
+      if (typeof (loadDataMethod) === 'function') {
         if (search != this.prevSearch && this._shownOptionsCount !== this.shownOptionsLimit) {
           this._shownOptionsCount = this.shownOptionsLimit;
           return;
@@ -381,23 +383,29 @@ export const CommonFunctionality = (superClass) =>
         this.page = _shownOptionsCount / this.shownOptionsLimit;
         if (search != this.prevSearch || this.page !== this.prevPage) {
           this.searchChanged = this.prevSearch !== search;
+          this.pageChanged = this.page !== this.prevPage;
           this.prevSearch = search;
-          this.loadDataMethod(this.search, this.page, this.shownOptionsLimit);
-          if (this.prevPage !== this.page) {
-            this.prevPage = this.page;
-            setTimeout(() => {
-              this._getIronDropdown()._updateOverlayPosition();
-            }, 200);
-          }
+          this.prevPage = this.page;
+
+          loadDataMethod(this.search, this.page, (this.shownOptionsLimit + 1));
+
           if (this.searchChanged) {
+            //if search is changed we return nothing as options to be shown, options (if any) will be set in loadDataMethod
             return;
           }
         }
         if (!this._isUndefined(options)) {
           if (this.searchChanged) {
+            // if search was changed need to update dropdown layout (options length can be different than what we had before)
             setTimeout(() => {
               this.searchChanged = false;
               this.notifyDropdownResize();
+            }, 200);
+          } else if (this.pageChanged) {
+            this.pageChanged = false;
+            // if page was changed, options were added to the list, need to scroll up to show them
+            setTimeout(() => {
+              this._getIronDropdown()._updateOverlayPosition();
             }, 200);
           }
           return this._trimByShownOptionsCount(options);
