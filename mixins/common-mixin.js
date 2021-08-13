@@ -443,7 +443,6 @@ export const CommonFunctionality = (superClass) =>
         }
         return this._trimByShownOptionsCount(options);
       }
-      return;
     }
 
     _trimByShownOptionsCount(options) {
