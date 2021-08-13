@@ -201,7 +201,7 @@ export const CommonFunctionality = (superClass) =>
         },
         // Function, if defined will be called to set options dynamically (ex: after making calls on the BE)
         loadDataMethod: {
-          type: Function
+          type: Object
         },
         // below properties are used only if loadDataMethod is set
         page: {
