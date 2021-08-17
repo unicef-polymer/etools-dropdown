@@ -97,7 +97,7 @@ class EsmmSelectedOptions extends ListItemUtils(PolymerElement) {
           <label hidden$="[[!label]]" aria-hidden="true" part="esmm-label" class="paper-input-label"
             for$="selected-items-wrapper">[[label]]
           </label>
-          <div class="label-slot-container" part="esmm-label-suffix">
+          <div class="label-slot-container" part="esmm-label-suffix" on-tap="_stopEvent">
               <slot name="input-label-suffix"></slot>
           </div>
         </div>
