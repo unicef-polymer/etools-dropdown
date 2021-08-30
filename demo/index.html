@@ -16,9 +16,9 @@
   <script type="module" src="elements/demo-dialog.js"></script>
 
   <script type="module">
-    const $_documentContainer = document.createElement('template');
+    const documentContainer = document.createElement('template');
 
-    $_documentContainer.innerHTML = `<custom-style>
+    documentContainer.innerHTML = `<custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
         .vertical-section-container {
           max-width: 900px;
@@ -26,25 +26,23 @@
       </style>
     </custom-style>`;
 
-    document.body.appendChild($_documentContainer.content);
+    document.body.appendChild(documentContainer.content);
   </script>
 
-  <script type="module">
-
-    window.EtoolsLogsLevel = window.EtoolsLogsLevel || 'INFO';
+  <script type="module">window.EtoolsLogsLevel = window.EtoolsLogsLevel || 'INFO';
   </script>
 </head>
 <body>
 <script type="module">
-  const $_documentContainer = document.createElement('template');
+  const documentContainer = document.createElement('template');
 
-  $_documentContainer.innerHTML = `<div class="vertical-section-container centered">
+  documentContainer.innerHTML = `<div class="vertical-section-container centered">
       <h3>etools-dropdown: single selection demo</h3>
       <esmm-single-selection-demo></esmm-single-selection-demo>
     </div>
 `;
 
-  document.body.appendChild($_documentContainer.content);
+  document.body.appendChild(documentContainer.content);
 </script>
 </body>
 </html>
