@@ -380,6 +380,7 @@ export const CommonFunctionality = (superClass) =>
       }
       if (typeof loadDataMethod === 'function') {
         // if loadDataMethod property is a function, use it to load options data
+        // TODO debounce if focus is in the search field
         return this._loadOptionsData(options, search, shownOptionsCount, loadDataMethod);
       }
 
