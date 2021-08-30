@@ -43,7 +43,7 @@ export const CommonFunctionality = (superClass) =>
         },
         readonly: {
           type: Boolean,
-          value: function() {
+          value: function () {
             return false;
           },
           reflectToAttribute: true,
@@ -51,7 +51,7 @@ export const CommonFunctionality = (superClass) =>
         },
         invalid: {
           type: Boolean,
-          value: function() {
+          value: function () {
             return false;
           },
           reflectToAttribute: true
@@ -72,7 +72,8 @@ export const CommonFunctionality = (superClass) =>
         /** Options seen by user */
         shownOptions: {
           type: Array,
-          computed: '_computeShownOptions(options, search, enableNoneOption, _shownOptionsCount, options.length, loadDataMethod)',
+          computed:
+            '_computeShownOptions(options, search, enableNoneOption, _shownOptionsCount, options.length, loadDataMethod)',
           observer: '_setFocusTarget'
         },
         searchedOptionsLength: {
@@ -134,7 +135,7 @@ export const CommonFunctionality = (superClass) =>
         /** Stop autofocus from paper-dialog */
         disableOnFocusHandling: {
           type: Boolean,
-          value: function() {
+          value: function () {
             return this.disableOnFocusHandling || this.isIEBrowser();
           },
           reflectToAttribute: true
@@ -221,7 +222,6 @@ export const CommonFunctionality = (superClass) =>
         }
       };
     }
-
 
     connectedCallback() {
       super.connectedCallback();
@@ -375,7 +375,10 @@ export const CommonFunctionality = (superClass) =>
     }
 
     _computeShownOptions(options, search, enableNoneOption, shownOptionsCount, _optionsCount, loadDataMethod) {
-      if (typeof (loadDataMethod) === 'function') {
+      if (this._isUndefined(shownOptionsCount)) {
+        return;
+      }
+      if (typeof loadDataMethod === 'function') {
         // if loadDataMethod property is a function, use it to load options data
         return this._loadOptionsData(options, search, shownOptionsCount, loadDataMethod);
       }
@@ -420,7 +423,7 @@ export const CommonFunctionality = (superClass) =>
         this.prevSearch = search;
         this.prevPage = this.page;
 
-        loadDataMethod(this.search, this.page, (this.shownOptionsLimit + 1));
+        loadDataMethod(this.search, this.page, this.shownOptionsLimit + 1);
 
         if (this.searchChanged) {
           //if search is changed we return nothing as options to be shown, options (if any) will be set in loadDataMethod
