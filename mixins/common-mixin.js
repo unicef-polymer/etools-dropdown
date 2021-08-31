@@ -1,5 +1,7 @@
 import {ListItemUtils} from './list-item-utils-mixin.js';
 import EtoolsLogsMixin from '@unicef-polymer/etools-behaviors/etools-logs-mixin.js';
+import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
+import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 /*
  * Common functionality for single selection and multiple selection dropdown
  * @polymer
@@ -43,7 +45,7 @@ export const CommonFunctionality = (superClass) =>
         },
         readonly: {
           type: Boolean,
-          value: function () {
+          value: function() {
             return false;
           },
           reflectToAttribute: true,
@@ -51,7 +53,7 @@ export const CommonFunctionality = (superClass) =>
         },
         invalid: {
           type: Boolean,
-          value: function () {
+          value: function() {
             return false;
           },
           reflectToAttribute: true
@@ -72,8 +74,7 @@ export const CommonFunctionality = (superClass) =>
         /** Options seen by user */
         shownOptions: {
           type: Array,
-          computed:
-            '_computeShownOptions(options, search, enableNoneOption, _shownOptionsCount, options.length, loadDataMethod)',
+          computed: '_computeShownOptions(options, search, enableNoneOption, _shownOptionsCount, options.length, loadDataMethod)',
           observer: '_setFocusTarget'
         },
         searchedOptionsLength: {
@@ -135,7 +136,7 @@ export const CommonFunctionality = (superClass) =>
         /** Stop autofocus from paper-dialog */
         disableOnFocusHandling: {
           type: Boolean,
-          value: function () {
+          value: function() {
             return this.disableOnFocusHandling || this.isIEBrowser();
           },
           reflectToAttribute: true
@@ -222,6 +223,7 @@ export const CommonFunctionality = (superClass) =>
         }
       };
     }
+
 
     connectedCallback() {
       super.connectedCallback();
@@ -375,13 +377,11 @@ export const CommonFunctionality = (superClass) =>
     }
 
     _computeShownOptions(options, search, enableNoneOption, shownOptionsCount, _optionsCount, loadDataMethod) {
-      if (this._isUndefined(shownOptionsCount)) {
-        return;
-      }
-      if (typeof loadDataMethod === 'function') {
+      if (typeof (loadDataMethod) === 'function') {
         // if loadDataMethod property is a function, use it to load options data
-        // TODO debounce if focus is in the search field
-        return this._loadOptionsData(options, search, shownOptionsCount, loadDataMethod);
+        this._debouncer = Debouncer.debounce(this._debouncer, timeOut.after(500), () => {
+          return this._loadOptionsData(options, search, shownOptionsCount, loadDataMethod);
+        });
       }
 
       if (this._isUndefined(options) || this._isUndefined(enableNoneOption)) {
