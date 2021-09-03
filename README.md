@@ -303,7 +303,7 @@ Examples:
 Version match | Result
 ----------------|-------------
 `1.2.3` | match
-`1.2.3-pre` | match`
+`1.2.3-pre` | match
 `1.2.3+build` | match
 `1.2.3-pre+build` | match
 `v1.2.3-pre+build` | match
