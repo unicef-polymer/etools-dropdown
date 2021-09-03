@@ -294,3 +294,19 @@ TODO: improve and add more tests
 ```
 $ polymer test
 ```
+
+## Circle CI
+
+Package will be automatically published after tag push. Tag name must correspond SemVer (Semantic Versioning) rules.  
+Examples:
+
+Version match | Result
+----------------|-------------
+`1.2.3` | match
+`1.2.3-pre` | match`
+`1.2.3+build` | match
+`1.2.3-pre+build` | match
+`v1.2.3-pre+build` | match
+`1.2` | no match
+
+You can see more details [here](https://rgxdb.com/r/40OZ1HN5)
