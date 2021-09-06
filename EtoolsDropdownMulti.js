@@ -111,6 +111,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
             two-lines-label="[[twoLinesLabel]]"
             option-value="[[optionValue]]"
             option-label="[[optionLabel]]"
+            request-in-progress="[[requestInProgress]]"
             show-no-search-results-warning="[[showNoSearchResultsWarning]]"
             show-limit-warning="[[showLimitWarning]]"
             shown-options-limit="[[shownOptionsLimit]]"

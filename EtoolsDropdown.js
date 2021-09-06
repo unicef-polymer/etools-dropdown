@@ -172,6 +172,7 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
             option-label="[[optionLabel]]"
             show-no-search-results-warning="[[showNoSearchResultsWarning]]"
             show-limit-warning="[[showLimitWarning]]"
+            request-in-progress="[[requestInProgress]]"
             shown-options-limit="[[shownOptionsLimit]]"
             shown-options-count="[[shownOptionsLimit]]"
             no-options-available="[[noOptionsAvailable]]"
