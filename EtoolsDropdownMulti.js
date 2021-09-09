@@ -191,11 +191,19 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
   }
 
   _selectedValuesOrOptionsChanged(selectedValuesOrLength, options) {
+
     if (this._isUndefined(selectedValuesOrLength) || this._isUndefined(options)) {
       return;
     }
     if (!this.selectedValues) {
       this.selectedValues = [];
+    }
+    // when using dynamic data load, in case we load options data, must preserve selected item
+    if (typeof this.loadDataMethod === 'function' && this.selectedValues.length) {
+      const selectedItemsMissingInOptions = this.options.filter(x => this.selectedValues.includes(String(x[this.optionValue]))).length !== this.selectedValues.length;
+      if (selectedItemsMissingInOptions) {
+        this.options = [...this.selectedItems, ...this.options];
+      }
     }
     this._selectedValuesToString();
     this._setSelectedItems(this.selectedValues);
@@ -351,8 +359,8 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
   _getValuesFromItems(selectedItems) {
     return selectedItems && selectedItems.length > 0
       ? selectedItems.map((item) => {
-          return item[this.optionValue].toString();
-        })
+        return item[this.optionValue].toString();
+      })
       : null;
   }
 
