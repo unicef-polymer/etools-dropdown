@@ -84,7 +84,7 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
         auto-validate$="[[_getAutoValidate()]]"
         disabled$="[[disabled]]"
         invalid="[[invalid]]"
-        on-focus="onInputFocus"
+        on-keyup="_onKeyUp"
         on-tap="_openMenu"
       >
         <slot name="prefix" slot="prefix"></slot>
@@ -231,6 +231,7 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
 
   _selectedAndOptionsChanged(selected, options) {
     this._setSelectedItem();
+
     if (!this.triggerValueChangeEvent) {
       return;
     }
@@ -246,7 +247,6 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
       this.set('selectedItem', selectedItem);
       return;
     }
-
     selected = selected || this.selected;
 
     if (!selected && this._noOptions()) {
@@ -326,6 +326,14 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
     // elemAttached condition is to prevent eager validation
     if (this.autoValidate && this.elemAttached) {
       this.validate(selected);
+    }
+  }
+
+  _onKeyUp(event) {
+    if ((event.key === ' ' || event.key === 'Enter') && !event.ctrlKey) {
+      this.dropdownIsClosing = false;
+      event.preventDefault();
+      this.onInputFocus(event);
     }
   }
 

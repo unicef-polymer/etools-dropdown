@@ -90,6 +90,7 @@ class EsmmSelectedOptions extends ListItemUtils(PolymerElement) {
       </style>
 
       <paper-input-container id="container" tabindex="1" no-label-float="[[noLabelFloat]]"
+                             on-tap="openMenu" on-focus="onInputFocus"
                              always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel, placeholder)]]"
                              auto-validate\$="[[autoValidate]]" disabled\$="[[disabled]]" invalid="[[invalid]]">
 
@@ -150,7 +151,9 @@ class EsmmSelectedOptions extends ListItemUtils(PolymerElement) {
       disabled: Boolean,
       invalid: Boolean,
       errorMessage: String,
-      _hidePlaceholder: Boolean
+      _hidePlaceholder: Boolean,
+      openMenu: Object,
+      onInputFocus: Object
     };
   }
 

@@ -77,9 +77,9 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
         option-value="[[optionValue]]"
         option-label="[[optionLabel]]"
         error-message="[[_getErrorMessage(errorMessage, invalid)]]"
-        on-focus="onInputFocus"
-        on-tap="_openMenu"
         exportparts="esmm-label-container, esmm-label, esmm-label-suffix"
+        open-menu="[[_openMenu]]"
+        on-input-focus="[[onInputFocus]]"
       >
         <span slot="input-label-suffix">
           <slot name="label-suffix"></slot>
@@ -187,9 +187,12 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('remove-selected-item', this._removeSelectedItem.bind(this));
+    this._openMenu = this._openMenu.bind(this);
+    this.onInputFocus = this.onInputFocus.bind(this);
   }
 
   _selectedValuesOrOptionsChanged(selectedValuesOrLength, options) {
+
     if (this._isUndefined(selectedValuesOrLength) || this._isUndefined(options)) {
       return;
     }
@@ -350,8 +353,8 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
   _getValuesFromItems(selectedItems) {
     return selectedItems && selectedItems.length > 0
       ? selectedItems.map((item) => {
-          return item[this.optionValue].toString();
-        })
+        return item[this.optionValue].toString();
+      })
       : null;
   }
 
