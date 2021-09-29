@@ -6,8 +6,8 @@ import {dedupingMixin} from '@polymer/polymer/lib/utils/mixin.js';
  * @mixinFunction
  */
 export const ListItemUtils = dedupingMixin(
-    superClass => class extends superClass {
-
+  (superClass) =>
+    class extends superClass {
       static get properties() {
         return {
           /** Option object property to use as value for selection */
@@ -106,7 +106,10 @@ export const ListItemUtils = dedupingMixin(
        * @returns {string}
        */
       _capitalizeString(string) {
-        return string.split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+        return string
+          .split(' ')
+          .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+          .join(' ');
       }
-
-    });
+    }
+);
