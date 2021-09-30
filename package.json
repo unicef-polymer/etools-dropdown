@@ -25,7 +25,8 @@
     "wct-browser-legacy": "^1.0.2"
   },
   "scripts": {
-    "lint": "eslint . --ext js,html --ignore-path .gitignore",
+    "lint:eslint": "eslint . --ext js,html --ignore-path .gitignore",
+    "lint": "npm run lint:eslint",
     "prepublishOnly": "npm run lint",
     "gen-typings": "gen-typescript-declarations --deleteExisting --outDir './'",
     "publish": "git push --tags && npm publish"
