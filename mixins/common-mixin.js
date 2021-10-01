@@ -43,7 +43,7 @@ export const CommonFunctionality = (superClass) =>
         },
         readonly: {
           type: Boolean,
-          value: function () {
+          value: function() {
             return false;
           },
           reflectToAttribute: true,
@@ -51,7 +51,7 @@ export const CommonFunctionality = (superClass) =>
         },
         invalid: {
           type: Boolean,
-          value: function () {
+          value: function() {
             return false;
           },
           reflectToAttribute: true
@@ -96,10 +96,6 @@ export const CommonFunctionality = (superClass) =>
           value: false,
           reflectToAttribute: true
         },
-        dropdownIsClosing: {
-          type: Boolean,
-          value: false
-        },
         focusedAtLeastOnce: {
           type: Boolean,
           value: false
@@ -134,7 +130,7 @@ export const CommonFunctionality = (superClass) =>
         /** Stop autofocus from paper-dialog */
         disableOnFocusHandling: {
           type: Boolean,
-          value: function () {
+          value: function() {
             return this.disableOnFocusHandling || this.isIEBrowser();
           },
           reflectToAttribute: true
@@ -426,7 +422,6 @@ export const CommonFunctionality = (superClass) =>
     }
 
     _onDropdownClose() {
-      this.dropdownIsClosing = false;
       if (!this.preserveSearchOnClose) {
         this.set('search', '');
       }
@@ -513,7 +508,6 @@ export const CommonFunctionality = (superClass) =>
 
     _closeMenu(e) {
       const dr = this._getIronDropdown();
-      this.dropdownIsClosing = true;
       dr.close();
     }
 
@@ -543,7 +537,7 @@ export const CommonFunctionality = (superClass) =>
      * @param e
      */
     onInputFocus(e) {
-      if (this.disableOnFocusHandling || this.dropdownIsClosing) {
+      if (this.disableOnFocusHandling) {
         return;
       }
       this.focusedAtLeastOnce = true;
