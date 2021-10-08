@@ -284,7 +284,8 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
     if (this._noOptions()) {
       return null;
     }
-    return this.options.find((item) => item[this.optionValue] == value);
+    value = String(value || '');
+    return this.options.find((item) => String(item[this.optionValue]) == value);
   }
 
   _notFoundOptionAndUrlChanged(notFoundOption, url) {

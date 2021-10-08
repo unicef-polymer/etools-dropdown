@@ -417,7 +417,7 @@ export const CommonFunctionality = (superClass) =>
         this._shownOptionsCount = this.shownOptionsLimit;
         return;
       }
-      this.page = shownOptionsCount / this.shownOptionsLimit;
+      this.page = (shownOptionsCount / this.shownOptionsLimit) || 1;
       if (search != this.prevSearch || this.page !== this.prevPage) {
         this.requestInProgress = true;
         this.searchChanged = this.prevSearch !== search;
@@ -434,10 +434,10 @@ export const CommonFunctionality = (superClass) =>
       }
       if (!this._isUndefined(options)) {
         if (this.searchChanged) {
+          this.searchChanged = false;
+          this.requestInProgress = false;
           // if search was changed need to update dropdown layout (options length can be different than what we had before)
           setTimeout(() => {
-            this.searchChanged = false;
-            this.requestInProgress = false;
             this.notifyDropdownResize();
           }, 200);
         } else if (this.pageChanged) {

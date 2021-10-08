@@ -200,7 +200,9 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     }
     // when using dynamic data load, in case we load options data, must preserve selected item
     if (typeof this.loadDataMethod === 'function' && this.selectedValues.length) {
-      const selectedItemsMissingInOptions = this.options.filter(x => this.selectedValues.includes(String(x[this.optionValue]))).length !== this.selectedValues.length;
+      const selectedValuesAsStringArray = this.selectedValues.map(x => String(x));
+      const selectedItemsMissingInOptions = this.options.filter(x => selectedValuesAsStringArray.includes(String(x[this.optionValue]))).length !== this.selectedValues.length;
+
       if (selectedItemsMissingInOptions) {
         this.options = [...this.selectedItems, ...this.options];
       }
