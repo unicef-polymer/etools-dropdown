@@ -111,6 +111,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
             two-lines-label="[[twoLinesLabel]]"
             option-value="[[optionValue]]"
             option-label="[[optionLabel]]"
+            request-in-progress="[[requestInProgress]]"
             show-no-search-results-warning="[[showNoSearchResultsWarning]]"
             show-limit-warning="[[showLimitWarning]]"
             shown-options-limit="[[shownOptionsLimit]]"
@@ -190,11 +191,21 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
   }
 
   _selectedValuesOrOptionsChanged(selectedValuesOrLength, options) {
+
     if (this._isUndefined(selectedValuesOrLength) || this._isUndefined(options)) {
       return;
     }
     if (!this.selectedValues) {
       this.selectedValues = [];
+    }
+    // when using dynamic data load, in case we load options data, must preserve selected item
+    if (typeof this.loadDataMethod === 'function' && this.selectedValues.length) {
+      const selectedValuesAsStringArray = this.selectedValues.map(x => String(x));
+      const selectedItemsMissingInOptions = this.options.filter(x => selectedValuesAsStringArray.includes(String(x[this.optionValue]))).length !== this.selectedValues.length;
+
+      if (selectedItemsMissingInOptions) {
+        this.options = [...this.selectedItems, ...this.options];
+      }
     }
     this._selectedValuesToString();
     this._setSelectedItems(this.selectedValues);
@@ -350,8 +361,8 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
   _getValuesFromItems(selectedItems) {
     return selectedItems && selectedItems.length > 0
       ? selectedItems.map((item) => {
-          return item[this.optionValue].toString();
-        })
+        return item[this.optionValue].toString();
+      })
       : null;
   }
 

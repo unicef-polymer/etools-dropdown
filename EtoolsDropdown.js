@@ -172,6 +172,7 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
             option-label="[[optionLabel]]"
             show-no-search-results-warning="[[showNoSearchResultsWarning]]"
             show-limit-warning="[[showLimitWarning]]"
+            request-in-progress="[[requestInProgress]]"
             shown-options-limit="[[shownOptionsLimit]]"
             shown-options-count="[[shownOptionsLimit]]"
             no-options-available="[[noOptionsAvailable]]"
@@ -231,6 +232,7 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
 
   _selectedAndOptionsChanged(selected, options) {
     this._setSelectedItem();
+
     if (!this.triggerValueChangeEvent) {
       return;
     }
@@ -246,7 +248,7 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
       this.set('selectedItem', selectedItem);
       return;
     }
-
+    const dataIsLoadedDynamic = typeof this.loadDataMethod === 'function';
     selected = selected || this.selected;
 
     if (!selected && this._noOptions()) {
@@ -254,7 +256,7 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
       return;
     }
 
-    if (selected && this._noOptions()) {
+    if (selected && this._noOptions() && !dataIsLoadedDynamic) {
       this.set('notFoundOption', this.selected);
       this.set('selectedItem', null);
       return;
@@ -262,6 +264,11 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
 
     selectedItem = this._getItemFromOptions(selected);
     if (!selectedItem) {
+      // when using dynamic data load, in case we load options data, must preserve selected item
+      if (this.selectedItem && dataIsLoadedDynamic) {
+        this.options = [...[this.selectedItem], ...this.options];
+        return;
+      }
       this.set('notFoundOption', this.selected);
       this.set('selectedItem', null);
     } else {
@@ -277,7 +284,8 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
     if (this._noOptions()) {
       return null;
     }
-    return this.options.find((item) => item[this.optionValue] == value);
+    value = String(value || '');
+    return this.options.find((item) => String(item[this.optionValue]) == value);
   }
 
   _notFoundOptionAndUrlChanged(notFoundOption, url) {

@@ -1,5 +1,7 @@
 import {ListItemUtils} from './list-item-utils-mixin.js';
 import EtoolsLogsMixin from '@unicef-polymer/etools-behaviors/etools-logs-mixin.js';
+import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
+import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 /*
  * Common functionality for single selection and multiple selection dropdown
  * @polymer
@@ -43,7 +45,7 @@ export const CommonFunctionality = (superClass) =>
         },
         readonly: {
           type: Boolean,
-          value: function () {
+          value: function() {
             return false;
           },
           reflectToAttribute: true,
@@ -51,7 +53,7 @@ export const CommonFunctionality = (superClass) =>
         },
         invalid: {
           type: Boolean,
-          value: function () {
+          value: function() {
             return false;
           },
           reflectToAttribute: true
@@ -135,7 +137,7 @@ export const CommonFunctionality = (superClass) =>
         /** Stop autofocus from paper-dialog */
         disableOnFocusHandling: {
           type: Boolean,
-          value: function () {
+          value: function() {
             return this.disableOnFocusHandling || this.isIEBrowser();
           },
           reflectToAttribute: true
@@ -375,13 +377,11 @@ export const CommonFunctionality = (superClass) =>
     }
 
     _computeShownOptions(options, search, enableNoneOption, shownOptionsCount, _optionsCount, loadDataMethod) {
-      if (this._isUndefined(shownOptionsCount)) {
-        return;
-      }
       if (typeof loadDataMethod === 'function') {
         // if loadDataMethod property is a function, use it to load options data
-        // TODO debounce if focus is in the search field
+        //this._debouncer = Debouncer.debounce(this._debouncer, timeOut.after(500), () => {
         return this._loadOptionsData(options, search, shownOptionsCount, loadDataMethod);
+        //        });
       }
 
       if (this._isUndefined(options) || this._isUndefined(enableNoneOption)) {
@@ -417,8 +417,9 @@ export const CommonFunctionality = (superClass) =>
         this._shownOptionsCount = this.shownOptionsLimit;
         return;
       }
-      this.page = shownOptionsCount / this.shownOptionsLimit;
+      this.page = (shownOptionsCount / this.shownOptionsLimit) || 1;
       if (search != this.prevSearch || this.page !== this.prevPage) {
+        this.requestInProgress = true;
         this.searchChanged = this.prevSearch !== search;
         this.pageChanged = this.page !== this.prevPage;
         this.prevSearch = search;
@@ -433,13 +434,15 @@ export const CommonFunctionality = (superClass) =>
       }
       if (!this._isUndefined(options)) {
         if (this.searchChanged) {
+          this.searchChanged = false;
+          this.requestInProgress = false;
           // if search was changed need to update dropdown layout (options length can be different than what we had before)
           setTimeout(() => {
-            this.searchChanged = false;
             this.notifyDropdownResize();
           }, 200);
         } else if (this.pageChanged) {
           this.pageChanged = false;
+          this.requestInProgress = false;
           // if page was changed, options were added to the list, need to scroll up to show them
           setTimeout(() => {
             this._getIronDropdown()._updateOverlayPosition();
