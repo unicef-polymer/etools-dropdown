@@ -52,7 +52,7 @@
     ],
     "arrow-parens": [
       2,
-      "as-needed",
+      "always",
       {
         "requireForBlockBody": true
       }

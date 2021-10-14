@@ -222,7 +222,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
       }
     } else {
       e.stopImmediatePropagation();
-      let selectedValue = e.model.item[this.optionValue];
+      const selectedValue = e.model.item[this.optionValue];
       this.set('selected', selectedValue);
       this.dispatchEvent(
         new CustomEvent('close-etools-dropdown', {
@@ -277,7 +277,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
   }
 
   _getItemValueByOptionValue(item) {
-    let val = item[this.optionValue];
+    const val = item[this.optionValue];
     if (val === null || val === undefined) {
       return -1;
     }

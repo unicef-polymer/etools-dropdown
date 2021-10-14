@@ -89,44 +89,59 @@ class EsmmSelectedOptions extends ListItemUtils(PolymerElement) {
         }
       </style>
 
-      <paper-input-container id="container" tabindex="1" no-label-float="[[noLabelFloat]]"
-                             always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel, placeholder)]]"
-                             auto-validate\$="[[autoValidate]]" disabled\$="[[disabled]]" invalid="[[invalid]]">
-
+      <paper-input-container
+        id="container"
+        tabindex="1"
+        no-label-float="[[noLabelFloat]]"
+        always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel, placeholder)]]"
+        auto-validate$="[[autoValidate]]"
+        disabled$="[[disabled]]"
+        invalid="[[invalid]]"
+      >
         <div id="label-container" part="esmm-label-container" class="paper-input-label" slot="label">
-          <label hidden$="[[!label]]" aria-hidden="true" part="esmm-label" class="paper-input-label"
-            for$="selected-items-wrapper">[[label]]
+          <label
+            hidden$="[[!label]]"
+            aria-hidden="true"
+            part="esmm-label"
+            class="paper-input-label"
+            for$="selected-items-wrapper"
+            >[[label]]
           </label>
-          <div class="label-slot-container" part="esmm-label-suffix">
-              <slot name="input-label-suffix"></slot>
+          <div class="label-slot-container" part="esmm-label-suffix" on-tap="_stopEvent">
+            <slot name="input-label-suffix"></slot>
           </div>
         </div>
 
         <div slot="input" class="paper-input-input">
-        <span class="placeholder" hidden\$="[[_hidePlaceholder]]">
-          [[placeholder]]
-        </span>
-          <div id="selected-items-wrapper" hidden\$="[[!_hidePlaceholder]]">
-
-            <template is="dom-repeat" notify-dom-change="" on-dom-change="_selectedItemsDisplayHasChanged"
-                      items="[[selectedItems]]">
-            <span class="selected-item">
-              <span>[[getLabel(item)]]</span>
-              <span class="readonly-separator" hidden\$="[[!readonly]]">|</span>
-              <paper-icon-button id="iconRemoveSelected" disabled\$="[[disabled]]" hidden\$="[[readonly]]"
-                                 icon="close" on-tap="_removeItem" on-focus="_onXFocus"></paper-icon-button>
-            </span>
+          <span class="placeholder" hidden$="[[_hidePlaceholder]]"> [[placeholder]] </span>
+          <div id="selected-items-wrapper" hidden$="[[!_hidePlaceholder]]">
+            <template
+              is="dom-repeat"
+              notify-dom-change=""
+              on-dom-change="_selectedItemsDisplayHasChanged"
+              items="[[selectedItems]]"
+            >
+              <span class="selected-item">
+                <span>[[getLabel(item)]]</span>
+                <span class="readonly-separator" hidden$="[[!readonly]]">|</span>
+                <paper-icon-button
+                  id="iconRemoveSelected"
+                  disabled$="[[disabled]]"
+                  hidden$="[[readonly]]"
+                  icon="close"
+                  on-tap="_removeItem"
+                  on-focus="_onXFocus"
+                ></paper-icon-button>
+              </span>
             </template>
-
           </div>
         </div>
 
-        <iron-icon icon="arrow-drop-down" slot="suffix" hidden\$="[[readonly]]"></iron-icon>
+        <iron-icon icon="arrow-drop-down" slot="suffix" hidden$="[[readonly]]"></iron-icon>
 
         <template is="dom-if" if="[[errorMessage]]">
           <paper-input-error aria-live="assertive" slot="add-on">[[errorMessage]]</paper-input-error>
         </template>
-
       </paper-input-container>
     `;
   }
@@ -179,10 +194,12 @@ class EsmmSelectedOptions extends ListItemUtils(PolymerElement) {
     }
 
     // Notifies paper-dialog to center its self
-    this.dispatchEvent(new CustomEvent('iron-resize', {
-      bubbles: true,
-      composed: true
-    }));
+    this.dispatchEvent(
+      new CustomEvent('iron-resize', {
+        bubbles: true,
+        composed: true
+      })
+    );
   }
 
   /**
@@ -193,11 +210,13 @@ class EsmmSelectedOptions extends ListItemUtils(PolymerElement) {
   _removeItem(e) {
     // fire remove event to parent
     this._stopEvent(e);
-    this.dispatchEvent(new CustomEvent('remove-selected-item', {
-      detail: e.model.item[this.optionValue],
-      bubbles: true,
-      composed: true
-    }));
+    this.dispatchEvent(
+      new CustomEvent('remove-selected-item', {
+        detail: e.model.item[this.optionValue],
+        bubbles: true,
+        composed: true
+      })
+    );
   }
 
   /**

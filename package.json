@@ -19,15 +19,14 @@
     "@webcomponents/webcomponentsjs": "^2.5.0",
     "eslint": "^7.20.0",
     "eslint-config-google": "^0.14.0",
-    "eslint-plugin-html": "^6.1.1",
     "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-html": "^6.1.1",
     "eslint-plugin-prettier": "^3.2.0",
     "wct-browser-legacy": "^1.0.2"
   },
   "scripts": {
-    "lint": "npm run lint:javascript && polymer lint && exit 0",
-    "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore && exit 0",
-    "test": "polymer test",
+    "lint": "eslint . --ext js,html --ignore-path .gitignore",
+    "prepublishOnly": "npm run lint",
     "gen-typings": "gen-typescript-declarations --deleteExisting --outDir './'",
     "publish": "git push --tags && npm publish"
   },
@@ -59,6 +58,7 @@
     "lodash": ">=4.17.21",
     "lodash-es": "^4.17.21",
     "minimist": ">=0.2.1",
+    "prettier": "^2.3.2",
     "prismjs": ">=1.21.0",
     "web-animations-js": "^2.3.2"
   },
