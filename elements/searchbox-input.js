@@ -32,8 +32,15 @@ class EsmmSearchboxInput extends PolymerElement {
         }
       </style>
 
-      <paper-input id="searchInput" no-label-float="" placeholder="Search" type="text" value="{{search}}" auto-focus=""
-                   tabindex="0">
+      <paper-input
+        id="searchInput"
+        no-label-float=""
+        placeholder="Search"
+        type="text"
+        value="{{search}}"
+        auto-focus=""
+        tabindex="0"
+      >
         <iron-icon icon="search" slot="prefix"></iron-icon>
       </paper-input>
     `;

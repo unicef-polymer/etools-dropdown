@@ -13,9 +13,9 @@
   <script type="module" src="./elements/multi-selection-demo.js"></script>
 
   <script type="module">
-    const $_documentContainer = document.createElement('template');
+    const documentContainer = document.createElement('template');
 
-    $_documentContainer.innerHTML = `<custom-style>
+    documentContainer.innerHTML = `<custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
         .vertical-section-container {
           max-width: 900px;
@@ -23,23 +23,21 @@
       </style>
     </custom-style>`;
 
-    document.body.appendChild($_documentContainer.content);
+    document.body.appendChild(documentContainer.content);
   </script>
 
-  <script type="module">
-
-    window.EtoolsLogsLevel = window.EtoolsLogsLevel || 'INFO';
+  <script type="module">window.EtoolsLogsLevel = window.EtoolsLogsLevel || 'INFO';
   </script>
 </head>
 <body>
 <script type="module">
-  const $_documentContainer = document.createElement('template');
-  $_documentContainer.innerHTML = `<div class="vertical-section-container centered">
+  const documentContainer = document.createElement('template');
+  documentContainer.innerHTML = `<div class="vertical-section-container centered">
       <h3>etools-dropdown-multi: multi selection demo</h3>
       <esmm-multi-selection-demo></esmm-multi-selection-demo>
     </div>`;
 
-  document.body.appendChild($_documentContainer.content);
+  document.body.appendChild(documentContainer.content);
 </script>
 </body>
 </html>
