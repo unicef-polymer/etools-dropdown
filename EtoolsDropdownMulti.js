@@ -199,7 +199,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       this.selectedValues = [];
     }
     // there is no current selection and we have no items already selected
-    // return to prevent eager validation below in case we just re-render an empty dropdown
+    // return to prevent eager validation below in case we just re-render a dropdown without selection
     if (!this.selectedValues.length && !this.selectedItems.length) {
       return;
     }
