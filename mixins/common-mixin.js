@@ -43,7 +43,7 @@ export const CommonFunctionality = (superClass) =>
         },
         readonly: {
           type: Boolean,
-          value: function() {
+          value: function () {
             return false;
           },
           reflectToAttribute: true,
@@ -51,7 +51,7 @@ export const CommonFunctionality = (superClass) =>
         },
         invalid: {
           type: Boolean,
-          value: function() {
+          value: function () {
             return false;
           },
           reflectToAttribute: true
@@ -130,7 +130,7 @@ export const CommonFunctionality = (superClass) =>
         /** Stop autofocus from paper-dialog */
         disableOnFocusHandling: {
           type: Boolean,
-          value: function() {
+          value: function () {
             return this.disableOnFocusHandling || this.isIEBrowser();
           },
           reflectToAttribute: true
