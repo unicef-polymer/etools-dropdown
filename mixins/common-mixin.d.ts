@@ -64,7 +64,6 @@ interface CommonFunctionality extends ListItemUtils {
    */
   enableNoneOption: boolean | null | undefined;
   hideSearch: boolean | null | undefined;
-  dropdownIsClosing: boolean | null | undefined;
 
   /**
    * Limit displayed options

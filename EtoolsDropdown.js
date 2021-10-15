@@ -84,7 +84,7 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
         auto-validate$="[[_getAutoValidate()]]"
         disabled$="[[disabled]]"
         invalid="[[invalid]]"
-        on-focus="onInputFocus"
+        on-keydown="_onKeyDown"
         on-tap="_openMenu"
       >
         <slot name="prefix" slot="prefix"></slot>
@@ -326,6 +326,13 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
     // elemAttached condition is to prevent eager validation
     if (this.autoValidate && this.elemAttached) {
       this.validate(selected);
+    }
+  }
+
+  _onKeyDown(event) {
+    if ((event.key === ' ' || event.key === 'Enter') && !event.ctrlKey) {
+      event.preventDefault();
+      this.onInputFocus(event);
     }
   }
 
