@@ -8,6 +8,4 @@
  *   scripts/es6-polyfills.js
  */
 
-
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
-
