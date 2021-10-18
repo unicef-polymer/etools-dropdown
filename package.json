@@ -59,7 +59,8 @@
     "lodash-es": "^4.17.21",
     "minimist": ">=0.2.1",
     "prettier": "^2.3.2",
-    "prismjs": ">=1.21.0",
+    "prismjs": ">=1.25.0",
+    "path-parse": ">=1.0.7",
     "web-animations-js": "^2.3.2"
   },
   "engines": {

@@ -99,10 +99,6 @@ export const CommonFunctionality = (superClass) =>
           value: false,
           reflectToAttribute: true
         },
-        dropdownIsClosing: {
-          type: Boolean,
-          value: false
-        },
         focusedAtLeastOnce: {
           type: Boolean,
           value: false
@@ -498,7 +494,6 @@ export const CommonFunctionality = (superClass) =>
     }
 
     _onDropdownClose() {
-      this.dropdownIsClosing = false;
       if (!this.preserveSearchOnClose) {
         this.set('search', '');
       }
@@ -585,7 +580,6 @@ export const CommonFunctionality = (superClass) =>
 
     _closeMenu(e) {
       const dr = this._getIronDropdown();
-      this.dropdownIsClosing = true;
       dr.close();
     }
 
@@ -615,7 +609,7 @@ export const CommonFunctionality = (superClass) =>
      * @param e
      */
     onInputFocus(e) {
-      if (this.disableOnFocusHandling || this.dropdownIsClosing) {
+      if (this.disableOnFocusHandling) {
         return;
       }
       this.focusedAtLeastOnce = true;
