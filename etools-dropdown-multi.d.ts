@@ -16,23 +16,21 @@ import EtoolsLogsMixin from '@unicef-polymer/etools-behaviors/etools-logs-mixin.
 /**
  * `etools-dropdown-multi`
  */
-declare class EtoolsDropdownMulti extends MissingOptions(CommonFunctionality(
-  EtoolsLogsMixin(PolymerElement))) {
-
+declare class EtoolsDropdownMulti extends MissingOptions(CommonFunctionality(EtoolsLogsMixin(PolymerElement))) {
   /**
    * Dropdown selected values
    */
-  selectedValues: any[]|null|undefined;
+  selectedValues: any[] | null | undefined;
 
   /**
    * Selected options objects
    */
-  selectedItems: any[]|null|undefined;
+  selectedItems: any[] | null | undefined;
 
   /**
    * Array of not found values (in options list)
    */
-  notFoundOptions: any[]|null|undefined;
+  notFoundOptions: any[] | null | undefined;
 
   /**
    * Element title attribute
@@ -41,7 +39,7 @@ declare class EtoolsDropdownMulti extends MissingOptions(CommonFunctionality(
   /**
    * Element close text
    */
-  closeText: string
+  closeText: string;
   connectedCallback(): void;
   _selectedValuesOrOptionsChanged(selectedValuesOrLength: any, options: any): void;
 
@@ -49,7 +47,7 @@ declare class EtoolsDropdownMulti extends MissingOptions(CommonFunctionality(
    * Can't use paper-listbox's on-selected-items-changed event ,
    * because paper-lisbox doesn't cover the case when selectedItems are not in the shownOptions values
    */
-  _setSelectedItems(selectedValues: any[]|null): void;
+  _setSelectedItems(selectedValues: any[] | null): void;
   _selectedItemsChanged(selectedItems: any): void;
   _fireChangeEvent(): void;
   _setAnyNotFoundOptions(selectedItems: any, selectedValues: any): void;
@@ -74,11 +72,10 @@ declare class EtoolsDropdownMulti extends MissingOptions(CommonFunctionality(
   _getElementTitle(selectedItems: any): any;
 }
 
-export {EtoolsDropdownMulti as EtoolsDropdownMultiEl}
+export {EtoolsDropdownMulti as EtoolsDropdownMultiEl};
 
 declare global {
-
   interface HTMLElementTagNameMap {
-    "etools-dropdown-multi": EtoolsDropdownMulti;
+    'etools-dropdown-multi': EtoolsDropdownMulti;
   }
 }

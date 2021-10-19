@@ -111,6 +111,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
             two-lines-label="[[twoLinesLabel]]"
             option-value="[[optionValue]]"
             option-label="[[optionLabel]]"
+            request-in-progress="[[requestInProgress]]"
             show-no-search-results-warning="[[showNoSearchResultsWarning]]"
             show-limit-warning="[[showLimitWarning]]"
             shown-options-limit="[[shownOptionsLimit]]"
@@ -198,10 +199,22 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     if (!this.selectedValues) {
       this.selectedValues = [];
     }
+
     // there is no current selection and we have no items already selected
     // return to prevent eager validation below in case we just re-render a dropdown without selection
     if (!this.selectedValues.length && !this.selectedItems.length) {
       return;
+
+    // when using dynamic data load, in case we load options data, must preserve selected item
+    if (typeof this.loadDataMethod === 'function' && this.selectedValues.length) {
+      const selectedValuesAsStringArray = this.selectedValues.map((x) => String(x));
+      const selectedItemsMissingInOptions =
+        this.options.filter((x) => selectedValuesAsStringArray.includes(String(x[this.optionValue]))).length !==
+        this.selectedValues.length;
+
+      if (selectedItemsMissingInOptions) {
+        this.options = [...this.selectedItems, ...this.options];
+      }
     }
     this._selectedValuesToString();
     this._setSelectedItems(this.selectedValues);

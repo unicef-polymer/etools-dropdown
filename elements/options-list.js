@@ -125,6 +125,10 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
           No results found. Try other keywords.
         </paper-item>
 
+        <paper-item hidden$="[[!requestInProgress]]" class="warning" disabled="">
+          Request in progress. <paper-spinner active style="padding-inline-start: 3px;"></paper-spinner>
+        </paper-item>
+
         <paper-item id="infinite-scroll-trigger" hidden$="[[!showLimitWarning]]" class="warning" disabled="">
           Scroll down to reveal more items. <paper-spinner active style="padding-inline-start: 3px;"></paper-spinner>
         </paper-item>
@@ -166,6 +170,12 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
       showNoSearchResultsWarning: Boolean,
       /** Flag to show the limit of options shown in dropdown */
       showLimitWarning: Boolean,
+
+      requestInProgress: {
+        type: Boolean,
+        value: false
+      },
+
       /** Flag to show a no options avaliable warning */
       noOptionsAvailable: Boolean,
 
@@ -196,6 +206,10 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
   }
 
   showMoreOptions() {
+    if (!this.shownOptions || !this.shownOptions.length) {
+      this.shownOptionsCount = this.shownOptionsLimit;
+      return;
+    }
     this.shownOptionsCount += this.shownOptionsLimit;
     this.dispatchEvent(
       new CustomEvent('show-more', {

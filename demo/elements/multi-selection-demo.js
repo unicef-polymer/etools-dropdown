@@ -25,12 +25,21 @@ class EsmmMultiSelectionDemo extends TestData(PolymerElement) {
         }
       </style>
       <div>
-        <etools-dropdown-multi id="dropDown1" class="demo-field" label="Multi selection"
-                               options="[[simpleOptions]]"></etools-dropdown-multi>
+        <etools-dropdown-multi
+          id="dropDown1"
+          class="demo-field"
+          label="Multi selection"
+          options="[[simpleOptions]]"
+        ></etools-dropdown-multi>
       </div>
       <div>
-        <etools-dropdown-multi id="dropDown2" class="demo-field" label="Multi selection, multi-lines options"
-                               options="[[twoLineOptions]]" two-lines-label=""></etools-dropdown-multi>
+        <etools-dropdown-multi
+          id="dropDown2"
+          class="demo-field"
+          label="Multi selection, multi-lines options"
+          options="[[twoLineOptions]]"
+          two-lines-label=""
+        ></etools-dropdown-multi>
       </div>
 
       <esmm-demo-actions id="demoActions"></esmm-demo-actions>

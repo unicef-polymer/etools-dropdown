@@ -8,7 +8,6 @@
  *   mixins/missing-options-mixin.js
  */
 
-
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
 // tslint:disable:no-any describes the API as best we are able today
 
@@ -16,21 +15,20 @@ import {dedupingMixin} from '@polymer/polymer/lib/utils/mixin.js';
 
 export {MissingOptions};
 
-
 /**
  * Missing options helper
  */
 declare function MissingOptions<T extends new (...args: any[]) => {}>(base: T): T & MissingOptionsConstructor;
 
 interface MissingOptionsConstructor {
-  new(...args: any[]): MissingOptions;
+  new (...args: any[]): MissingOptions;
 }
 
 export {MissingOptionsConstructor};
 
 interface MissingOptions {
-  url: string|null|undefined;
-  ajaxParams: object|null|undefined;
+  url: string | null | undefined;
+  ajaxParams: object | null | undefined;
 
   /**
    * If there are no selected options that are not found in dropdown options then request them from server using
@@ -43,7 +41,7 @@ interface MissingOptions {
    *    values: 1,2,3,4 // multiple values
    * }
    */
-  requestMissingOptions(notFoundValues: any[]|null): void;
+  requestMissingOptions(notFoundValues: any[] | null): void;
 
   /**
    * Handle missing option request response
@@ -63,7 +61,7 @@ interface MissingOptions {
   /**
    * Check if option received from missing options request is valid
    */
-  isValidOption(optionObj: any): boolean|any;
+  isValidOption(optionObj: any): boolean | any;
 
   /**
    * Prepare new received options to add them to the current options list

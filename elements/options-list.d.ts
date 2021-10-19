@@ -8,7 +8,6 @@
  *   elements/options-list.js
  */
 
-
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
 // tslint:disable:no-any describes the API as best we are able today
 
@@ -16,50 +15,46 @@ import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 
 import {ListItemUtils} from '../mixins/list-item-utils-mixin.js';
 
-declare class EsmmOptionsList extends
-  EsmmMixins.ListItemUtils(
-  Object) {
-
+declare class EsmmOptionsList extends EsmmMixins.ListItemUtils(Object) {
   /**
    * Multi selection flag. If true `selectedValues` array will be used instead `selected`
    */
-  multi: boolean|null|undefined;
+  multi: boolean | null | undefined;
 
   /**
    * paper-listbox selected value is `multi` is false
    */
-  selected: string|null|undefined;
+  selected: string | null | undefined;
 
   /**
    * paper-listbox selected values is `multi` is true
    */
-  selectedValues: any[]|null|undefined;
+  selectedValues: any[] | null | undefined;
 
   /**
    * Array of options to be shown in dropdown
    */
-  shownOptions: any[]|null|undefined;
+  shownOptions: any[] | null | undefined;
 
   /**
    * Flag used to show no search result found warning
    */
-  showNoSearchResultsWarning: boolean|null|undefined;
+  showNoSearchResultsWarning: boolean | null | undefined;
 
   /**
    * Flag to show the limit of options shown in dropdown
    */
-  showLimitWarning: boolean|null|undefined;
+  showLimitWarning: boolean | null | undefined;
 
   /**
    * Flag to show a no options avaliable warning
    */
-  noOptionsAvailable: boolean|null|undefined;
-  shownOptionsLimit: number|null|undefined;
+  noOptionsAvailable: boolean | null | undefined;
+  shownOptionsLimit: number | null | undefined;
 }
 
 declare global {
-
   interface HTMLElementTagNameMap {
-    "esmm-options-list": EsmmOptionsList;
+    'esmm-options-list': EsmmOptionsList;
   }
 }
