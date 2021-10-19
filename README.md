@@ -325,9 +325,9 @@ When the data source of the dropdown is voluminous, you can resort to loading ju
 Requirements for this functionality:
 
 - The endpoint used to populate the dropdown has to support pagination and search
-- After the selected value/s are saved, the API has to return more that just the saved id. Has to return all the details needed to populate the dropdown with the saved selected item. This is to cover the cases like:
+- After the selected value/s are saved, the API has to return more that just the saved id. Has to return all the details needed to populate the dropdown with the saved selected item. This is to cover cases like:
   - the saved item is not on the first page of the data source (on page refresh for ex)
-  - after search, if the saved item is not in the results from bk it has to be re-added to the dropdown options otherwise it will dissapear as selected from UI
+  - after search, if the saved item is not in the results from bk it has to be re-added to the dropdown options, otherwise it will dissapear as selected from UI
 
 Implementation example:
 
