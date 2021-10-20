@@ -199,6 +199,12 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     if (!this.selectedValues) {
       this.selectedValues = [];
     }
+
+    // there is no current selection and we have no items already selected
+    // return to prevent eager validation below in case we just re-render a dropdown without selection
+    if (!this.selectedValues.length && !this.selectedItems.length) {
+      return;
+
     // when using dynamic data load, in case we load options data, must preserve selected item
     if (typeof this.loadDataMethod === 'function' && this.selectedValues.length) {
       const selectedValuesAsStringArray = this.selectedValues.map((x) => String(x));
@@ -213,7 +219,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     this._selectedValuesToString();
     this._setSelectedItems(this.selectedValues);
     // elemAttached condition is to prevent eager validation
-    if (this.autoValidate && this.elemAttached && this.selectedValues !== undefined) {
+    if (this.autoValidate && this.elemAttached) {
       this.validate(this.selectedValues);
     }
   }
@@ -364,8 +370,8 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
   _getValuesFromItems(selectedItems) {
     return selectedItems && selectedItems.length > 0
       ? selectedItems.map((item) => {
-          return item[this.optionValue].toString();
-        })
+        return item[this.optionValue].toString();
+      })
       : null;
   }
 
