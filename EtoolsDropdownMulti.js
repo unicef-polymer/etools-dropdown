@@ -204,6 +204,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     // return to prevent eager validation below in case we just re-render a dropdown without selection
     if (!this.selectedValues.length && !this.selectedItems.length) {
       return;
+    }
 
     // when using dynamic data load, in case we load options data, must preserve selected item
     if (typeof this.loadDataMethod === 'function' && this.selectedValues.length) {
