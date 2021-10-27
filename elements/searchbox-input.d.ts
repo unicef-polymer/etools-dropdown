@@ -8,22 +8,19 @@
  *   elements/searchbox-input.js
  */
 
-
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
 
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 
 declare class EsmmSearchboxInput extends PolymerElement {
-
   /**
    * Search string property
    */
-  search: string|null|undefined;
+  search: string | null | undefined;
 }
 
 declare global {
-
   interface HTMLElementTagNameMap {
-    "esmm-searchbox-input": EsmmSearchboxInput;
+    'esmm-searchbox-input': EsmmSearchboxInput;
   }
 }

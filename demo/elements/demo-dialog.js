@@ -21,7 +21,6 @@ class DropdownDialogDemo extends PolymerElement {
         .vertical-section-container {
           max-width: 900px;
         }
-
       </style>
 
       <etools-dialog id="demoDialog" size="lg" opened="[[opened]]">

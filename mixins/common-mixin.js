@@ -1,7 +1,5 @@
 import {ListItemUtils} from './list-item-utils-mixin.js';
 import EtoolsLogsMixin from '@unicef-polymer/etools-behaviors/etools-logs-mixin.js';
-import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
-import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 /*
  * Common functionality for single selection and multiple selection dropdown
  * @polymer
@@ -45,7 +43,7 @@ export const CommonFunctionality = (superClass) =>
         },
         readonly: {
           type: Boolean,
-          value: function() {
+          value: function () {
             return false;
           },
           reflectToAttribute: true,
@@ -53,7 +51,7 @@ export const CommonFunctionality = (superClass) =>
         },
         invalid: {
           type: Boolean,
-          value: function() {
+          value: function () {
             return false;
           },
           reflectToAttribute: true
@@ -75,6 +73,7 @@ export const CommonFunctionality = (superClass) =>
         shownOptions: {
           type: Array,
           computed:
+            // eslint-disable-next-line max-len
             '_computeShownOptions(options, search, enableNoneOption, _shownOptionsCount, options.length, loadDataMethod)',
           observer: '_setFocusTarget'
         },
@@ -133,7 +132,7 @@ export const CommonFunctionality = (superClass) =>
         /** Stop autofocus from paper-dialog */
         disableOnFocusHandling: {
           type: Boolean,
-          value: function() {
+          value: function () {
             return this.disableOnFocusHandling || this.isIEBrowser();
           },
           reflectToAttribute: true
@@ -375,7 +374,7 @@ export const CommonFunctionality = (superClass) =>
     _computeShownOptions(options, search, enableNoneOption, shownOptionsCount, _optionsCount, loadDataMethod) {
       if (typeof loadDataMethod === 'function') {
         // if loadDataMethod property is a function, use it to load options data
-        //this._debouncer = Debouncer.debounce(this._debouncer, timeOut.after(500), () => {
+        // this._debouncer = Debouncer.debounce(this._debouncer, timeOut.after(500), () => {
         return this._loadOptionsData(options, search, shownOptionsCount, loadDataMethod);
         //        });
       }
@@ -413,7 +412,7 @@ export const CommonFunctionality = (superClass) =>
         this._shownOptionsCount = this.shownOptionsLimit;
         return;
       }
-      this.page = (shownOptionsCount / this.shownOptionsLimit) || 1;
+      this.page = shownOptionsCount / this.shownOptionsLimit || 1;
       if (search != this.prevSearch || this.page !== this.prevPage) {
         this.requestInProgress = true;
         this.searchChanged = this.prevSearch !== search;
@@ -424,7 +423,8 @@ export const CommonFunctionality = (superClass) =>
         loadDataMethod(this.search, this.page, this.shownOptionsLimit + 1);
 
         if (this.searchChanged) {
-          //if search is changed we return nothing as options to be shown, options (if any) will be set in loadDataMethod
+          // eslint-disable-next-line max-len
+          // if search is changed we return nothing as options to be shown, options (if any) will be set in loadDataMethod
           return;
         }
       }
@@ -432,6 +432,7 @@ export const CommonFunctionality = (superClass) =>
         if (this.searchChanged) {
           this.searchChanged = false;
           this.requestInProgress = false;
+          // eslint-disable-next-line max-len
           // if search was changed need to update dropdown layout (options length can be different than what we had before)
           setTimeout(() => {
             this.notifyDropdownResize();

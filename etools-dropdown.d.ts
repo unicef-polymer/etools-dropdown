@@ -13,28 +13,24 @@ import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 
 import EtoolsLogsMixin from '@unicef-polymer/etools-behaviors/etools-logs-mixin.js';
 
-
 /**
  * `etools-dropdown`
  */
-declare class EtoolsDropdown extends  MissingOptions(
-  CommonFunctionality(
-    EtoolsLogsMixin(PolymerElement))) {
-
+declare class EtoolsDropdown extends MissingOptions(CommonFunctionality(EtoolsLogsMixin(PolymerElement))) {
   /**
    * Dropdown selected value `optionValue` prop of the selected option
    */
-  selected: number|null|undefined;
+  selected: number | null | undefined;
 
   /**
    * Selected option object
    */
-  selectedItem: object|null|undefined;
+  selectedItem: object | null | undefined;
 
   /**
    * Selected value not found in options
    */
-  notFoundOption: string|null|undefined;
+  notFoundOption: string | null | undefined;
 
   /**
    * Element title attribute
@@ -57,8 +53,7 @@ declare class EtoolsDropdown extends  MissingOptions(
 export {EtoolsDropdown as EtoolsDropdownEl};
 
 declare global {
-
   interface HTMLElementTagNameMap {
-    "etools-dropdown": EtoolsDropdown;
+    'etools-dropdown': EtoolsDropdown;
   }
 }

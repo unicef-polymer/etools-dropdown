@@ -110,6 +110,7 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
           validator="[[validator]]"
         >
           <input
+            readonly
             aria-labelledby$="[[_ariaLabelledBy]]"
             aria-describedby$="[[_ariaDescribedBy]]"
             disabled$="[[disabled]]"
@@ -127,7 +128,6 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
             step$="[[step]]"
             name$="[[name]]"
             placeholder$="[[placeholder]]"
-            readonly$="[[readonly]]"
             list$="[[list]]"
             size$="[[size]]"
             autocapitalize$="[[autocapitalize]]"

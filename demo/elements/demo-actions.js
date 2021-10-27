@@ -35,20 +35,20 @@ class EsmmDemoActions extends PolymerElement {
 
       <div>
         <paper-button raised="" on-tap="validateDropdowns">Validate</paper-button>
-        <paper-button raised="" class\$="[[autoValidateActiveClass]]" on-tap="activateAutoValidation">Enable auto
-          validation
+        <paper-button raised="" class$="[[autoValidateActiveClass]]" on-tap="activateAutoValidation"
+          >Enable auto validation
         </paper-button>
         <paper-button raised="" on-tap="deactivateAutoValidation">Disable auto validation</paper-button>
       </div>
       <div>
-        <paper-button raised="" on-tap="makeDropdownsRequired" class\$="[[requiredActiveClass]]">
+        <paper-button raised="" on-tap="makeDropdownsRequired" class$="[[requiredActiveClass]]">
           Make dropdowns required
         </paper-button>
         <paper-button raised="" on-tap="makeDropdownsNotRequired">Make dropdowns NOT required</paper-button>
       </div>
       <div>
-        <paper-button raised="" on-tap="makeDropdownsReadonly" class\$="[[readonlyActiveClass]]">Make dropdowns
-          readonly
+        <paper-button raised="" on-tap="makeDropdownsReadonly" class$="[[readonlyActiveClass]]"
+          >Make dropdowns readonly
         </paper-button>
         <paper-button raised="" on-tap="removeReadonlyState">Make dropdowns editable</paper-button>
       </div>
@@ -57,7 +57,7 @@ class EsmmDemoActions extends PolymerElement {
         <paper-button raised="" on-tap="deactivateInvalidState">Hide invalid state</paper-button>
       </div>
       <div>
-        <paper-button raised="" on-tap="disableDropdowns" class\$="[[disabledActiveClass]]">Disable</paper-button>
+        <paper-button raised="" on-tap="disableDropdowns" class$="[[disabledActiveClass]]">Disable</paper-button>
         <paper-button raised="" on-tap="enableDropdowns">Enable</paper-button>
       </div>
     `;
@@ -84,74 +84,74 @@ class EsmmDemoActions extends PolymerElement {
   }
 
   makeDropdownsRequired() {
-    this.dropdownsIds.forEach(drId => {
+    this.dropdownsIds.forEach((drId) => {
       drId.set('required', true);
     });
     this.set('requiredActiveClass', 'active');
   }
 
   makeDropdownsNotRequired() {
-    this.dropdownsIds.forEach(drId => {
+    this.dropdownsIds.forEach((drId) => {
       drId.set('required', false);
     });
     this.set('requiredActiveClass', '');
   }
 
   activateAutoValidation() {
-    this.dropdownsIds.forEach(drId => {
+    this.dropdownsIds.forEach((drId) => {
       drId.set('autoValidate', true);
     });
     this.set('autoValidateActiveClass', 'active');
   }
 
   deactivateAutoValidation() {
-    this.dropdownsIds.forEach(drId => {
+    this.dropdownsIds.forEach((drId) => {
       drId.set('autoValidate', false);
     });
     this.set('autoValidateActiveClass', '');
   }
 
   validateDropdowns() {
-    this.dropdownsIds.forEach(drId => {
+    this.dropdownsIds.forEach((drId) => {
       drId.validate();
     });
   }
 
   makeDropdownsReadonly() {
-    this.dropdownsIds.forEach(drId => {
+    this.dropdownsIds.forEach((drId) => {
       drId.set('readonly', true);
     });
     this.set('readonlyActiveClass', 'active');
   }
 
   removeReadonlyState() {
-    this.dropdownsIds.forEach(drId => {
+    this.dropdownsIds.forEach((drId) => {
       drId.set('readonly', false);
     });
     this.set('readonlyActiveClass', '');
   }
 
   activateInvalidState() {
-    this.dropdownsIds.forEach(drId => {
+    this.dropdownsIds.forEach((drId) => {
       drId.set('invalid', true);
     });
   }
 
   deactivateInvalidState() {
-    this.dropdownsIds.forEach(drId => {
+    this.dropdownsIds.forEach((drId) => {
       drId.set('invalid', false);
     });
   }
 
   disableDropdowns() {
-    this.dropdownsIds.forEach(drId => {
+    this.dropdownsIds.forEach((drId) => {
       drId.set('disabled', true);
     });
     this.set('disabledActiveClass', 'active');
   }
 
   enableDropdowns() {
-    this.dropdownsIds.forEach(drId => {
+    this.dropdownsIds.forEach((drId) => {
       drId.set('disabled', false);
     });
     this.set('disabledActiveClass', '');
