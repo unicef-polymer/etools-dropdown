@@ -18,7 +18,7 @@ jobs:
       - run:
           name: Install node modules
           command: npm ci
-      -run:
+      - run:
           name: Prettier version
           command: prettier -v
       - save_cache:
