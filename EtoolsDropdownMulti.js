@@ -370,8 +370,8 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
   _getValuesFromItems(selectedItems) {
     return selectedItems && selectedItems.length > 0
       ? selectedItems.map((item) => {
-          return item[this.optionValue].toString();
-        })
+        return item[this.optionValue].toString();
+      })
       : null;
   }
 
