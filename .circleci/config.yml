@@ -20,7 +20,7 @@ jobs:
           command: npm ci
       - run:
           name: Prettier version
-          command: prettier -v
+          command: npx prettier -v
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
