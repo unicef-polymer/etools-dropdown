@@ -7,7 +7,7 @@ jobs:
   publish:
     docker:
       # specify the version you desire here
-      - image: circleci/node:12.2
+      - image: cimg/node:12.22.7
 
     working_directory: ~/repo
 
