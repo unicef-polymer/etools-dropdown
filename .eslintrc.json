@@ -9,7 +9,8 @@
     "sourceType": "module"
   },
   "env": {
-    "browser": true
+    "browser": true,
+    "es6": true
   },
   "plugins": ["html", "prettier"],
   "rules": {
@@ -19,12 +20,7 @@
     "new-cap": [
       "error",
       {
-        "capIsNewExceptions": [
-          "Polymer",
-          "ListItemUtils",
-          "MissingOptions",
-          "CommonFunctionality"
-        ],
+        "capIsNewExceptions": ["Polymer", "ListItemUtils", "MissingOptions", "CommonFunctionality"],
         "capIsNewExceptionPattern": "^Etools.."
       }
     ],
