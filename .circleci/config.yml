@@ -21,9 +21,6 @@ jobs:
       - run:
           name: Prettier version
           command: npx prettier -v
-      - run:
-          name: Linting
-          command: npm prepublishOnly
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
