@@ -109,13 +109,13 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
             multi=""
             selected-values="{{selectedValues}}"
             two-lines-label="[[twoLinesLabel]]"
-            option-value="[[optionValue]]"
+                         option-value="[[optionValue]]"
             option-label="[[optionLabel]]"
             request-in-progress="[[requestInProgress]]"
             show-no-search-results-warning="[[showNoSearchResultsWarning]]"
-            show-limit-warning="[[showLimitWarning]]"
+                         show-limit-warning="[[showLimitWarning]]"
             shown-options-limit="[[shownOptionsLimit]]"
-            shown-options-count="[[shownOptionsLimit]]"
+                       shown-options-count="[[shownOptionsLimit]]"
             no-options-available="[[noOptionsAvailable]]"
             capitalize="[[capitalize]]"
             on-show-more="onShowMore"
@@ -243,7 +243,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       this._setAnyNotFoundOptions(this.selectedItems, selectedValues);
       return;
     }
-    const selectedItems = this.options.filter((item) => {
+    var selectedItems = this.options.filter((item) => {
       return selectedValues instanceof Array && item[this.optionValue]
         ? selectedValues.includes(item[this.optionValue].toString())
         : false;
