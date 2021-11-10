@@ -33,7 +33,6 @@
     "@polymer/polymer": "^3.4.1",
     "@unicef-polymer/etools-ajax": "^4.2.0",
     "@unicef-polymer/etools-behaviors": "^3.0.4",
-    "@unicef-polymer/etools-loading": "^4.0.4",
     "lodash-es": ">=4.17.21",
     "lodash": ">=4.17.21",
     "web-animations-js": "^2.3.2"
