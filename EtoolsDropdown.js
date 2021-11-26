@@ -251,7 +251,7 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
     const dataIsLoadedDynamic = typeof this.loadDataMethod === 'function';
     selected = selected || this.selected;
 
-    if (!selected && this._noOptions()) {
+    if (!selected) {
       this.set('selectedItem', null);
       return;
     }
