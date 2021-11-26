@@ -121,7 +121,7 @@ export const CommonFunctionality = (superClass) =>
         showLimitWarning: {
           type: Boolean,
           value: false,
-          computed: '_computeShowLimitWarning(_shownOptionsCount, searchedOptionsLength)'
+          computed: '_computeShowLimitWarning(_shownOptionsCount, searchedOptionsLength, requestInProgress)'
         },
         /** Flag used to show no search result found warning */
         showNoSearchResultsWarning: {
@@ -461,8 +461,8 @@ export const CommonFunctionality = (superClass) =>
       );
     }
 
-    _computeShowLimitWarning(limit, searchedOptionsLength) {
-      if (this._isUndefined(limit) || this._isUndefined(searchedOptionsLength)) {
+    _computeShowLimitWarning(limit, searchedOptionsLength, requestInProgress) {
+      if (this._isUndefined(limit) || this._isUndefined(searchedOptionsLength) || requestInProgress) {
         return false;
       }
       return searchedOptionsLength > limit;
