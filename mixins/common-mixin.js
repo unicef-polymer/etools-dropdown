@@ -143,7 +143,7 @@ export const CommonFunctionality = (superClass) =>
          */
         fitInto: {
           type: Object,
-          observer: '_setFitInto'
+          observer: 'setFitInto'
         },
         /** Margin added if dropdown bottom is too close to the viewport bottom margin */
         viewportEdgeMargin: {
@@ -229,7 +229,6 @@ export const CommonFunctionality = (superClass) =>
       this._onFocusOut = this._onFocusOut.bind(this);
       this.addEventListener('focusout', this._onFocusOut);
 
-      this._setFitInto(this.fitInto);
       this._setPositionTarget();
       this._setDropdownWidth();
       this._disableScrollAction();
@@ -237,6 +236,7 @@ export const CommonFunctionality = (superClass) =>
 
       this._setResetSizeHandler();
       this.elemAttached = true;
+      this.setFitInto();
     }
 
     disconnectedCallback() {
@@ -261,13 +261,22 @@ export const CommonFunctionality = (superClass) =>
       }
     }
 
-    _setFitInto(fitInto) {
+    debounce(fn, time) {
+      let timeout;
+      return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => fn(...args), time);
+      };
+    }
+
+    _setFitInto() {
       const ironDropdown = this._getIronDropdown();
       // fitInto element will not let the dropdown to overlap it's margins
-      if (!fitInto && window.EtoolsEsmmFitIntoEl) {
+      if (!this.fitInto && window.EtoolsEsmmFitIntoEl) {
         ironDropdown.set('fitInto', window.EtoolsEsmmFitIntoEl);
       }
-      if (fitInto === 'etools-dialog') {
+      let calculatedFitInto = null;
+      if (this.fitInto === 'etools-dialog') {
         try {
           let rootNodeHost = this.getRootNode().host;
           let dialogContent = null;
@@ -288,16 +297,19 @@ export const CommonFunctionality = (superClass) =>
               }
             }
           }
-          fitInto = dialogContent;
+          calculatedFitInto = dialogContent;
         } catch (e) {
           this.logWarn('Cannot find etools-dialog content element.', 'etools-dropdown', e);
-          fitInto = null;
+          calculatedFitInto = null;
         }
       }
-      if (fitInto && fitInto instanceof Element) {
-        fitInto.style.position = 'relative';
-        ironDropdown.set('fitInto', fitInto);
+      if (calculatedFitInto && calculatedFitInto instanceof Element) {
+        calculatedFitInto.style.position = 'relative';
+        ironDropdown.set('fitInto', calculatedFitInto);
       }
+    }
+    setFitInto() {
+      this.debounce(this._setFitInto.bind(this), 500)();
     }
 
     /**
