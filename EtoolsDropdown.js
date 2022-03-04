@@ -336,10 +336,6 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
     return valid;
   }
 
-  _selectedValueChanged(e){
-    this.selected = e.detail.value;
-  }
-
   _selectedChanged(selected) {
     // elemAttached condition is to prevent eager validation
     if (this.autoValidate && this.elemAttached) {
@@ -370,5 +366,10 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
 
   _searchChanged(e){
     this.search = e.detail.value;
+  }
+
+  _selectedValueChanged(e){
+    this.selected = e.detail.value;
+    this._selectedAndOptionsChanged(this.selected, this.options);
   }
 }
