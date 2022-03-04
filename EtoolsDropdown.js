@@ -163,10 +163,12 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
         with-backdrop="[[withBackdrop]]"
       >
         <div id="ironDrContent" class="paper-material rounded" elevation="1" slot="dropdown-content">
-          <esmm-searchbox-input id="searchbox" 
-          search="[[search]]" 
-          on-search-changed="_searchChanged"
-          hidden$="[[hideSearch]]">
+          <esmm-searchbox-input
+            id="searchbox"
+            search="[[search]]"
+            on-search-changed="_searchChanged"
+            hidden$="[[hideSearch]]"
+          >
           </esmm-searchbox-input>
           <esmm-options-list
             id="optionsList"
@@ -360,15 +362,15 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
     );
   }
 
-  _invalidInputChanged(e){
+  _invalidInputChanged(e) {
     this.invalid = e.detail.value;
   }
 
-  _searchChanged(e){
+  _searchChanged(e) {
     this.search = e.detail.value;
   }
 
-  _selectedValueChanged(e){
+  _selectedValueChanged(e) {
     this.selected = e.detail.value;
     this._selectedAndOptionsChanged(this.selected, this.options);
   }

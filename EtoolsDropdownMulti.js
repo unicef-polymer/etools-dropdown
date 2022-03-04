@@ -100,10 +100,13 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       >
         <div id="ironDrContent" class="paper-material rounded" elevation="1" slot="dropdown-content">
           <div id="dropdown-controls">
-            <esmm-searchbox-input id="searchbox"   
-            search="[[search]]" 
-            on-search-changed="_searchChanged"
-            hidden$="[[hideSearch]]"></esmm-searchbox-input>
+            <esmm-searchbox-input
+              id="searchbox"
+              search="[[search]]"
+              on-search-changed="_searchChanged"
+              hidden$="[[hideSearch]]"
+            >
+            </esmm-searchbox-input>
           </div>
 
           <esmm-options-list
@@ -200,11 +203,11 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     if (this._isUndefined(selectedValuesOrLength) || this._isUndefined(options)) {
       return;
     }
+
     if (!this.selectedValues) {
       this.selectedValues = [];
     }
 
-  
     // there is no current selection and we have no items already selected
     // return to prevent eager validation below in case we just re-render a dropdown without selection
     if (!this.selectedValues.length && !this.selectedItems.length) {
@@ -413,7 +416,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     return labels.join(' | ');
   }
 
-  _searchChanged(e){
+  _searchChanged(e) {
     this.search = e.detail.value;
   }
 

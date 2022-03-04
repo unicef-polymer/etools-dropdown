@@ -296,7 +296,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
   }
 
   _selectedValuesChanged(e) {
-    if(e.detail.type ==='splice'){
+    if (e.detail.type === 'splice') {
       this.set('selectedValues', e.detail.indexSplices[0].object);
     }
     this.dispatchEvent(

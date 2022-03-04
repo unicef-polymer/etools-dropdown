@@ -61,7 +61,7 @@ class EsmmSearchboxInput extends PolymerElement {
     };
   }
 
-  _valueChanged(e){
+  _valueChanged(e) {
     this.search = e.detail.value;
     this.dispatchEvent(
       new CustomEvent('search-changed', {
