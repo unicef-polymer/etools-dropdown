@@ -37,7 +37,8 @@ class EsmmSearchboxInput extends PolymerElement {
         no-label-float=""
         placeholder="Search"
         type="text"
-        value="{{search}}"
+        value="[[search]]"
+        on-value-changed="_valueChanged"
         auto-focus=""
         tabindex="0"
       >
@@ -58,6 +59,17 @@ class EsmmSearchboxInput extends PolymerElement {
         notify: true
       }
     };
+  }
+
+  _valueChanged(e){
+    this.search = e.detail.value;
+    this.dispatchEvent(
+      new CustomEvent('search-changed', {
+        detail: e.detail,
+        bubbles: true,
+        composed: true
+      })
+    );
   }
 }
 

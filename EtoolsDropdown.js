@@ -106,7 +106,8 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
           id$="[[_inputId]]"
           maxlength$="[[maxlength]]"
           allowed-pattern="[[allowedPattern]]"
-          invalid="{{invalid}}"
+          invalid="[[invalid]]"
+          on-invalid-changed="_invalidInputChanged"
           validator="[[validator]]"
         >
           <input
@@ -162,11 +163,16 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
         with-backdrop="[[withBackdrop]]"
       >
         <div id="ironDrContent" class="paper-material rounded" elevation="1" slot="dropdown-content">
-          <esmm-searchbox-input id="searchbox" search="{{search}}" hidden$="{{hideSearch}}"></esmm-searchbox-input>
+          <esmm-searchbox-input id="searchbox" 
+          search="[[search]]" 
+          on-search-changed="_searchChanged"
+          hidden$="[[hideSearch]]">
+          </esmm-searchbox-input>
           <esmm-options-list
             id="optionsList"
             shown-options="[[shownOptions]]"
-            selected="{{selected}}"
+            selected="[[selected]]"
+            on-selected-changed="_selectedValueChanged"
             two-lines-label="[[twoLinesLabel]]"
             option-value="[[optionValue]]"
             option-label="[[optionLabel]]"
@@ -330,6 +336,10 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
     return valid;
   }
 
+  _selectedValueChanged(e){
+    this.selected = e.detail.value;
+  }
+
   _selectedChanged(selected) {
     // elemAttached condition is to prevent eager validation
     if (this.autoValidate && this.elemAttached) {
@@ -352,5 +362,13 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
         composed: true
       })
     );
+  }
+
+  _invalidInputChanged(e){
+    this.invalid = e.detail.value;
+  }
+
+  _searchChanged(e){
+    this.search = e.detail.value;
   }
 }

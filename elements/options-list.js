@@ -90,7 +90,8 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
         multi="[[multi]]"
         attr-for-selected="internal-id"
         selected="[[selected]]"
-        selected-values="{{selectedValues}}"
+        selected-values="[[selectedValues]]"
+        on-selected-values-changed="_selectedValuesChanged"
       >
         <template is="dom-repeat" items="[[shownOptions]]">
           <paper-icon-item
@@ -292,6 +293,19 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
       return -1;
     }
     return val;
+  }
+
+  _selectedValuesChanged(e) {
+    if(e.detail.type ==='splice'){
+      this.set('selectedValues', e.detail.indexSplices[0].object);
+    }
+    this.dispatchEvent(
+      new CustomEvent('selected-values-changed', {
+        detail: {value: this.selectedValues},
+        bubbles: true,
+        composed: true
+      })
+    );
   }
 }
 

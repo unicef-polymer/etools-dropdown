@@ -100,14 +100,18 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       >
         <div id="ironDrContent" class="paper-material rounded" elevation="1" slot="dropdown-content">
           <div id="dropdown-controls">
-            <esmm-searchbox-input id="searchbox" search="{{search}}" hidden$="{{hideSearch}}"></esmm-searchbox-input>
+            <esmm-searchbox-input id="searchbox"   
+            search="[[search]]" 
+            on-search-changed="_searchChanged"
+            hidden$="[[hideSearch]]"></esmm-searchbox-input>
           </div>
 
           <esmm-options-list
             id="optionsList"
             shown-options="[[shownOptions]]"
             multi=""
-            selected-values="{{selectedValues}}"
+            selected-values="[[selectedValues]]"
+            on-selected-values-changed="_selectedValuesChanged"
             two-lines-label="[[twoLinesLabel]]"
             option-value="[[optionValue]]"
             option-label="[[optionLabel]]"
@@ -125,7 +129,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
             title="[[closeText]]"
             class="close-btn"
             part="esmm-close-btn"
-            hidden$="{{hideClose}}"
+            hidden$="[[hideClose]]"
             on-tap="_closeMenu"
           >
             [[closeText]]
@@ -200,6 +204,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       this.selectedValues = [];
     }
 
+  
     // there is no current selection and we have no items already selected
     // return to prevent eager validation below in case we just re-render a dropdown without selection
     if (!this.selectedValues.length && !this.selectedItems.length) {
@@ -406,5 +411,14 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     });
 
     return labels.join(' | ');
+  }
+
+  _searchChanged(e){
+    this.search = e.detail.value;
+  }
+
+  _selectedValuesChanged(e) {
+    this.selectedValues = e.detail.value;
+    this._selectedValuesOrOptionsChanged(this.selectedValues, this.options);
   }
 }
