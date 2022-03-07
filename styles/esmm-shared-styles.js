@@ -38,7 +38,7 @@ documentContainer.innerHTML = `<custom-style>
         @apply --esmm-external-wrapper;
       }
 
-      :host(:not([readonly])), :host(:not([disabled])) {
+      :host(:not([readonly]):not([disabled])) {
         cursor: var(--esmm-select-cursor);
       }
 
