@@ -309,14 +309,18 @@ customObjOptions = [
 Use `paper-input` (and related elements) style properties and mixins.
 Specific css variables and mixins of this element:
 
-| Custom property                   | Description                               | Default                                                  |
-| --------------------------------- | ----------------------------------------- | -------------------------------------------------------- |
-| `--esmm-select-cursor`            | CSS cursor property                       | `pointer`                                                |
-| `--esmm-icons`                    | Mixin applied to element icons            | `{color: var(--secondary-text-color); cursor: pointer;}` |
-| `--esmm-search-input-label`       | Mixin aplied to the search input label    | `{}`                                                     |
-| `--esmm-list-item-selected-color` | Selected options bg color                 | `#DCDCDC`                                                |
-| `--esmm-multi-placeholder-color`  | Multiselection dropdown placeholder color | `rgba(0, 0, 0, 0.54)`                                    |
-| `--esmm-bg-color`                 | Dropdown background color                 | `#ffffff`                                                |
+| Custom property                               | Description                               | Default                                                  |
+| --------------------------------------------- | ----------------------------------------- | -------------------------------------------------------- |
+| `--esmm-select-cursor`                        | CSS cursor property                       | `pointer`                                                |
+| `--esmm-icons`                                | Mixin applied to element icons            | `{color: var(--secondary-text-color); cursor: pointer;}` |
+| `--esmm-search-input-label`                   | Mixin aplied to the search input label    | `{}`                                                     |
+| `--esmm-list-item-selected-color`             | Selected options bg color                 | `#DCDCDC`                                                |
+| `--esmm-multi-placeholder-color`              | Multiselection dropdown placeholder color | `rgba(0, 0, 0, 0.54)`                                    |
+| `--esmm-bg-color`                             | Dropdown background color                 | `#ffffff`                                                |
+| `etools-dropdown::part(esmm-label-container)` | Mixin for Dropdown label container        | `#ffffff`                                                |
+| `etools-dropdown::part(esmm-label)`           | Mixin for Dropdown label                  | `#ffffff`                                                |
+| `etools-dropdown::part(esmm-label-suffix)`    | Mixin for Dropdown label suffix           | `#ffffff`                                                |
+| `etools-dropdown::part(esmm-dropdown-content)`| Mixin for Dropdown content                | `#ffffff`                                                |
 
 ## Dynamically loading data
 
@@ -395,7 +399,7 @@ $ polymer test
 
 ## Circle CI
 
-Package will be automatically published after tag push. Tag name must correspond SemVer (Semantic Versioning) rules.  
+Package will be automatically published after tag push. Tag name must correspond SemVer (Semantic Versioning) rules.
 Examples:
 
 | Version match      | Result   |
