@@ -133,7 +133,7 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
           Scroll down to reveal more items. <paper-spinner active style="padding-inline-start: 3px;"></paper-spinner>
         </paper-item>
 
-        <paper-item hidden$="[[!noOptionsAvailable]]" class="warning" disabled=""> No options available. </paper-item>
+        <paper-item hidden$="[[!noOptionsAvailable]]" id="noOptions" class="warning" disabled=""> No options available. </paper-item>
       </paper-listbox>
     `;
   }
