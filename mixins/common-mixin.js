@@ -539,15 +539,16 @@ export const CommonFunctionality = (superClass) =>
      * enables the 'Go to item that starts with pressed letter' functionality
      */
     _setFocusTarget() {
-      if (!this.shownOptions || !this.shownOptions.length) {
-        return;
-      }
       setTimeout(() => {
         let focusTarget = null;
-        if (this.hideSearch) {
-          focusTarget = this.$.optionsList.shadowRoot.querySelector('paper-icon-item');
+        if (!this.shownOptions || !this.shownOptions.length) {
+          focusTarget = this.$.optionsList.shadowRoot.querySelector('#noOptions');
         } else {
-          focusTarget = this._getSearchox().shadowRoot.querySelector('#searchInput');
+          if (this.hideSearch) {
+            focusTarget = this.$.optionsList.shadowRoot.querySelector('paper-icon-item');
+          } else {
+            focusTarget = this._getSearchox().shadowRoot.querySelector('#searchInput');
+          }
         }
 
         this._getIronDropdown().focusTarget = focusTarget;
