@@ -151,6 +151,7 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
       </paper-input-container>
       <iron-dropdown
         id="dropdownMenu"
+        part="esmm-dropdownmenu"
         horizontal-align="[[horizontalAlign]]"
         vertical-offset="[[verticalOffset]]"
         dynamic-align="[[!noDynamicAlign]]"
