@@ -1,7 +1,7 @@
 {
   "name": "@unicef-polymer/etools-dropdown",
   "description": "Polymer 3 dropdown element with searchable options, single and multiple selection",
-  "version": "3.7.13",
+  "version": "3.7.14",
   "homepage": "https://github.com/unicef-polymer/etools-dropdown",
   "repository": {
     "type": "git",
