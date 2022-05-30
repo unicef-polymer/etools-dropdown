@@ -79,7 +79,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
         error-message="[[_getErrorMessage(errorMessage, invalid)]]"
         open-menu="[[_openMenu]]"
         on-input-focus="[[onInputFocus]]"
-        exportparts="esmm-label-container, esmm-label, esmm-label-suffix, esmm-dropdownmenu"
+        exportparts="esmm-label-container, esmm-label, esmm-label-suffix"
       >
         <span slot="input-label-suffix">
           <slot name="label-suffix"></slot>
