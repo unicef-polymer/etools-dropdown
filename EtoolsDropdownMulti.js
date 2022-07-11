@@ -88,6 +88,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
 
       <iron-dropdown
         id="dropdownMenu"
+        part="esmm-dropdownmenu"
         horizontal-align="[[horizontalAlign]]"
         vertical-offset="[[verticalOffset]]"
         dynamic-align="[[!noDynamicAlign]]"

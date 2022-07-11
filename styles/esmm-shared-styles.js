@@ -46,6 +46,7 @@ documentContainer.innerHTML = `<custom-style>
         position: var(--esmm-dropdown-menu-position, absolute) !important;
         display: flex;
         flex-direction: column;
+        z-index: var(--esmm-dropdown-menu-z-index, initial);
       }
 
       #ironDrContent {
