@@ -5,7 +5,7 @@ const translations = {
   },
   fr: {
     SEARCH: 'Chercher',
-    CLOSE: 'Close'
+    CLOSE: 'Fermer'
   }
 };
 export default translations;
