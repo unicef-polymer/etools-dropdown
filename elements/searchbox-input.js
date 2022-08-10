@@ -35,7 +35,7 @@ class EsmmSearchboxInput extends PolymerElement {
       <paper-input
         id="searchInput"
         no-label-float=""
-        placeholder="Search"
+        placeholder="[[getTranslation(language, 'SEARCH')]]"
         type="text"
         value="{{search}}"
         auto-focus=""
@@ -56,6 +56,10 @@ class EsmmSearchboxInput extends PolymerElement {
       search: {
         type: String,
         notify: true
+      },
+      language: {
+        type: String,
+        value: 'en'
       }
     };
   }
