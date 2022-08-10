@@ -2,6 +2,7 @@ import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-input/paper-input.js';
+import {getTranslation} from '../utils/translate';
 
 /**
  * @customElement
@@ -62,6 +63,10 @@ class EsmmSearchboxInput extends PolymerElement {
         value: 'en'
       }
     };
+  }
+
+  getTranslation(language) {
+    return getTranslation(language, 'SEARCH');
   }
 }
 
