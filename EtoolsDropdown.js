@@ -170,13 +170,7 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
           slot="dropdown-content"
           part="esmm-dropdown-content"
         >
-          <esmm-searchbox-input
-            id="searchbox"
-            search="[[search]]"
-            on-search-changed="_searchChanged"
-            hidden$="[[hideSearch]]"
-          >
-          </esmm-searchbox-input>
+          <esmm-searchbox-input id="searchbox" search="[[search]]"  on-search-changed="_searchChanged" language="[[language]]" hidden$="{{hideSearch}}"></esmm-searchbox-input>
           <esmm-options-list
             id="optionsList"
             shown-options="[[shownOptions]]"
@@ -237,6 +231,10 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
         type: Boolean,
         reflectToAttribute: true,
         value: false
+      },
+      language: {
+        type: String,
+        value: 'en'
       }
     };
   }
