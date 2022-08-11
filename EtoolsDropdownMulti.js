@@ -420,7 +420,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
   }
 
   _getCloseBtnText(closeText, language) {
-    if (closeText) {
+    if (closeText && closeText != 'Close') {
       return closeText;
     }
     return getTranslation(language, 'CLOSE');
