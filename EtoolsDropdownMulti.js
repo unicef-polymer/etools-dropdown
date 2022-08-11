@@ -102,7 +102,13 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       >
         <div id="ironDrContent" class="paper-material rounded" elevation="1" slot="dropdown-content">
           <div id="dropdown-controls">
-            <esmm-searchbox-input id="searchbox" search="[[search]]" on-search-changed="_searchChanged" language="[[language]]" hidden$="{{hideSearch}}"></esmm-searchbox-input>
+            <esmm-searchbox-input
+              id="searchbox"
+              search="[[search]]"
+              on-search-changed="_searchChanged"
+              language="[[language]]"
+              hidden$="{{hideSearch}}"
+            ></esmm-searchbox-input>
           </div>
 
           <esmm-options-list
@@ -414,5 +420,12 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     });
 
     return labels.join(' | ');
+  }
+
+  _getCloseBtnText(closeText, language) {
+    if (closeText && closeText.toLowerCase() != 'close') {
+      return closeText;
+    }
+    return getTranslation(language, 'CLOSE');
   }
 }
