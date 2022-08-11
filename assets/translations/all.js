@@ -1,11 +1,11 @@
 const translations = {
   en: {
     SEARCH: 'Search',
-    CLOSE: 'Close'
+    CLOSE: 'CLOSE'
   },
   fr: {
     SEARCH: 'Chercher',
-    CLOSE: 'Fermer'
+    CLOSE: 'FERMER'
   }
 };
 export default translations;
