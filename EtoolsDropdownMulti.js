@@ -428,4 +428,13 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     }
     return getTranslation(language, 'CLOSE');
   }
+
+  _searchChanged(e) {
+    this.search = e.detail.value;
+  }
+
+  _selectedValuesChanged(e) {
+    this.selectedValues = e.detail.value;
+    this._selectedValuesOrOptionsChanged(this.selectedValues, this.options);
+  }
 }
