@@ -122,19 +122,21 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
         </template>
 
         <paper-item hidden$="[[!showNoSearchResultsWarning]]" class="warning" disabled="">
-          No results found. Try other keywords.
+          [[getTranslation(language, 'No_results_found_Try_other_keywords')]]
         </paper-item>
 
         <paper-item hidden$="[[!requestInProgress]]" class="warning" disabled="">
-          Request in progress. <paper-spinner active style="padding-inline-start: 3px;"></paper-spinner>
+          [[getTranslation(language, 'Request_in_progress')]]
+          <paper-spinner active style="padding-inline-start: 3px;"></paper-spinner>
         </paper-item>
 
         <paper-item id="infinite-scroll-trigger" hidden$="[[!showLimitWarning]]" class="warning" disabled="">
-          Scroll down to reveal more items. <paper-spinner active style="padding-inline-start: 3px;"></paper-spinner>
+          [[getTranslation(language, 'Scroll_down_to_reveal_more_items')]]
+          <paper-spinner active style="padding-inline-start: 3px;"></paper-spinner>
         </paper-item>
 
         <paper-item hidden$="[[!noOptionsAvailable]]" id="noOptions" class="warning" disabled="">
-          No options available.
+          [[getTranslation(language, 'No_options_available')]]
         </paper-item>
       </paper-listbox>
     `;
@@ -181,7 +183,11 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
       /** Flag to show a no options avaliable warning */
       noOptionsAvailable: Boolean,
 
-      shownOptionsLimit: Number
+      shownOptionsLimit: Number,
+      language: {
+        type: String,
+        value: 'en'
+      }
     };
   }
 
