@@ -195,6 +195,7 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
             capitalize="[[capitalize]]"
             on-close-etools-dropdown="_closeMenu"
             on-show-more="onShowMore"
+            language="[[language]]"
           ></esmm-options-list>
         </div>
       </iron-dropdown>

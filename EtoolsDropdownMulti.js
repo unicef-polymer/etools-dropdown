@@ -128,6 +128,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
             no-options-available="[[noOptionsAvailable]]"
             capitalize="[[capitalize]]"
             on-show-more="onShowMore"
+            language="[[language]]"
           >
           </esmm-options-list>
           <span
