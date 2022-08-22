@@ -11,6 +11,7 @@ import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import {ListItemUtils} from '../mixins/list-item-utils-mixin.js';
 import '@polymer/paper-spinner/paper-spinner';
+import {getTranslation} from '../utils/translate';
 
 /**
  * @customElement
@@ -300,6 +301,9 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
       return -1;
     }
     return val;
+  }
+  getTranslation(lang, key) {
+    return getTranslation(lang, key);
   }
 }
 
