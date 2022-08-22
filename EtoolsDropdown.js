@@ -151,6 +151,7 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
       </paper-input-container>
       <iron-dropdown
         id="dropdownMenu"
+        part="esmm-dropdownmenu"
         horizontal-align="[[horizontalAlign]]"
         vertical-offset="[[verticalOffset]]"
         dynamic-align="[[!noDynamicAlign]]"
@@ -161,8 +162,19 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
         allow-click-through
         with-backdrop="[[withBackdrop]]"
       >
-        <div id="ironDrContent" class="paper-material rounded" elevation="1" slot="dropdown-content">
-          <esmm-searchbox-input id="searchbox" search="{{search}}" hidden$="{{hideSearch}}"></esmm-searchbox-input>
+        <div
+          id="ironDrContent"
+          class="paper-material rounded"
+          elevation="1"
+          slot="dropdown-content"
+          part="esmm-dropdown-content"
+        >
+          <esmm-searchbox-input
+            id="searchbox"
+            search="{{search}}"
+            hidden$="{{hideSearch}}"
+            language="[[language]]"
+          ></esmm-searchbox-input>
           <esmm-options-list
             id="optionsList"
             shown-options="[[shownOptions]]"
@@ -180,6 +192,7 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
             capitalize="[[capitalize]]"
             on-close-etools-dropdown="_closeMenu"
             on-show-more="onShowMore"
+            language="[[language]]"
           ></esmm-options-list>
         </div>
       </iron-dropdown>
@@ -222,6 +235,10 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
         type: Boolean,
         reflectToAttribute: true,
         value: false
+      },
+      language: {
+        type: String,
+        value: 'en'
       }
     };
   }

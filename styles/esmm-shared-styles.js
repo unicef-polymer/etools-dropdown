@@ -46,6 +46,7 @@ documentContainer.innerHTML = `<custom-style>
         position: var(--esmm-dropdown-menu-position, absolute) !important;
         display: flex;
         flex-direction: column;
+        z-index: var(--esmm-dropdown-menu-z-index, initial);
       }
 
       #ironDrContent {
@@ -53,7 +54,7 @@ documentContainer.innerHTML = `<custom-style>
         flex-grow: 1;
         display: flex;
         flex-direction: column;
-        min-height: 0;
+        min-height: 48px;
       }
 
       #optionsList {

@@ -14,6 +14,7 @@ import './elements/selected-options.js';
 import './elements/searchbox-input.js';
 import './elements/options-list.js';
 import './styles/esmm-shared-styles.js';
+import {getTranslation} from './utils/translate.js';
 
 /**
  * @polymer
@@ -88,6 +89,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
 
       <iron-dropdown
         id="dropdownMenu"
+        part="esmm-dropdownmenu"
         horizontal-align="[[horizontalAlign]]"
         vertical-offset="[[verticalOffset]]"
         dynamic-align="[[!noDynamicAlign]]"
@@ -100,7 +102,12 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       >
         <div id="ironDrContent" class="paper-material rounded" elevation="1" slot="dropdown-content">
           <div id="dropdown-controls">
-            <esmm-searchbox-input id="searchbox" search="{{search}}" hidden$="{{hideSearch}}"></esmm-searchbox-input>
+            <esmm-searchbox-input
+              id="searchbox"
+              search="{{search}}"
+              hidden$="{{hideSearch}}"
+              language="[[language]]"
+            ></esmm-searchbox-input>
           </div>
 
           <esmm-options-list
@@ -119,6 +126,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
             no-options-available="[[noOptionsAvailable]]"
             capitalize="[[capitalize]]"
             on-show-more="onShowMore"
+            language="[[language]]"
           >
           </esmm-options-list>
           <span
@@ -128,7 +136,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
             hidden$="{{hideClose}}"
             on-tap="_closeMenu"
           >
-            [[closeText]]
+            [[_getCloseBtnText(closeText, language)]]
           </span>
         </div>
       </iron-dropdown>
@@ -172,6 +180,10 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
         type: String,
         reflectToAttribute: true,
         value: 'CLOSE'
+      },
+      language: {
+        type: String,
+        value: 'en'
       }
     };
   }
@@ -406,5 +418,12 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     });
 
     return labels.join(' | ');
+  }
+
+  _getCloseBtnText(closeText, language) {
+    if (closeText && closeText.toLowerCase() != 'close') {
+      return closeText;
+    }
+    return getTranslation(language, 'CLOSE');
   }
 }
