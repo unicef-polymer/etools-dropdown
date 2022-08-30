@@ -259,8 +259,7 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
   }
 
   connectedCallback() {
-    // generate 6 x 7 table
-    super.connectedCallback(); // for 2.0 class-based elements only
+    super.connectedCallback();
 
     document.addEventListener('language-changed', this.handleLanguageChange);
   }
