@@ -53,6 +53,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
           color: var(--primary-color);
           font-weight: 500;
           border-top: solid 1px lightgray;
+          text-transform: uppercase;
         }
       </style>
 
@@ -143,6 +144,18 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     `;
   }
 
+  constructor() {
+    super();
+    if (!this.language) {
+      this.language = window.localStorage.defaultLanguage || 'en';
+    }
+    this.handleLanguageChange = this.handleLanguageChange.bind(this);
+  }
+
+  handleLanguageChange(e) {
+    this.language = e.detail.language;
+  }
+
   static get is() {
     return 'etools-dropdown-multi';
   }
@@ -199,9 +212,15 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
 
   connectedCallback() {
     super.connectedCallback();
+    document.addEventListener('language-changed', this.handleLanguageChange);
     this.addEventListener('remove-selected-item', this._removeSelectedItem.bind(this));
     this._openMenu = this._openMenu.bind(this);
     this.onInputFocus = this.onInputFocus.bind(this);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener('language-changed', this.handleLanguageChange);
   }
 
   _selectedValuesOrOptionsChanged(selectedValuesOrLength, options) {

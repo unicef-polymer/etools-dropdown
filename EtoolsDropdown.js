@@ -237,14 +237,37 @@ export class EtoolsDropdown extends DropdownRequiredMixins {
         value: false
       },
       language: {
-        type: String,
-        value: 'en'
+        type: String
       }
     };
   }
 
+  constructor() {
+    super();
+    if (!this.language) {
+      this.language = window.localStorage.defaultLanguage || 'en';
+    }
+    this.handleLanguageChange = this.handleLanguageChange.bind(this);
+  }
+
   static get observers() {
     return ['_selectedAndOptionsChanged(selected, options)', '_notFoundOptionAndUrlChanged(notFoundOption, url)'];
+  }
+
+  handleLanguageChange(e) {
+    this.language = e.detail.language;
+  }
+
+  connectedCallback() {
+    // generate 6 x 7 table
+    super.connectedCallback(); // for 2.0 class-based elements only
+
+    document.addEventListener('language-changed', this.handleLanguageChange);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener('language-changed', this.handleLanguageChange);
   }
 
   _selectedAndOptionsChanged(selected, options) {
