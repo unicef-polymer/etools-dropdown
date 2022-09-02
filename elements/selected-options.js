@@ -16,7 +16,7 @@ import {ListItemUtils} from '../mixins/list-item-utils-mixin.js';
  */
 class EsmmSelectedOptions extends ListItemUtils(PolymerElement) {
   static get template() {
-    // language=HTML //TODO
+    // language=HTML
     return html`
       <style>
         *[hidden] {
