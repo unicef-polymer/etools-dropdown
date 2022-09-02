@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {LitElement, html} from 'lit-element';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import {TestData} from '../mixins/test-data-mixin.js';
 import './demo-actions.js';
@@ -10,8 +10,8 @@ import '../../etools-dropdown-multi.js';
  * @polymer
  * @appliesMixin EsmmDemoHelpers.TestData
  */
-class EsmmMultiSelectionDemo extends TestData(PolymerElement) {
-  static get template() {
+class EsmmMultiSelectionDemo extends TestData(LitElement) {
+  render() {
     // language=HTML
     return html`
       <style>
@@ -29,7 +29,11 @@ class EsmmMultiSelectionDemo extends TestData(PolymerElement) {
           id="dropDown1"
           class="demo-field"
           label="Multi selection"
-          options="[[simpleOptions]]"
+          .options="${this.simpleOptions}"
+          no-dynamic-align
+          hide-search
+          horizontal-align="left"
+          vertical-offset="300"
         ></etools-dropdown-multi>
       </div>
       <div>
@@ -37,8 +41,9 @@ class EsmmMultiSelectionDemo extends TestData(PolymerElement) {
           id="dropDown2"
           class="demo-field"
           label="Multi selection, multi-lines options"
-          options="[[twoLineOptions]]"
-          two-lines-label=""
+          .options="${this.twoLineOptions}"
+          two-lines-label
+          no-dynamic-align
         ></etools-dropdown-multi>
       </div>
 
@@ -54,9 +59,11 @@ class EsmmMultiSelectionDemo extends TestData(PolymerElement) {
     return {};
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.$.demoActions.set('dropdownsIds', [this.$.dropDown1, this.$.dropDown2]);
+  firstUpdate() {
+    this.shadowRoot.querySelector('#demoActions').dropdownsIds = [
+      this.shadowRoot.querySelector('#dropDown1'), 
+      this.shadowRoot.querySelector('#dropDown2')
+    ];
   }
 }
 

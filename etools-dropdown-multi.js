@@ -1,3 +1,3 @@
-import {EtoolsDropdownMulti} from './EtoolsDropdownMulti.js';
+import {EtoolsDropdownMulti} from './src/etools-dropdown-multi';
 
-window.customElements.define(EtoolsDropdownMulti.is, EtoolsDropdownMulti);
+export default EtoolsDropdownMulti;

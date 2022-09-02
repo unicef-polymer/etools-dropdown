@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {LitElement, html} from 'lit-element';
 import '@polymer/paper-button/paper-button.js';
 
 /* eslint-disable */
@@ -6,8 +6,8 @@ import '@polymer/paper-button/paper-button.js';
  * @polymer
  * @customElement
  */
-class EsmmDemoActions extends PolymerElement {
-  static get template() {
+class EsmmDemoActions extends LitElement {
+  render() {
     // language=HTML
     return html`
       <style>
@@ -34,31 +34,31 @@ class EsmmDemoActions extends PolymerElement {
       </style>
 
       <div>
-        <paper-button raised="" on-tap="validateDropdowns">Validate</paper-button>
-        <paper-button raised="" class$="[[autoValidateActiveClass]]" on-tap="activateAutoValidation"
+        <paper-button raised @tap="${this.validateDropdowns}">Validate</paper-button>
+        <paper-button raised class="${this.autoValidateActiveClass}" @tap="${this.activateAutoValidation}"
           >Enable auto validation
         </paper-button>
-        <paper-button raised="" on-tap="deactivateAutoValidation">Disable auto validation</paper-button>
+        <paper-button raised @tap="${this.deactivateAutoValidation}">Disable auto validation</paper-button>
       </div>
       <div>
-        <paper-button raised="" on-tap="makeDropdownsRequired" class$="[[requiredActiveClass]]">
+        <paper-button raised @tap="${this.makeDropdownsRequired}" class="${this.requiredActiveClass}">
           Make dropdowns required
         </paper-button>
-        <paper-button raised="" on-tap="makeDropdownsNotRequired">Make dropdowns NOT required</paper-button>
+        <paper-button raised @tap="${this.makeDropdownsNotRequired}">Make dropdowns NOT required</paper-button>
       </div>
       <div>
-        <paper-button raised="" on-tap="makeDropdownsReadonly" class$="[[readonlyActiveClass]]"
+        <paper-button raised @tap="${this.makeDropdownsReadonly}" class="${this.readonlyActiveClass}"
           >Make dropdowns readonly
         </paper-button>
-        <paper-button raised="" on-tap="removeReadonlyState">Make dropdowns editable</paper-button>
+        <paper-button raised @tap="${this.removeReadonlyState}">Make dropdowns editable</paper-button>
       </div>
       <div>
-        <paper-button raised="" on-tap="activateInvalidState">Activate invalid state</paper-button>
-        <paper-button raised="" on-tap="deactivateInvalidState">Hide invalid state</paper-button>
+        <paper-button raised @tap="${this.activateInvalidState}">Activate invalid state</paper-button>
+        <paper-button raised @tap="${this.deactivateInvalidState}">Hide invalid state</paper-button>
       </div>
       <div>
-        <paper-button raised="" on-tap="disableDropdowns" class$="[[disabledActiveClass]]">Disable</paper-button>
-        <paper-button raised="" on-tap="enableDropdowns">Enable</paper-button>
+        <paper-button raised @tap="${this.disableDropdowns}" class="${this.disabledActiveClass}">Disable</paper-button>
+        <paper-button raised @tap="${this.enableDropdowns}">Enable</paper-button>
       </div>
     `;
   }
@@ -85,30 +85,30 @@ class EsmmDemoActions extends PolymerElement {
 
   makeDropdownsRequired() {
     this.dropdownsIds.forEach((drId) => {
-      drId.set('required', true);
+      drId.required = true;
     });
-    this.set('requiredActiveClass', 'active');
+    this.requiredActiveClass = 'active';
   }
 
   makeDropdownsNotRequired() {
     this.dropdownsIds.forEach((drId) => {
-      drId.set('required', false);
+      drId.required = false;
     });
-    this.set('requiredActiveClass', '');
+    this.requiredActiveClass = '';
   }
 
   activateAutoValidation() {
     this.dropdownsIds.forEach((drId) => {
-      drId.set('autoValidate', true);
+      drId.autoValidate = true;
     });
-    this.set('autoValidateActiveClass', 'active');
+    this.autoValidateActiveClass = 'active';
   }
 
   deactivateAutoValidation() {
     this.dropdownsIds.forEach((drId) => {
-      drId.set('autoValidate', false);
+      drId.autoValidate = false;
     });
-    this.set('autoValidateActiveClass', '');
+    this.autoValidateActiveClass = '';
   }
 
   validateDropdowns() {
@@ -119,43 +119,43 @@ class EsmmDemoActions extends PolymerElement {
 
   makeDropdownsReadonly() {
     this.dropdownsIds.forEach((drId) => {
-      drId.set('readonly', true);
+      drId.readonly = true;
     });
-    this.set('readonlyActiveClass', 'active');
+    this.readonlyActiveClass = 'active';
   }
 
   removeReadonlyState() {
     this.dropdownsIds.forEach((drId) => {
-      drId.set('readonly', false);
+      drId.readonly = false;
     });
-    this.set('readonlyActiveClass', '');
+    this.readonlyActiveClass = '';
   }
 
   activateInvalidState() {
     this.dropdownsIds.forEach((drId) => {
-      drId.set('invalid', true);
+      drId.invalid = true;
     });
   }
 
   deactivateInvalidState() {
     this.dropdownsIds.forEach((drId) => {
-      drId.set('invalid', false);
+      drId.invalid = false;
     });
   }
 
   disableDropdowns() {
     this.dropdownsIds.forEach((drId) => {
-      drId.set('disabled', true);
+      drId.disabled = true;
     });
-    this.set('disabledActiveClass', 'active');
+    this.disabledActiveClass = 'active';
   }
 
   enableDropdowns() {
     this.dropdownsIds.forEach((drId) => {
-      drId.set('disabled', false);
+      drId.disabled = false;
     });
-    this.set('disabledActiveClass', '');
+    this.disabledActiveClass = '';
   }
 }
 
-window.customElements.define(EsmmDemoActions.is, EsmmDemoActions);
+customElements.define(EsmmDemoActions.is, EsmmDemoActions);
