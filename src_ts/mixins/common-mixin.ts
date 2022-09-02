@@ -1,7 +1,7 @@
-import { property, LitElement } from 'lit-element';
-import { IronDropdownElement } from '@polymer/iron-dropdown';
-import { ListItemUtils } from './list-item-utils-mixin';
-import { MixinTarget } from '../utils/types';
+import {property, LitElement} from 'lit-element';
+import {IronDropdownElement} from '@polymer/iron-dropdown';
+import {ListItemUtilsMixin} from './list-item-utils-mixin';
+import {MixinTarget} from '../utils/types';
 /*
  * Common functionality for single selection and multiple selection dropdown
  * @polymer
@@ -10,142 +10,140 @@ import { MixinTarget } from '../utils/types';
  * @appliesMixin EsmmMixins.ListItemUtils
  */
 
-export function CommonFunctionality<T extends MixinTarget<LitElement>>(superClass: T) {
-  class CommonFunctionalityClass extends ListItemUtils(superClass) {
-
-
+export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(superClass: T) {
+  class CommonFunctionalityClass extends ListItemUtilsMixin(superClass) {
     /** Dropdown label */
-    @property({ type: String, attribute: 'label' })
+    @property({type: String, attribute: 'label'})
     label: string | undefined;
 
-    @property({ type: Boolean, attribute: 'no-label-float' })
+    @property({type: Boolean, attribute: 'no-label-float'})
     noLabelFloat: boolean | undefined;
 
-    @property({ type: Boolean, attribute: 'always-float-label' })
+    @property({type: Boolean, attribute: 'always-float-label'})
     alwaysFloatLabel = true;
 
-    @property({ type: String, attribute: 'placeholder' })
+    @property({type: String, attribute: 'placeholder'})
     placeholder = '—';
 
-    @property({ type: Boolean, attribute: 'required', reflect: true })
+    @property({type: Boolean, attribute: 'required', reflect: true})
     required: boolean | undefined;
 
-    @property({ type: String, attribute: 'error-message' })
+    @property({type: String, attribute: 'error-message'})
     errorMessage = 'This field is required';
 
-    @property({ type: Boolean, attribute: 'auto-validate' })
+    @property({type: Boolean, attribute: 'auto-validate'})
     autoValidate: boolean | undefined;
 
-    @property({ type: Boolean, attribute: 'disabled', reflect: true })
+    @property({type: Boolean, attribute: 'disabled', reflect: true})
     disabled = false;
 
-    @property({ type: Boolean, attribute: 'readonly', reflect: true })
+    @property({type: Boolean, attribute: 'readonly', reflect: true})
     readonly = false;
 
-    @property({ type: Boolean, attribute: 'invalid', reflect: true })
+    @property({type: Boolean, attribute: 'invalid', reflect: true})
     invalid = false;
 
     /** Makes the dropdown to show top or bottom (or left - right) where it will fit better */
-    @property({ type: Boolean, attribute: 'no-dynamic-align' })
+    @property({type: Boolean, attribute: 'no-dynamic-align'})
     noDynamicAlign = false;
 
-    @property({ type: String, attribute: 'search' })
-    search: string = '';
+    @property({type: String, attribute: 'search'})
+    search = '';
 
     /** Array of objects, dropdowns options used to compute shownOptions */
-    @property({ type: Array })
+    @property({type: Array})
     options: any[] = [];
 
     /** Options seen by user */
-    @property({ type: Number })
-    searchedOptionsLength: number = 0;
+    @property({type: Number})
+    searchedOptionsLength = 0;
 
     /**
      * Flag to show `None` option (first dropdown option)
      * Used to reset single selection dropdown selected value
      */
-    @property({ type: Boolean, attribute: 'enable-none-option' })
+    @property({type: Boolean, attribute: 'enable-none-option'})
     enableNoneOption = false;
 
-    @property({ type: Boolean, attribute: 'hide-search', reflect: true })
+    @property({type: Boolean, attribute: 'hide-search', reflect: true})
     hideSearch = false;
 
-    @property({ type: Boolean, attribute: 'hide-close', reflect: true })
+    @property({type: Boolean, attribute: 'hide-close', reflect: true})
     hideClose = false;
 
-    @property({ type: Boolean })
+    @property({type: Boolean})
     focusedAtLeastOnce = false;
 
-    @property({ type: Number })
+    @property({type: Number})
     /** Limit displayed options */
     shownOptionsLimit = 30;
 
     /** The current number of shown options, it increseas by shownOptionsLimit when users scrolls down */
-    @property({ type: Number })
-    _shownOptionsCount: number = 0;
+    @property({type: Number})
+    _shownOptionsCount = 0;
 
     /** Stop autofocus from paper-dialog */
-    @property({ type: Boolean, attribute: 'disable-on-focus-handling', reflect: true }) // value: 
+    @property({type: Boolean, attribute: 'disable-on-focus-handling', reflect: true}) // value:
     disableOnFocusHandling: boolean | undefined;
     /**
      * Element that will prevent dropdown to overflow outside it's margins
      * @type HTMLElement
      */
-    @property({ type: Object }) // observer: 'setFitInto'
+    @property({type: Object}) // observer: 'setFitInto'
     fitInto: any;
 
     /** Margin added if dropdown bottom is too close to the viewport bottom margin */
-    @property({ type: Number, attribute: 'viewport-edge-margin' })
+    @property({type: Number, attribute: 'viewport-edge-margin'})
     viewportEdgeMargin = 20;
 
     /** Vertical offset for dropdownMenu */
-    @property({ type: Number, attribute: 'vertical-offset' })
-    verticalOffset: number = 0;
+    @property({type: Number, attribute: 'vertical-offset'})
+    verticalOffset = 0;
     /**
      * By default the search string is reset when the dropdown closes
      * This flag allows the search value to persist after the dropdown is closed
      */
-    @property({ type: Boolean, attribute: 'preserve-search-on-close' })
+    @property({type: Boolean, attribute: 'preserve-search-on-close'})
     preserveSearchOnClose = false;
     /** Flag to trigger `etools-selected-items-changed` event */
-    @property({ type: Boolean, attribute: 'trigger-value-change-event' })
+    @property({type: Boolean, attribute: 'trigger-value-change-event'})
     triggerValueChangeEvent = false;
-    @property({ type: Boolean })
+    @property({type: Boolean})
     elemAttached = false;
-    @property({ type: Boolean, attribute: 'auto-width' })
+    @property({type: Boolean, attribute: 'auto-width'})
     autoWidth = false;
-    @property({ type: String, attribute: 'max-width' })
+    @property({type: String, attribute: 'max-width'})
     maxWidth = '';
-    @property({ type: String, attribute: 'min-width'})
+    @property({type: String, attribute: 'min-width'})
     minWidth = '';
-    @property({ type: String, attribute: 'horizontal-align' })
+    @property({type: String, attribute: 'horizontal-align'})
     horizontalAlign = 'right';
     /* withBackdrop property was added in order to trap the focus within the light DOM of the iron-dropdown.
       Setting this to true solves a bug in PRP where when you have the etools-dropdown in a paper-dialog,
       and you click on the opened drodpdown's scroll,  the dropdown closes.
   **/
-    @property({ type: Boolean, attribute: 'with-backdrop', reflect: true })
+    @property({type: Boolean, attribute: 'with-backdrop', reflect: true})
     withBackdrop = false;
     // Function, if defined will be called to set options dynamically (ex: after making calls on the BE)
-    @property({ type: String, attribute: 'load-data-method' })
+    @property({type: String, attribute: 'load-data-method'})
     loadDataMethod: string | undefined;
     // below properties are used only if loadDataMethod is set
-    @property({ type: Number })
+    @property({type: Number})
     page = 1;
 
-    @property({ type: Number })
+    @property({type: Number})
     prevPage = 1;
 
-    @property({ type: String })
+    @property({type: String})
     prevSearch: string | undefined;
 
-    @property({ type: Boolean })
+    @property({type: Boolean})
     searchChanged = false;
 
-    @property({ type: Boolean })
+    @property({type: Boolean})
     pageChanged = false;
 
-    @property({ type: Boolean })
+    @property({type: Boolean})
     requestInProgress = false;
 
     // @ts-ignore
@@ -352,7 +350,7 @@ export function CommonFunctionality<T extends MixinTarget<LitElement>>(superClas
       }
 
       if (this.enableNoneOption) {
-        const emptyOption: any = { cssClass: 'esmm-none-option' };
+        const emptyOption: any = {cssClass: 'esmm-none-option'};
         emptyOption[this.optionValue] = null;
         emptyOption[this.optionLabel] = this.noneOptionLabel;
         shownOptions.unshift(emptyOption);
@@ -421,8 +419,12 @@ export function CommonFunctionality<T extends MixinTarget<LitElement>>(superClas
     }
 
     /** Flag to show the limit of options shown in dropdown */
-    get showLimitWarning(){
-      if (this._isUndefined(this._shownOptionsCount) || this._isUndefined(this.searchedOptionsLength) || this.requestInProgress) {
+    get showLimitWarning() {
+      if (
+        this._isUndefined(this._shownOptionsCount) ||
+        this._isUndefined(this.searchedOptionsLength) ||
+        this.requestInProgress
+      ) {
         return false;
       }
       return this.searchedOptionsLength > this._shownOptionsCount;
@@ -432,8 +434,8 @@ export function CommonFunctionality<T extends MixinTarget<LitElement>>(superClas
       return shownOptionsLimit;
     }
 
-     /** Flag used to show no search result found warning */
-    get showNoSearchResultsWarning(){
+    /** Flag used to show no search result found warning */
+    get showNoSearchResultsWarning() {
       if (this.noOptionsAvailable) {
         return false;
       }
@@ -508,29 +510,29 @@ export function CommonFunctionality<T extends MixinTarget<LitElement>>(superClas
       // set position target to align dropdown content properly
       const ironDropdown = this._getIronDropdown();
       ironDropdown.positionTarget = this._getPaperInputContainer();
-  }
+    }
 
     _getIronDropdown() {
-      return this.shadowRoot?.querySelector("#dropdownMenu")! as any as IronDropdownElement;
+      return this.shadowRoot?.querySelector('#dropdownMenu')! as any as IronDropdownElement;
     }
 
     _getIronDropdownContent() {
-      return this.shadowRoot?.querySelector("#ironDrContent")! as any;
+      return this.shadowRoot?.querySelector('#ironDrContent')! as any;
     }
 
     _getOptionsList() {
-      return this.shadowRoot?.querySelector("#optionsList")! as any;
+      return this.shadowRoot?.querySelector('#optionsList')! as any;
     }
 
     _getSearchox() {
-      return this.shadowRoot?.querySelector("#searchbox")! as any;
+      return this.shadowRoot?.querySelector('#searchbox')! as any;
     }
 
     _getPaperInputContainer() {
       if (this.tagName === 'ETOOLS-DROPDOWN') {
-        return this.shadowRoot?.querySelector("#main")! as any;
+        return this.shadowRoot?.querySelector('#main')! as any;
       }
-      return this.shadowRoot?.querySelector("#main")?.shadowRoot?.querySelector("#container")! as any;
+      return this.shadowRoot?.querySelector('#main')?.shadowRoot?.querySelector('#container')! as any;
     }
 
     _openMenu(_e: Event) {

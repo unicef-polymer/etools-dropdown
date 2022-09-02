@@ -1,7 +1,7 @@
 import { LitElement } from 'lit-element';
 import { IronDropdownElement } from '@polymer/iron-dropdown';
 import { MixinTarget } from '../utils/types';
-export declare function CommonFunctionality<T extends MixinTarget<LitElement>>(superClass: T): {
+export declare function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(superClass: T): {
     new (...args: any[]): {
         /** Dropdown label */
         label: string | undefined;

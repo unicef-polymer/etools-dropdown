@@ -1,7 +1,7 @@
 import {LitElement, html, property, customElement} from 'lit-element';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
-import {CommonFunctionality} from './mixins/common-mixin.js';
-import {MissingOptions} from './mixins/missing-options-mixin.js';
+import {CommonFunctionalityMixin} from './mixins/common-mixin.js';
+import {MissingOptionsMixin} from './mixins/missing-options-mixin.js';
 import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-dropdown/iron-dropdown.js';
@@ -23,7 +23,7 @@ import {getTranslation} from './utils/translate.js';
  * @demo demo/index-multi.html
  */
 @customElement('etools-dropdown-multi')
-export class EtoolsDropdownMulti extends CommonFunctionality(MissingOptions(LitElement)) {
+export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptionsMixin(LitElement)) {
   /** Dropdown selected values */
   @property({type: Array}) // notify: true
   selectedValues: any[] = [];
@@ -41,14 +41,14 @@ export class EtoolsDropdownMulti extends CommonFunctionality(MissingOptions(LitE
 
   /** Element title attribute */
   @property({type: String, attribute: 'title', reflect: true})
-  title: string = '';
+  title = '';
 
   @property({type: String, attribute: 'close-text', reflect: true})
-  closeText: string = 'CLOSE';
+  closeText = 'CLOSE';
 
   @property({type: String})
-  language: string = 'en';
-  
+  language = 'en';
+
   private _debouncer: Debouncer | null = null;
 
   render() {
@@ -111,7 +111,13 @@ export class EtoolsDropdownMulti extends CommonFunctionality(MissingOptions(LitE
         allow-click-through
         ?with-backdrop="${this.withBackdrop}"
       >
-        <div id="ironDrContent" class="paper-material rounded" elevation="1" slot="dropdown-content" part="esmm-dropdown-content">
+        <div
+          id="ironDrContent"
+          class="paper-material rounded"
+          elevation="1"
+          slot="dropdown-content"
+          part="esmm-dropdown-content"
+        >
           <div id="dropdown-controls">
             <esmm-searchbox-input
               id="searchbox"
@@ -191,7 +197,6 @@ export class EtoolsDropdownMulti extends CommonFunctionality(MissingOptions(LitE
       return;
     }
 
-  
     // when using dynamic data load, in case we load options data, must preserve selected item
     if (typeof this.loadDataMethod === 'function' && this.selectedItems.length) {
       const selectedItemsMissingInOptions = this.selectedItems.filter(
@@ -327,7 +332,7 @@ export class EtoolsDropdownMulti extends CommonFunctionality(MissingOptions(LitE
     const notFoundValues =
       notFoundSelectedValues instanceof Array ? notFoundSelectedValues.join(', ') : notFoundSelectedValues;
     warnMsg += notFoundValues + " not found in dropdown's options!";
-    console.log('etools-esmm ' + this.label + ': ' +warnMsg);
+    console.log('etools-esmm ' + this.label + ': ' + warnMsg);
   }
 
   _onDropdownClose() {

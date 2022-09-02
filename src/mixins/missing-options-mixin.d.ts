@@ -1,6 +1,6 @@
 import { LitElement } from 'lit-element';
 import { MixinTarget } from '../utils/types';
-export declare const MissingOptions: <T extends MixinTarget<LitElement>>(superClass: T) => {
+export declare const MissingOptionsMixin: <T extends MixinTarget<LitElement>>(superClass: T) => {
     new (...args: any[]): {
         url: string;
         ajaxParams: any;
@@ -72,11 +72,7 @@ export declare const MissingOptions: <T extends MixinTarget<LitElement>>(superCl
         verticalOffset: number;
         preserveSearchOnClose: boolean;
         triggerValueChangeEvent: boolean;
-        elemAttached: boolean; /**
-         * Prepare new received options to add them to the current options list
-         * @param receivedOptions
-         * @returns {*}
-         */
+        elemAttached: boolean;
         autoWidth: boolean;
         maxWidth: string;
         minWidth: string;

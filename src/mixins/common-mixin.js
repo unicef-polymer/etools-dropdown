@@ -5,7 +5,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import { property } from 'lit-element';
-import { ListItemUtils } from './list-item-utils-mixin';
+import { ListItemUtilsMixin } from './list-item-utils-mixin';
 /*
  * Common functionality for single selection and multiple selection dropdown
  * @polymer
@@ -13,8 +13,8 @@ import { ListItemUtils } from './list-item-utils-mixin';
  * @appliesMixin EtoolsLogsMixin
  * @appliesMixin EsmmMixins.ListItemUtils
  */
-export function CommonFunctionality(superClass) {
-    class CommonFunctionalityClass extends ListItemUtils(superClass) {
+export function CommonFunctionalityMixin(superClass) {
+    class CommonFunctionalityClass extends ListItemUtilsMixin(superClass) {
         constructor() {
             super(...arguments);
             this.alwaysFloatLabel = true;
@@ -319,7 +319,9 @@ export function CommonFunctionality(superClass) {
         }
         /** Flag to show the limit of options shown in dropdown */
         get showLimitWarning() {
-            if (this._isUndefined(this._shownOptionsCount) || this._isUndefined(this.searchedOptionsLength) || this.requestInProgress) {
+            if (this._isUndefined(this._shownOptionsCount) ||
+                this._isUndefined(this.searchedOptionsLength) ||
+                this.requestInProgress) {
                 return false;
             }
             return this.searchedOptionsLength > this._shownOptionsCount;
@@ -400,26 +402,26 @@ export function CommonFunctionality(superClass) {
         }
         _getIronDropdown() {
             var _a;
-            return (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector("#dropdownMenu");
+            return (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector('#dropdownMenu');
         }
         _getIronDropdownContent() {
             var _a;
-            return (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector("#ironDrContent");
+            return (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector('#ironDrContent');
         }
         _getOptionsList() {
             var _a;
-            return (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector("#optionsList");
+            return (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector('#optionsList');
         }
         _getSearchox() {
             var _a;
-            return (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector("#searchbox");
+            return (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector('#searchbox');
         }
         _getPaperInputContainer() {
             var _a, _b, _c, _d;
             if (this.tagName === 'ETOOLS-DROPDOWN') {
-                return (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector("#main");
+                return (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector('#main');
             }
-            return (_d = (_c = (_b = this.shadowRoot) === null || _b === void 0 ? void 0 : _b.querySelector("#main")) === null || _c === void 0 ? void 0 : _c.shadowRoot) === null || _d === void 0 ? void 0 : _d.querySelector("#container");
+            return (_d = (_c = (_b = this.shadowRoot) === null || _b === void 0 ? void 0 : _b.querySelector('#main')) === null || _c === void 0 ? void 0 : _c.shadowRoot) === null || _d === void 0 ? void 0 : _d.querySelector('#container');
         }
         _openMenu(_e) {
             const dr = this._getIronDropdown();
@@ -548,7 +550,7 @@ export function CommonFunctionality(superClass) {
         property({ type: Number })
     ], CommonFunctionalityClass.prototype, "_shownOptionsCount", void 0);
     __decorate([
-        property({ type: Boolean, attribute: 'disable-on-focus-handling', reflect: true }) // value: 
+        property({ type: Boolean, attribute: 'disable-on-focus-handling', reflect: true }) // value:
     ], CommonFunctionalityClass.prototype, "disableOnFocusHandling", void 0);
     __decorate([
         property({ type: Object }) // observer: 'setFitInto'

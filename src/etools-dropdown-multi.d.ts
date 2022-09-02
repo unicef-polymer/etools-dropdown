@@ -99,7 +99,7 @@ declare const EtoolsDropdownMulti_base: {
         optionLabel: string;
         twoLinesLabel: boolean;
         noneOptionLabel: string;
-        capitalize: boolean; /** Dropdown selected values */
+        capitalize: boolean;
         language: string;
         getPrimaryLabel(label: string): string;
         getSecondaryLabel(label: string): string;
@@ -534,7 +534,7 @@ declare const EtoolsDropdownMulti_base: {
         optionLabel: string;
         twoLinesLabel: boolean;
         noneOptionLabel: string;
-        capitalize: boolean; /** Dropdown selected values */
+        capitalize: boolean;
         language: string;
         getPrimaryLabel(label: string): string;
         getSecondaryLabel(label: string): string;

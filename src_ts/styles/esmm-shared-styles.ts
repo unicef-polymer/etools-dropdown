@@ -3,21 +3,19 @@ import {html} from 'lit-element';
 // language=HTML
 export const esmmSharedStyles = html` <style>
   html {
-
     --esmm-icons: {
       color: var(--secondary-text-color);
       cursor: pointer;
-    };
+    }
 
     --esmm-select-cursor: pointer;
 
     --paper-item-focused-before: {
       opacity: 0.06;
-    };
+    }
     --paper-item-focused-after: {
       opacity: 0.06;
-    };
-
+    }
   }
 
   *[hidden] {
@@ -59,44 +57,43 @@ export const esmmSharedStyles = html` <style>
     border-radius: 4px;
   }
 
-
   html {
     --paper-material: {
       display: block;
       position: relative;
-    };
+    }
     --paper-material-elevation-1: {
       @apply --shadow-elevation-2dp;
-    };
+    }
     --paper-material-elevation-2: {
       @apply --shadow-elevation-4dp;
-    };
+    }
     --paper-material-elevation-3: {
       @apply --shadow-elevation-6dp;
-    };
+    }
     --paper-material-elevation-4: {
       @apply --shadow-elevation-8dp;
-    };
+    }
     --paper-material-elevation-5: {
       @apply --shadow-elevation-16dp;
-    };
+    }
   }
   .paper-material {
     @apply --paper-material;
   }
-  .paper-material[elevation="1"] {
+  .paper-material[elevation='1'] {
     @apply --paper-material-elevation-1;
   }
-  .paper-material[elevation="2"] {
+  .paper-material[elevation='2'] {
     @apply --paper-material-elevation-2;
   }
-  .paper-material[elevation="3"] {
+  .paper-material[elevation='3'] {
     @apply --paper-material-elevation-3;
   }
-  .paper-material[elevation="4"] {
+  .paper-material[elevation='4'] {
     @apply --paper-material-elevation-4;
   }
-  .paper-material[elevation="5"] {
+  .paper-material[elevation='5'] {
     @apply --paper-material-elevation-5;
   }
 
@@ -105,39 +102,39 @@ export const esmmSharedStyles = html` <style>
     --paper-material: {
       display: block;
       position: relative;
-    };
+    }
     --paper-material-elevation-1: {
       @apply --shadow-elevation-2dp;
-    };
+    }
     --paper-material-elevation-2: {
       @apply --shadow-elevation-4dp;
-    };
+    }
     --paper-material-elevation-3: {
       @apply --shadow-elevation-6dp;
-    };
+    }
     --paper-material-elevation-4: {
       @apply --shadow-elevation-8dp;
-    };
+    }
     --paper-material-elevation-5: {
       @apply --shadow-elevation-16dp;
-    };
+    }
   }
   :host(.paper-material) {
     @apply --paper-material;
   }
-  :host(.paper-material[elevation="1"]) {
+  :host(.paper-material[elevation='1']) {
     @apply --paper-material-elevation-1;
   }
-  :host(.paper-material[elevation="2"]) {
+  :host(.paper-material[elevation='2']) {
     @apply --paper-material-elevation-2;
   }
-  :host(.paper-material[elevation="3"]) {
+  :host(.paper-material[elevation='3']) {
     @apply --paper-material-elevation-3;
   }
-  :host(.paper-material[elevation="4"]) {
+  :host(.paper-material[elevation='4']) {
     @apply --paper-material-elevation-4;
   }
-  :host(.paper-material[elevation="5"]) {
+  :host(.paper-material[elevation='5']) {
     @apply --paper-material-elevation-5;
   }
 </style>`;

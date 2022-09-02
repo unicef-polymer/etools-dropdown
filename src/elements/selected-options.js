@@ -13,13 +13,13 @@ import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-input/paper-input-container.js';
 import '@polymer/paper-input/paper-input-error.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
-import { ListItemUtils } from '../mixins/list-item-utils-mixin.js';
+import { ListItemUtilsMixin } from '../mixins/list-item-utils-mixin.js';
 /**
  * @litelement
  * @customElement
  * @appliesMixin EsmmMixins.ListItemUtils
  */
-let EsmmSelectedOptions = class EsmmSelectedOptions extends ListItemUtils(LitElement) {
+let EsmmSelectedOptions = class EsmmSelectedOptions extends ListItemUtilsMixin(LitElement) {
     constructor() {
         super(...arguments);
         this.selectedItems = [];
@@ -136,7 +136,8 @@ let EsmmSelectedOptions = class EsmmSelectedOptions extends ListItemUtils(LitEle
         <div slot="input" class="paper-input-input">
           <span class="placeholder" ?hidden="${this._hidePlaceholder}"> ${this.placeholder} </span>
           <div id="selected-items-wrapper" ?hidden="${!this._hidePlaceholder}">
-            ${this.selectedItems && this.selectedItems.length &&
+            ${this.selectedItems &&
+            this.selectedItems.length &&
             this.selectedItems.map((item) => html `
                 <span class="selected-item">
                   <span>${this.getLabel(item)}</span>

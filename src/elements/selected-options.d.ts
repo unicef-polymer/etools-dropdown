@@ -366,7 +366,7 @@ export declare class EsmmSelectedOptions extends EsmmSelectedOptions_base {
     readonly: boolean;
     disabled: boolean;
     invalid: boolean;
-    errorMessage: String;
+    errorMessage: string;
     _hidePlaceholder: boolean;
     openMenu: any;
     onInputFocus: any;

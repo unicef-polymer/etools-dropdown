@@ -6,8 +6,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import { LitElement, html, property, customElement } from 'lit-element';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
-import { CommonFunctionality } from './mixins/common-mixin.js';
-import { MissingOptions } from './mixins/missing-options-mixin.js';
+import { CommonFunctionalityMixin } from './mixins/common-mixin.js';
+import { MissingOptionsMixin } from './mixins/missing-options-mixin.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-dropdown/iron-dropdown.js';
@@ -27,7 +27,7 @@ import { getTranslation } from './utils/translate.js';
  * @appliesMixin MultiDropdownRequiredMixins
  * @demo demo/index-multi.html
  */
-let EtoolsDropdownMulti = class EtoolsDropdownMulti extends CommonFunctionality(MissingOptions(LitElement)) {
+let EtoolsDropdownMulti = class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptionsMixin(LitElement)) {
     constructor() {
         super(...arguments);
         /** Dropdown selected values */
@@ -103,7 +103,13 @@ let EtoolsDropdownMulti = class EtoolsDropdownMulti extends CommonFunctionality(
         allow-click-through
         ?with-backdrop="${this.withBackdrop}"
       >
-        <div id="ironDrContent" class="paper-material rounded" elevation="1" slot="dropdown-content" part="esmm-dropdown-content">
+        <div
+          id="ironDrContent"
+          class="paper-material rounded"
+          elevation="1"
+          slot="dropdown-content"
+          part="esmm-dropdown-content"
+        >
           <div id="dropdown-controls">
             <esmm-searchbox-input
               id="searchbox"

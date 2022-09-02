@@ -6,8 +6,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import { LitElement, html, property, customElement } from 'lit-element';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
-import { CommonFunctionality } from './mixins/common-mixin.js';
-import { MissingOptions } from './mixins/missing-options-mixin.js';
+import { CommonFunctionalityMixin } from './mixins/common-mixin.js';
+import { MissingOptionsMixin } from './mixins/missing-options-mixin.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-dropdown/iron-dropdown.js';
@@ -26,7 +26,7 @@ import { esmmSharedStyles } from './styles/esmm-shared-styles.js';
  * @appliesMixin DropdownRequiredMixins
  * @demo demo/index.html
  */
-let EtoolsDropdown = class EtoolsDropdown extends CommonFunctionality(MissingOptions(LitElement)) {
+let EtoolsDropdown = class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin(LitElement)) {
     constructor() {
         super(...arguments);
         /** Selected option object */

@@ -1,14 +1,14 @@
 import {dedupeMixin} from '@open-wc/dedupe-mixin';
 import {LitElement, property} from 'lit-element';
 import {getTranslation} from '../utils/translate';
-import { MixinTarget } from '../utils/types';
+import {MixinTarget} from '../utils/types';
 /*
  * Item data utils mixin
  * @polymer
  * @mixinFunction
  */
 
-export const ListItemUtils = dedupeMixin(<T extends MixinTarget<LitElement>>(superClass: T) => {
+export const ListItemUtilsMixin = dedupeMixin(<T extends MixinTarget<LitElement>>(superClass: T) => {
   class ListItemUtilsClass extends superClass {
     /** Option object property to use as value for selection */
     @property({type: String, attribute: 'option-value'})

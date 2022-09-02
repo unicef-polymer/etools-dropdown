@@ -1,6 +1,6 @@
 import { LitElement } from 'lit-element';
 import { MixinTarget } from '../utils/types';
-export declare const ListItemUtils: <T extends MixinTarget<LitElement>>(superClass: T) => {
+export declare const ListItemUtilsMixin: <T extends MixinTarget<LitElement>>(superClass: T) => {
     new (...args: any[]): {
         /** Option object property to use as value for selection */
         optionValue: string;

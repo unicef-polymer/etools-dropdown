@@ -6,15 +6,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import { dedupeMixin } from '@open-wc/dedupe-mixin';
 import { property } from 'lit-element';
-import { CommonFunctionality } from './common-mixin';
+import { CommonFunctionalityMixin } from './common-mixin';
 /*
  * Missing options helper
  * @polymer
  * @mixinFunction
  * @appliesMixin EtoolsLogsMixin
  */
-export const MissingOptions = dedupeMixin((superClass) => {
-    class MissingOptionsClass extends CommonFunctionality(superClass) {
+export const MissingOptionsMixin = dedupeMixin((superClass) => {
+    class MissingOptionsClass extends CommonFunctionalityMixin(superClass) {
         constructor() {
             super(...arguments);
             this.url = '';
@@ -40,7 +40,7 @@ export const MissingOptions = dedupeMixin((superClass) => {
             if (!this.shouldRequestMissingOption(this.url)) {
                 return;
             }
-            const etoolsAjax = (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector("#missingOptionsAjax");
+            const etoolsAjax = (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector('#missingOptionsAjax');
             if (!etoolsAjax) {
                 return;
             }
@@ -81,7 +81,8 @@ export const MissingOptions = dedupeMixin((superClass) => {
                         this.optionValue +
                         'and ' +
                         this.optionLabel +
-                        ' properties etools-esmm ' + this.label);
+                        ' properties etools-esmm ' +
+                        this.label);
                 }
             }
             catch (error) {

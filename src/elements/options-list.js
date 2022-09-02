@@ -15,14 +15,14 @@ import '@polymer/paper-item/paper-icon-item.js';
 import '@polymer/paper-item/paper-item-body.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async.js';
-import { ListItemUtils } from '../mixins/list-item-utils-mixin.js';
+import { ListItemUtilsMixin } from '../mixins/list-item-utils-mixin.js';
 import '@polymer/paper-spinner/paper-spinner';
 /**
  * @customElement
  * @polymer
  * @appliesMixin EsmmMixins.ListItemUtils
  */
-let EsmmOptionsList = class EsmmOptionsList extends ListItemUtils(LitElement) {
+let EsmmOptionsList = class EsmmOptionsList extends ListItemUtilsMixin(LitElement) {
     constructor() {
         super(...arguments);
         /** The current number of shown options, it increases by shownOptionsLimit when user scrolls down */

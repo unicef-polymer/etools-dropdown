@@ -7,7 +7,7 @@ import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-input/paper-input-container.js';
 import '@polymer/paper-input/paper-input-error.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
-import {ListItemUtils} from '../mixins/list-item-utils-mixin.js';
+import {ListItemUtilsMixin} from '../mixins/list-item-utils-mixin.js';
 
 /**
  * @litelement
@@ -15,36 +15,36 @@ import {ListItemUtils} from '../mixins/list-item-utils-mixin.js';
  * @appliesMixin EsmmMixins.ListItemUtils
  */
 @customElement('esmm-selected-options')
-export class EsmmSelectedOptions extends ListItemUtils(LitElement) {
+export class EsmmSelectedOptions extends ListItemUtilsMixin(LitElement) {
   @property({type: Array})
   selectedItems: any[] = [];
 
-  @property({type: String, attribute:'label'})
-  label: string = '';
+  @property({type: String, attribute: 'label'})
+  label = '';
 
-  @property({type: Boolean, attribute:'no-label-float'})
+  @property({type: Boolean, attribute: 'no-label-float'})
   noLabelFloat = false;
 
-  @property({type: Boolean, attribute:'always-float-label'})
+  @property({type: Boolean, attribute: 'always-float-label'})
   alwaysFloatLabel = false;
 
-  @property({type: String, attribute:'placeholder'})
-  placeholder: string = '';
+  @property({type: String, attribute: 'placeholder'})
+  placeholder = '';
 
-  @property({type: Boolean, attribute:'auto-validate'})
+  @property({type: Boolean, attribute: 'auto-validate'})
   autoValidate = false;
 
   @property({type: Boolean, attribute: 'readonly', reflect: true})
   readonly = false;
 
-  @property({type: Boolean, attribute:'disabled', reflect: true})
+  @property({type: Boolean, attribute: 'disabled', reflect: true})
   disabled = false;
 
-  @property({type: Boolean, attribute:'invalid', reflect: true})
+  @property({type: Boolean, attribute: 'invalid', reflect: true})
   invalid = false;
 
-  @property({type: String, attribute:'error-message'})
-  errorMessage: String = '';
+  @property({type: String, attribute: 'error-message'})
+  errorMessage = '';
 
   @property({type: Boolean})
   _hidePlaceholder = false;
@@ -157,7 +157,8 @@ export class EsmmSelectedOptions extends ListItemUtils(LitElement) {
         <div slot="input" class="paper-input-input">
           <span class="placeholder" ?hidden="${this._hidePlaceholder}"> ${this.placeholder} </span>
           <div id="selected-items-wrapper" ?hidden="${!this._hidePlaceholder}">
-            ${this.selectedItems && this.selectedItems.length &&
+            ${this.selectedItems &&
+            this.selectedItems.length &&
             this.selectedItems.map(
               (item) => html`
                 <span class="selected-item">
@@ -185,8 +186,8 @@ export class EsmmSelectedOptions extends ListItemUtils(LitElement) {
     `;
   }
 
-  updated(changedProperties: any){
-    if(changedProperties.has('selectedItems')){
+  updated(changedProperties: any) {
+    if (changedProperties.has('selectedItems')) {
       this._selectedItemsDisplayHasChanged();
     }
   }

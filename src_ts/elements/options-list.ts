@@ -9,7 +9,7 @@ import '@polymer/paper-item/paper-icon-item.js';
 import '@polymer/paper-item/paper-item-body.js';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 import {timeOut} from '@polymer/polymer/lib/utils/async.js';
-import {ListItemUtils} from '../mixins/list-item-utils-mixin.js';
+import {ListItemUtilsMixin} from '../mixins/list-item-utils-mixin.js';
 import '@polymer/paper-spinner/paper-spinner';
 
 /**
@@ -18,10 +18,10 @@ import '@polymer/paper-spinner/paper-spinner';
  * @appliesMixin EsmmMixins.ListItemUtils
  */
 @customElement('esmm-options-list')
-export class EsmmOptionsList extends ListItemUtils(LitElement) {
+export class EsmmOptionsList extends ListItemUtilsMixin(LitElement) {
   /** The current number of shown options, it increases by shownOptionsLimit when user scrolls down */
   @property({type: Number})
-  shownOptionsCount: number = 0;
+  shownOptionsCount = 0;
 
   /** Multi selection flag. If true `selectedValues` array will be used instead `selected` */
   @property({type: Boolean, attribute: 'multi', reflect: true})
@@ -29,7 +29,7 @@ export class EsmmOptionsList extends ListItemUtils(LitElement) {
 
   /** paper-listbox selected value is `multi` is false */
   @property({type: String}) //  notify: true
-  selected: string = '';
+  selected = '';
 
   /** paper-listbox selected values is `multi` is true */
   @property({type: Array}) // notify: true
@@ -54,7 +54,7 @@ export class EsmmOptionsList extends ListItemUtils(LitElement) {
   noOptionsAvailable = false;
 
   @property({type: Number})
-  shownOptionsLimit: number = 0;
+  shownOptionsLimit = 0;
 
   private _debouncer: Debouncer | null = null;
 

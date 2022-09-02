@@ -12,7 +12,7 @@ import { getTranslation } from '../utils/translate';
  * @polymer
  * @mixinFunction
  */
-export const ListItemUtils = dedupeMixin((superClass) => {
+export const ListItemUtilsMixin = dedupeMixin((superClass) => {
     class ListItemUtilsClass extends superClass {
         constructor() {
             super(...arguments);

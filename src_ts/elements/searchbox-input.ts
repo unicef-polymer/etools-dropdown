@@ -1,8 +1,8 @@
-import {LitElement, html, customElement, property } from 'lit-element';
+import {LitElement, html, customElement, property} from 'lit-element';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-input/paper-input.js';
-import { getTranslation } from '../utils/translate';
+import {getTranslation} from '../utils/translate';
 
 /**
  * @customElement
@@ -11,10 +11,10 @@ import { getTranslation } from '../utils/translate';
 @customElement('esmm-searchbox-input')
 export class EsmmSearchboxInput extends LitElement {
   @property({type: String})
-  search: string = '';
-  
+  search = '';
+
   @property({type: String})
-  language: string = 'en';
+  language = 'en';
 
   render() {
     // language=HTML

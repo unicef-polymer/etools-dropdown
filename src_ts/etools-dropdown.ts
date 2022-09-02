@@ -1,7 +1,7 @@
 import {LitElement, html, property, customElement} from 'lit-element';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
-import {CommonFunctionality} from './mixins/common-mixin.js';
-import {MissingOptions} from './mixins/missing-options-mixin.js';
+import {CommonFunctionalityMixin} from './mixins/common-mixin.js';
+import {MissingOptionsMixin} from './mixins/missing-options-mixin.js';
 import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-dropdown/iron-dropdown.js';
@@ -22,7 +22,7 @@ import {esmmSharedStyles} from './styles/esmm-shared-styles.js';
  * @demo demo/index.html
  */
 @customElement('etools-dropdown')
-export class EtoolsDropdown extends CommonFunctionality(MissingOptions(LitElement)) {
+export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin(LitElement)) {
   /** Dropdown selected value `optionValue` prop of the selected option */
   @property({type: Number}) // observer: '_selectedChanged', notify: true
   selected: any;
@@ -37,7 +37,7 @@ export class EtoolsDropdown extends CommonFunctionality(MissingOptions(LitElemen
 
   /** Element title attribute */
   @property({type: String, attribute: 'title', reflect: true}) // computed: 'getLabel(selectedItem)'
-  title: string = '';
+  title = '';
 
   /* withBackdrop property was added in order to trap the focus within the light DOM of the iron-dropdown.
            Setting this to true solves a bug in PRP where when you have the etools-dropdown in a paper-dialog,
@@ -47,7 +47,7 @@ export class EtoolsDropdown extends CommonFunctionality(MissingOptions(LitElemen
   withBackdrop = false;
 
   @property({type: String})
-  language: string = 'en';
+  language = 'en';
 
   private _debouncer: Debouncer | null = null;
 
@@ -278,7 +278,7 @@ export class EtoolsDropdown extends CommonFunctionality(MissingOptions(LitElemen
     if (changedProperties.has('notFoundOption') || changedProperties.has('url')) {
       this._notFoundOptionAndUrlChanged(this.notFoundOption, this.url);
     }
-    if(changedProperties.has('selected')){
+    if (changedProperties.has('selected')) {
       this._selectedChanged(this.selected);
     }
   }
