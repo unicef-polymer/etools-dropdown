@@ -194,8 +194,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
         reflectToAttribute: true
       },
       language: {
-        type: String,
-        value: 'en'
+        type: String
       }
     };
   }
