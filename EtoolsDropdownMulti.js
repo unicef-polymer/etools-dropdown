@@ -131,7 +131,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
           >
           </esmm-options-list>
           <span
-            title="[[closeText]]"
+            title="[[_getCloseBtnText(closeText, language)]]"
             class="close-btn"
             part="esmm-close-btn"
             hidden$="{{hideClose}}"
@@ -191,8 +191,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       },
       closeText: {
         type: String,
-        reflectToAttribute: true,
-        value: 'CLOSE'
+        reflectToAttribute: true
       },
       language: {
         type: String,
@@ -440,7 +439,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
   }
 
   _getCloseBtnText(closeText, language) {
-    if (closeText && closeText.toLowerCase() != 'close') {
+    if (closeText) {
       return closeText;
     }
     return getTranslation(language, 'CLOSE');
