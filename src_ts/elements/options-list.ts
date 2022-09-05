@@ -125,6 +125,14 @@ export class EsmmOptionsList extends ListItemUtilsMixin(LitElement) {
           padding-bottom: 8px;
         }
 
+        .warning paper-spinner {
+          min-width: 20px;
+          min-height: 20px;
+          width: 20px;
+          height: 20px;
+          margin-left: auto;
+        }
+
         paper-icon-item.esmm-none-option {
           color: rgba(0, 0, 0, 0.38);
         }
