@@ -53,6 +53,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
           color: var(--primary-color);
           font-weight: 500;
           border-top: solid 1px lightgray;
+          text-transform: uppercase;
         }
       </style>
 
@@ -130,7 +131,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
           >
           </esmm-options-list>
           <span
-            title="[[closeText]]"
+            title="[[_getCloseBtnText(closeText, language)]]"
             class="close-btn"
             part="esmm-close-btn"
             hidden$="{{hideClose}}"
@@ -141,6 +142,18 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
         </div>
       </iron-dropdown>
     `;
+  }
+
+  constructor() {
+    super();
+    if (!this.language) {
+      this.language = window.localStorage.defaultLanguage || 'en';
+    }
+    this.handleLanguageChange = this.handleLanguageChange.bind(this);
+  }
+
+  handleLanguageChange(e) {
+    this.language = e.detail.language;
   }
 
   static get is() {
@@ -178,12 +191,10 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       },
       closeText: {
         type: String,
-        reflectToAttribute: true,
-        value: 'CLOSE'
+        reflectToAttribute: true
       },
       language: {
-        type: String,
-        value: 'en'
+        type: String
       }
     };
   }
@@ -199,9 +210,15 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
 
   connectedCallback() {
     super.connectedCallback();
+    document.addEventListener('language-changed', this.handleLanguageChange);
     this.addEventListener('remove-selected-item', this._removeSelectedItem.bind(this));
     this._openMenu = this._openMenu.bind(this);
     this.onInputFocus = this.onInputFocus.bind(this);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener('language-changed', this.handleLanguageChange);
   }
 
   _selectedValuesOrOptionsChanged(selectedValuesOrLength, options) {
@@ -421,7 +438,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
   }
 
   _getCloseBtnText(closeText, language) {
-    if (closeText && closeText.toLowerCase() != 'close') {
+    if (closeText) {
       return closeText;
     }
     return getTranslation(language, 'CLOSE');

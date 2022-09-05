@@ -1,4 +1,5 @@
 import {dedupingMixin} from '@polymer/polymer/lib/utils/mixin.js';
+import {getTranslation} from '../utils/translate';
 
 /*
  * Item data utils mixin
@@ -37,6 +38,11 @@ export const ListItemUtils = dedupingMixin(
             value: false
           }
         };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        setTimeout(() => (this.noneOptionLabel = '-- ' + getTranslation(this.language, 'NONE') + ' --'));
       }
 
       /**
