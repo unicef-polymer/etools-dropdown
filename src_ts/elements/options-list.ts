@@ -11,6 +11,7 @@ import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import {ListItemUtilsMixin} from '../mixins/list-item-utils-mixin.js';
 import '@polymer/paper-spinner/paper-spinner';
+import { getTranslation } from '../utils/translate';
 
 /**
  * @customElement
@@ -174,21 +175,21 @@ export class EsmmOptionsList extends ListItemUtilsMixin(LitElement) {
         )}
 
         <paper-item ?hidden="${!this.showNoSearchResultsWarning}" class="warning" disabled>
-          ${this.getTranslation('NO_RESULTS_FOUND_TRY_OTHER_KEYWORDS')}
+          ${getTranslation(this.language, 'NO_RESULTS_FOUND_TRY_OTHER_KEYWORDS')}
         </paper-item>
 
         <paper-item ?hidden="${!this.requestInProgress}" class="warning" disabled>
-          ${this.getTranslation('REQUEST_IN_PROGRESS')}
+          ${getTranslation(this.language, 'REQUEST_IN_PROGRESS')}
           <paper-spinner active></paper-spinner>
         </paper-item>
 
         <paper-item id="infinite-scroll-trigger" ?hidden="${!this.showLimitWarning}" class="warning" disabled>
-          ${this.getTranslation('SCROLL_DOWN_TO_REVEAL_MORE_ITEMS')}
+          ${getTranslation(this.language, 'SCROLL_DOWN_TO_REVEAL_MORE_ITEMS')}
           <paper-spinner active></paper-spinner>
         </paper-item>
 
         <paper-item ?hidden="${!this.noOptionsAvailable}" id="noOptions" class="warning" disabled>
-          ${this.getTranslation('NO_OPTIONS_AVAILABLE')}
+          ${getTranslation(this.language, 'NO_OPTIONS_AVAILABLE')}
         </paper-item>
       </paper-listbox>
     `;

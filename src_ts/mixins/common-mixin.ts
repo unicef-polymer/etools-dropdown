@@ -145,13 +145,21 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
 
     @property({type: Boolean})
     requestInProgress = false;
+    
+    constructor(...args: any[]) {
+      super(args);
+      if (!this.language) {
+        this.language = window.localStorage.defaultLanguage || 'en';
+      }
+      this._handleLanguageChange = this._handleLanguageChange.bind(this);
+    }
 
     // @ts-ignore
     connectedCallback() {
       super.connectedCallback();
       this._shownOptionsCount = this.shownOptionsLimit;
       this.disableOnFocusHandling = this.disableOnFocusHandling || this.isIEBrowser();
-
+      document.addEventListener('language-changed', this._handleLanguageChange as any);
       // focusout is used because blur acts weirdly on IE
       this._onFocusOut = this._onFocusOut.bind(this);
       this.addEventListener('focusout', this._onFocusOut);
@@ -161,6 +169,7 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
     disconnectedCallback() {
       super.disconnectedCallback();
       this.removeEventListener('focusout', this._onFocusOut);
+      document.removeEventListener('language-changed', this._handleLanguageChange as any);
     }
 
     firstUpdated() {
@@ -189,6 +198,10 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
       if (changedProperties.has('fitInto')) {
         this.setFitInto();
       }
+    }
+
+    _handleLanguageChange(e: CustomEvent) {
+      this.language = e.detail.language;
     }
 
     _onFocusOut(e: FocusEvent) {

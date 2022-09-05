@@ -43,7 +43,7 @@ export class EsmmSearchboxInput extends LitElement {
       <paper-input
         id="searchInput"
         no-label-float
-        placeholder="${this.getTranslation('SEARCH')}"
+        placeholder="${getTranslation(this.language, 'SEARCH')}"
         type="text"
         .value="${this.search}"
         @value-changed="${this._valueChanged}"
@@ -64,9 +64,5 @@ export class EsmmSearchboxInput extends LitElement {
         composed: true
       })
     );
-  }
-
-  getTranslation(key: string) {
-    return getTranslation(this.language, key);
   }
 }

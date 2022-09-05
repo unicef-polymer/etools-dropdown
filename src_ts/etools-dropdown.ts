@@ -271,29 +271,6 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
     `;
   }
 
-  constructor() {
-    super();
-    if (!this.language) {
-      this.language = window.localStorage.defaultLanguage || 'en';
-    }
-    this.handleLanguageChange = this.handleLanguageChange.bind(this);
-  }
-
-  handleLanguageChange(e: CustomEvent) {
-    this.language = e.detail.language;
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-
-    document.addEventListener('language-changed', this.handleLanguageChange as any);
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    document.removeEventListener('language-changed', this.handleLanguageChange as any);
-  }
-
   updated(changedProperties: any) {
     if (changedProperties.has('selected') || changedProperties.has('options')) {
       this._selectedAndOptionsChanged(this.selected, this.options);
