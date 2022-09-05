@@ -71,6 +71,11 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
           display: none;
         }
 
+        paper-item,
+        paper-icon-item {
+          overflow-x: hidden;
+        }
+
         .warning {
           font-family: Roboto;
           font-size: 12px;
@@ -79,6 +84,14 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
           background-color: #eeeeee;
           padding-top: 8px;
           padding-bottom: 8px;
+        }
+
+        .warning paper-spinner {
+          min-width: 20px;
+          min-height: 20px;
+          width: 20px;
+          height: 20px;
+          margin-left: auto;
         }
 
         paper-icon-item.esmm-none-option {
@@ -123,21 +136,21 @@ class EsmmOptionsList extends ListItemUtils(PolymerElement) {
         </template>
 
         <paper-item hidden$="[[!showNoSearchResultsWarning]]" class="warning" disabled="">
-          [[getTranslation(language, 'No_results_found_Try_other_keywords')]]
+          [[getTranslation(language, 'NO_RESULTS_FOUND_TRY_OTHER_KEYWORDS')]]
         </paper-item>
 
         <paper-item hidden$="[[!requestInProgress]]" class="warning" disabled="">
-          [[getTranslation(language, 'Request_in_progress')]]
-          <paper-spinner active style="padding-inline-start: 3px;"></paper-spinner>
+          [[getTranslation(language, 'REQUEST_IN_PROGRESS')]]
+          <paper-spinner active></paper-spinner>
         </paper-item>
 
         <paper-item id="infinite-scroll-trigger" hidden$="[[!showLimitWarning]]" class="warning" disabled="">
-          [[getTranslation(language, 'Scroll_down_to_reveal_more_items')]]
-          <paper-spinner active style="padding-inline-start: 3px;"></paper-spinner>
+          [[getTranslation(language, 'SCROLL_DOWN_TO_REVEAL_MORE_ITEMS')]]
+          <paper-spinner active></paper-spinner>
         </paper-item>
 
         <paper-item hidden$="[[!noOptionsAvailable]]" id="noOptions" class="warning" disabled="">
-          [[getTranslation(language, 'No_options_available')]]
+          [[getTranslation(language, 'NO_OPTIONS_AVAILABLE')]]
         </paper-item>
       </paper-listbox>
     `;
