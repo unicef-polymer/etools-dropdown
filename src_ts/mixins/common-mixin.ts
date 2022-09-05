@@ -145,7 +145,7 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
 
     @property({type: Boolean})
     requestInProgress = false;
-    
+
     constructor(...args: any[]) {
       super(args);
       if (!this.language) {

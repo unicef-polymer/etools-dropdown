@@ -34,7 +34,7 @@ export const ListItemUtilsMixin = dedupeMixin(<T extends MixinTarget<LitElement>
 
     firstUpdated() {
       this.updateComplete.then(() => {
-        this.noneOptionLabel = '-- ' + getTranslation(this.language, 'NONE') + ' --'
+        this.noneOptionLabel = '-- ' + getTranslation(this.language, 'NONE') + ' --';
       });
     }
 
