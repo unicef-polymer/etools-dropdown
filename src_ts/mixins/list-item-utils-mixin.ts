@@ -30,8 +30,12 @@ export const ListItemUtilsMixin = dedupeMixin(<T extends MixinTarget<LitElement>
     capitalize = false;
 
     @property({type: String, attribute: 'language'})
-    language = 'en';
+    language!: string;
 
+    connectedCallback() {
+      super.connectedCallback();
+      setTimeout(() => (this.noneOptionLabel = '-- ' + getTranslation(this.language, 'NONE') + ' --'));
+    }
     /**
      * Get option primary label. All chars until `|` .
      * @param label
@@ -105,6 +109,7 @@ export const ListItemUtilsMixin = dedupeMixin(<T extends MixinTarget<LitElement>
         .join(' ');
     }
 
+    // TODO - not needed in LitElement
     getTranslation(key: string) {
       return getTranslation(this.language, key);
     }

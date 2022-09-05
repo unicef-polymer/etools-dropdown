@@ -47,7 +47,7 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
   withBackdrop = false;
 
   @property({type: String})
-  language = 'en';
+  language!: string;
 
   private _debouncer: Debouncer | null = null;
 
@@ -269,6 +269,29 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
         </div>
       </iron-dropdown>
     `;
+  }
+
+  constructor() {
+    super();
+    if (!this.language) {
+      this.language = window.localStorage.defaultLanguage || 'en';
+    }
+    this.handleLanguageChange = this.handleLanguageChange.bind(this);
+  }
+
+  handleLanguageChange(e: CustomEvent) {
+    this.language = e.detail.language;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    document.addEventListener('language-changed', this.handleLanguageChange as any);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener('language-changed', this.handleLanguageChange as any);
   }
 
   updated(changedProperties: any) {
