@@ -44,10 +44,10 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
   title = '';
 
   @property({type: String, attribute: 'close-text', reflect: true})
-  closeText = 'CLOSE';
+  closeText!: string;
 
   @property({type: String})
-  language = 'en';
+  language!: string;
 
   private _debouncer: Debouncer | null = null;
 
@@ -71,6 +71,7 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
           color: var(--primary-color);
           font-weight: 500;
           border-top: solid 1px lightgray;
+          text-transform: uppercase;
         }
       </style>
 
@@ -162,6 +163,18 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
     `;
   }
 
+  constructor() {
+    super();
+    if (!this.language) {
+      this.language = window.localStorage.defaultLanguage || 'en';
+    }
+    this.handleLanguageChange = this.handleLanguageChange.bind(this);
+  }
+
+  handleLanguageChange(e) {
+    this.language = e.detail.language;
+  }
+
   updated(changedProperties: any) {
     if (changedProperties.has('selectedValues') || changedProperties.has('options')) {
       this._selectedValuesOrOptionsChanged(this.selectedValues, this.options);
@@ -177,9 +190,15 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
   // @ts-ignore
   connectedCallback() {
     super.connectedCallback();
+    document.addEventListener('language-changed', this.handleLanguageChange);
     this.addEventListener('remove-selected-item', this._removeSelectedItem.bind(this));
     this._openMenu = this._openMenu.bind(this);
     this.onInputFocus = this.onInputFocus.bind(this);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener('language-changed', this.handleLanguageChange);
   }
 
   _selectedValuesOrOptionsChanged(selectedValuesOrLength: any, options: any[]) {
@@ -404,7 +423,7 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
   }
 
   _getCloseBtnText(closeText: string, language: string) {
-    if (closeText && closeText.toLowerCase() != 'close') {
+    if (closeText) {
       return closeText;
     }
     return getTranslation(language, 'CLOSE');
