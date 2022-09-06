@@ -1,4 +1,4 @@
-import {LitElement, html, property, customElement} from 'lit-element';
+import {LitElement, html, property} from 'lit-element';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 import {CommonFunctionalityMixin} from './mixins/common-mixin.js';
 import {MissingOptionsMixin} from './mixins/missing-options-mixin.js';
@@ -21,7 +21,6 @@ import {esmmSharedStyles} from './styles/esmm-shared-styles.js';
  * @appliesMixin DropdownRequiredMixins
  * @demo demo/index.html
  */
-@customElement('etools-dropdown')
 export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin(LitElement)) {
   /** Dropdown selected value `optionValue` prop of the selected option */
   @property({type: Number}) // observer: '_selectedChanged', notify: true

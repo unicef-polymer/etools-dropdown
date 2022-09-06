@@ -1,3 +1,3 @@
 import {EtoolsDropdown} from './src/etools-dropdown';
 
-export default EtoolsDropdown;
+window.customElements.define('etools-dropdown', EtoolsDropdown);

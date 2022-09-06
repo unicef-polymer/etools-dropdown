@@ -1,4 +1,4 @@
-import {LitElement, html, property, customElement} from 'lit-element';
+import {LitElement, html, property} from 'lit-element';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 import {CommonFunctionalityMixin} from './mixins/common-mixin.js';
 import {MissingOptionsMixin} from './mixins/missing-options-mixin.js';
@@ -22,7 +22,6 @@ import {getTranslation} from './utils/translate';
  * @appliesMixin MultiDropdownRequiredMixins
  * @demo demo/index-multi.html
  */
-@customElement('etools-dropdown-multi')
 export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptionsMixin(LitElement)) {
   /** Dropdown selected values */
   @property({type: Array}) // notify: true
