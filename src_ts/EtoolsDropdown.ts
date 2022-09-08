@@ -140,7 +140,6 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
           float: left;
         }
       </style>
-     
       <paper-input-container
         id="main"
         ?no-label-float="${this.noLabelFloat}"

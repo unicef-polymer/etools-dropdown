@@ -1,7 +1,7 @@
 import {dedupeMixin} from '@open-wc/dedupe-mixin';
-import { timeOut } from '@polymer/polymer/lib/utils/async';
-import { Debouncer } from '@polymer/polymer/lib/utils/debounce';
-import { sendRequest } from '@unicef-polymer/etools-ajax';
+import {timeOut} from '@polymer/polymer/lib/utils/async';
+import {Debouncer} from '@polymer/polymer/lib/utils/debounce';
+import {sendRequest} from '@unicef-polymer/etools-ajax';
 import {LitElement, property} from 'lit-element';
 import {MixinTarget} from '../utils/types';
 import {CommonFunctionalityMixin} from './common-mixin';
@@ -12,7 +12,6 @@ import {CommonFunctionalityMixin} from './common-mixin';
  * @mixinFunction
  * @appliesMixin EtoolsLogsMixin
  */
-
 export const MissingOptionsMixin = dedupeMixin(<T extends MixinTarget<LitElement>>(superClass: T) => {
   class MissingOptionsClass extends CommonFunctionalityMixin(superClass) {
     @property({type: String, attribute: 'url'})
@@ -23,14 +22,14 @@ export const MissingOptionsMixin = dedupeMixin(<T extends MixinTarget<LitElement
 
     _missingOptionsDebouncer: Debouncer | null = null;
 
-    updated(changedProperties:any){
+    updated(changedProperties: any) {
       if (changedProperties.has('ajaxParams') || changedProperties.has('url')) {
         this.fetchMissingOptions(this.url, this.ajaxParams);
       }
     }
 
-    fetchMissingOptions(url: string | null, params: any){
-      if(!url) {
+    fetchMissingOptions(url: string | null, params: any) {
+      if (!url) {
         return;
       }
 
@@ -46,7 +45,7 @@ export const MissingOptionsMixin = dedupeMixin(<T extends MixinTarget<LitElement
         })
           .then(this.handleMissingOptionsReqResponse)
           .catch(this.handleMissingOptionsReqError);
-      }); 
+      });
     }
 
     /**
