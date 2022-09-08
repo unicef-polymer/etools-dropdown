@@ -11,6 +11,7 @@ import '@polymer/paper-styles/element-styles/paper-material-styles.js';
 import './scripts/es6-polyfills.js';
 import './elements/searchbox-input.js';
 import './elements/options-list.js';
+import '@unicef-polymer/etools-ajax/etools-ajax.js';
 import {esmmSharedStyles} from './styles/esmm-shared-styles.js';
 
 /**
@@ -140,7 +141,12 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
           float: left;
         }
       </style>
-
+      <etools-ajax
+        id="missingOptionsAjax"
+        .params="${this.ajaxParams}"
+        @success="${this.handleMissingOptionsReqResponse}"
+        @fail="${this.handleMissingOptionsReqError}"
+      ></etools-ajax>
       <paper-input-container
         id="main"
         ?no-label-float="${this.noLabelFloat}"
@@ -366,7 +372,7 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
    * @param selected
    * @returns {boolean}
    */
-  validate(selected: any) {
+  validate(selected?: any) {
     if (!this.hasAttribute('required') || this.readonly) {
       this.invalid = false;
       return true;
@@ -382,7 +388,7 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
     return valid;
   }
 
-  _selectedChanged(selected: any) {
+  _selectedChanged(selected?: any) {
     this.title = this.getLabel(this.selectedItem);
     // elemAttached condition is to prevent eager validation
     if (this.autoValidate && this.elemAttached) {
@@ -417,7 +423,6 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
 
   _selectedValueChanged(e: CustomEvent) {
     this.selected = e.detail.value;
-    console.log(this.selected);
     this._selectedAndOptionsChanged(this.selected, this.options);
   }
 }

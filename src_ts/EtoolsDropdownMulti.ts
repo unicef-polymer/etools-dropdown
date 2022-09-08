@@ -7,6 +7,7 @@ import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-dropdown/iron-dropdown.js';
 import '@polymer/neon-animation/neon-animations.js';
 import '@polymer/paper-styles/element-styles/paper-material-styles.js';
+import '@unicef-polymer/etools-ajax/etools-ajax.js';
 import './scripts/es6-polyfills.js';
 import './elements/selected-options.js';
 import './elements/searchbox-input.js';
@@ -73,6 +74,13 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
           text-transform: uppercase;
         }
       </style>
+
+      <etools-ajax
+        id="missingOptionsAjax"
+        .params="${this.ajaxParams}"
+        @success="${this.handleMissingOptionsReqResponse}"
+        @fail="${this.handleMissingOptionsReqError}"
+      ></etools-ajax>
 
       <esmm-selected-options
         id="main"
@@ -348,7 +356,7 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
    * @param selectedValues
    * @returns {boolean}
    */
-  validate(selectedValues: any[]) {
+  validate(selectedValues?: any[]) {
     if (!this.hasAttribute('required') || this.readonly) {
       this.invalid = false;
       return true;
@@ -362,7 +370,7 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
     return !invalid;
   }
 
-  _getValuesFromItems(selectedItems: any[]) {
+  _getValuesFromItems(selectedItems?: any[]) {
     return selectedItems && selectedItems.length > 0
       ? selectedItems.map((item: any) => {
           return item[this.optionValue].toString();
@@ -370,14 +378,14 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
       : [];
   }
 
-  _noSelectedValues(selectedValues: any[]) {
+  _noSelectedValues(selectedValues?: any[]) {
     if (typeof selectedValues === 'undefined') {
       selectedValues = this.selectedValues;
     }
     return !selectedValues || !selectedValues.length;
   }
 
-  _noSelectedItems(selectedItems: any[]) {
+  _noSelectedItems(selectedItems?: any[]) {
     if (typeof selectedItems === 'undefined') {
       selectedItems = this.selectedItems;
     }
