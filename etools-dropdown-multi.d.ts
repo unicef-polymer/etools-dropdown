@@ -4,6 +4,6 @@ export {EtoolsDropdownMulti as EtoolsDropdownMultiEl};
 
 declare global {
   interface HTMLElementTagNameMap {
-    'etools-dropdown': EtoolsDropdown;
+    'etools-dropdown': EtoolsDropdownMulti;
   }
 }
