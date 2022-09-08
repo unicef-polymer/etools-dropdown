@@ -11,7 +11,6 @@ import '@polymer/paper-styles/element-styles/paper-material-styles.js';
 import './scripts/es6-polyfills.js';
 import './elements/searchbox-input.js';
 import './elements/options-list.js';
-import '@unicef-polymer/etools-ajax/etools-ajax.js';
 import {esmmSharedStyles} from './styles/esmm-shared-styles.js';
 
 /**
@@ -141,12 +140,7 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
           float: left;
         }
       </style>
-      <etools-ajax
-        id="missingOptionsAjax"
-        .params="${this.ajaxParams}"
-        @success="${this.handleMissingOptionsReqResponse}"
-        @fail="${this.handleMissingOptionsReqError}"
-      ></etools-ajax>
+     
       <paper-input-container
         id="main"
         ?no-label-float="${this.noLabelFloat}"

@@ -1,4 +1,7 @@
 import {dedupeMixin} from '@open-wc/dedupe-mixin';
+import { timeOut } from '@polymer/polymer/lib/utils/async';
+import { Debouncer } from '@polymer/polymer/lib/utils/debounce';
+import { sendRequest } from '@unicef-polymer/etools-ajax';
 import {LitElement, property} from 'lit-element';
 import {MixinTarget} from '../utils/types';
 import {CommonFunctionalityMixin} from './common-mixin';
@@ -17,6 +20,34 @@ export const MissingOptionsMixin = dedupeMixin(<T extends MixinTarget<LitElement
 
     @property({type: Object, attribute: 'ajax-params'})
     ajaxParams: any;
+
+    _missingOptionsDebouncer: Debouncer | null = null;
+
+    updated(changedProperties:any){
+      if (changedProperties.has('ajaxParams') || changedProperties.has('url')) {
+        this.fetchMissingOptions(this.url, this.ajaxParams);
+      }
+    }
+
+    fetchMissingOptions(url: string | null, params: any){
+      if(!url) {
+        return;
+      }
+
+      this._missingOptionsDebouncer = Debouncer.debounce(this._missingOptionsDebouncer, timeOut.after(300), () => {
+        if (!this.ajaxParams) {
+          return;
+        }
+        sendRequest({
+          endpoint: {
+            url
+          },
+          params
+        })
+          .then(this.handleMissingOptionsReqResponse)
+          .catch(this.handleMissingOptionsReqError);
+      }); 
+    }
 
     /**
      * If there are no selected options that are not found in dropdown options then request them from server using
@@ -38,11 +69,8 @@ export const MissingOptionsMixin = dedupeMixin(<T extends MixinTarget<LitElement
       if (!this.shouldRequestMissingOption(this.url)) {
         return;
       }
-      const etoolsAjax = this.shadowRoot?.querySelector('#missingOptionsAjax') as any;
-      if (!etoolsAjax) {
-        return;
-      }
-      etoolsAjax.url = null;
+
+      let url = null;
       const notFoundV = notFoundValues.join(',');
       if (this.ajaxParams && typeof this.ajaxParams === 'object') {
         this.ajaxParams.values = notFoundV;
@@ -52,8 +80,9 @@ export const MissingOptionsMixin = dedupeMixin(<T extends MixinTarget<LitElement
         };
       }
       if (typeof this.ajaxParams.values === 'string' && this.ajaxParams.values !== '') {
-        etoolsAjax.url = this.url;
+        url = this.url;
       }
+      this.fetchMissingOptions(url, this.ajaxParams);
     }
 
     /**
