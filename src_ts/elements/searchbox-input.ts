@@ -15,7 +15,7 @@ export class EsmmSearchboxInput extends LitElement {
 
   @property({type: String})
   language = 'en';
-  
+
   render() {
     // language=HTML
     return html`

@@ -204,8 +204,8 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
       }
     }
 
-    setMarginTopFromVerticalOffset(){
-      if(this._getIronDropdown()){
+    setMarginTopFromVerticalOffset() {
+      if (this._getIronDropdown()) {
         this._getIronDropdown().style.marginTop = `${this.verticalOffset || 0}px`;
       }
     }
