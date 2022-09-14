@@ -46,7 +46,7 @@ export const ListItemUtilsMixin = dedupeMixin(<T extends MixinTarget<LitElement>
     getPrimaryLabel(label: string) {
       let l = '';
       if (label) {
-        l = label.slice(0, label.indexOf('|'));
+        l = label.toString().slice(0, label.toString().indexOf('|'));
         if (this.capitalize) {
           l = this._capitalizeString(l);
         }
@@ -65,7 +65,7 @@ export const ListItemUtilsMixin = dedupeMixin(<T extends MixinTarget<LitElement>
       }
       let sl = '';
       if (label) {
-        sl = label.slice(label.indexOf('|') + 1);
+        sl = label.toString().slice(label.toString().indexOf('|') + 1);
         if (this.capitalize) {
           sl = this._capitalizeString(sl);
         }
@@ -105,7 +105,7 @@ export const ListItemUtilsMixin = dedupeMixin(<T extends MixinTarget<LitElement>
      * @returns {string}
      */
     _capitalizeString(string: string) {
-      return string
+      return string.toString()
         .split(' ')
         .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
         .join(' ');

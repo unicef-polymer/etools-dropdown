@@ -71,14 +71,15 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
           font-weight: 500;
           border-top: solid 1px lightgray;
           text-transform: uppercase;
+          cursor: pointer;
         }
       </style>
 
       <esmm-selected-options
         id="main"
         .selectedItems="${this.selectedItems}"
-        label="${this.label}"
-        placeholder="${this.placeholder}"
+        .label="${this.label}"
+        .placeholder="${this.placeholder}"
         ?always-float-label="${this.alwaysFloatLabel}"
         ?no-label-float="${this.noLabelFloat}"
         ?two-lines-label="${this.twoLinesLabel}"
@@ -102,7 +103,6 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
         id="dropdownMenu"
         part="esmm-dropdownmenu"
         horizontal-align="${this.horizontalAlign}"
-        vertical-offset="${this.verticalOffset}"
         ?dynamic-align="${!this.noDynamicAlign}"
         @iron-overlay-opened="${this._onDropdownOpen}"
         @iron-overlay-closed="${this._onDropdownClose}"
@@ -149,7 +149,7 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
           >
           </esmm-options-list>
           <span
-            title="${this.closeText}"
+            title="${this._getCloseBtnText(this.closeText, this.language)}"
             class="close-btn"
             part="esmm-close-btn"
             ?hidden="${this.hideClose}"
@@ -163,6 +163,7 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
   }
 
   updated(changedProperties: any) {
+    super.updated(changedProperties);
     if (changedProperties.has('selectedValues') || changedProperties.has('options')) {
       this._selectedValuesOrOptionsChanged(this.selectedValues, this.options);
     }
@@ -412,6 +413,7 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
 
   _searchChanged(e: CustomEvent) {
     this.search = e.detail.value;
+    this.notifyDropdownResize();
   }
 
   _selectedValuesChanged(e: CustomEvent) {

@@ -128,10 +128,20 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
         #label-container {
           overflow: visible;
           max-width: 133%;
+          display: flex;
+          flex-wrap: nowrap;
         }
         .label-slot-container {
           position: relative;
           display: inline;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          flex-shrink: 0;
+        }
+        #label-container label {
+          position: relative;
+          display: block;
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
@@ -155,6 +165,7 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
         <div id="label-container" part="esmm-label-container" class="paper-input-label" slot="label">
           <label
             ?hidden="${!this.label}"
+            title="${this.label}"
             aria-hidden="true"
             part="esmm-label"
             class="paper-input-label"
@@ -221,7 +232,6 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
         id="dropdownMenu"
         part="esmm-dropdownmenu"
         horizontal-align="${this.horizontalAlign}"
-        vertical-offset="${this.verticalOffset}"
         ?dynamic-align="${!this.noDynamicAlign}"
         @iron-overlay-opened="${this._onDropdownOpen}"
         @iron-overlay-closed="${this._onDropdownClose}"
@@ -270,6 +280,7 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
   }
 
   updated(changedProperties: any) {
+    super.updated(changedProperties);
     if (changedProperties.has('selected') || changedProperties.has('options')) {
       this._selectedAndOptionsChanged(this.selected, this.options);
     }

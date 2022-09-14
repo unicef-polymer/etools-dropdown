@@ -85,7 +85,7 @@ export class EsmmOptionsList extends ListItemUtilsMixin(LitElement) {
         }
 
         paper-icon-item {
-          cursor: var(--esmm-select-cursor);
+          cursor: var(--esmm-select-cursor, pointer);
           height: 48px; /* for IE */
         }
 
@@ -93,7 +93,7 @@ export class EsmmOptionsList extends ListItemUtilsMixin(LitElement) {
           display: none;
         }
 
-        paper-icon-item .check-box {
+        paper-icon-item .check-box:not([hidden]) {
           display: flex;
           color: var(--secondary-text-color);
         }
@@ -102,7 +102,7 @@ export class EsmmOptionsList extends ListItemUtilsMixin(LitElement) {
           background: var(--esmm-list-item-selected-color, #dcdcdc);
         }
 
-        paper-icon-item.iron-selected .tick-icon {
+        paper-icon-item.iron-selected .tick-icon:not([hidden]) {
           display: flex;
           color: var(--primary-color);
         }
@@ -147,32 +147,35 @@ export class EsmmOptionsList extends ListItemUtilsMixin(LitElement) {
         .selectedValues="${this.selectedValues}"
         @selected-values-changed=${this._selectedValuesChanged}
       >
-        ${this.shownOptions.map(
-          (item) => html`
-            <paper-icon-item
-              ?disabled="${item.disableSelection}"
-              internal-id="${this.getValue(item)}"
-              @tap="${(e: CustomEvent) => this._itemSelected(e, item)}"
-              class="${this._getSelectedClass(item)}"
-              title="${this._getItemTitle(item)}"
-            >
-              <iron-icon
-                class="check-box"
-                icon="check-box-outline-blank"
-                slot="item-icon"
-                ?hidden="${!this.multi}"
-              ></iron-icon>
-              <iron-icon class="tick-icon" icon="check-box" slot="item-icon" ?hidden="${!this.multi}"></iron-icon>
-              <iron-icon class="tick-icon" icon="check" slot="item-icon" ?hidden="${this.multi}"></iron-icon>
+        ${(this.shownOptions &&
+          this.shownOptions.length > 0 &&
+          this.shownOptions.map(
+            (item) => html`
+              <paper-icon-item
+                ?disabled="${item.disableSelection}"
+                internal-id="${this.getValue(item)}"
+                @tap="${(e: CustomEvent) => this._itemSelected(e, item)}"
+                class="${this._getSelectedClass(item)}"
+                title="${this._getItemTitle(item)}"
+              >
+                <iron-icon
+                  class="check-box"
+                  icon="check-box-outline-blank"
+                  slot="item-icon"
+                  ?hidden="${!this.multi}"
+                ></iron-icon>
+                <iron-icon class="tick-icon" icon="check-box" slot="item-icon" ?hidden="${!this.multi}"></iron-icon>
+                <iron-icon class="tick-icon" icon="check" slot="item-icon" ?hidden="${this.multi}"></iron-icon>
 
-              <paper-item-body two-line="${this.twoLinesLabel}">
-                <div ?hidden="${!this.twoLinesLabel}">${this.getPrimaryLabel(item.label)}</div>
-                <div ?hidden="${!this.twoLinesLabel}" secondary="">${this.getSecondaryLabel(item.label)}</div>
-                <span ?hidden="${this.twoLinesLabel}">${this.getLabel(item)}</span>
-              </paper-item-body>
-            </paper-icon-item>
-          `
-        )}
+                <paper-item-body two-line="${this.twoLinesLabel}">
+                  <div ?hidden="${!this.twoLinesLabel}">${this.getPrimaryLabel(item.label)}</div>
+                  <div ?hidden="${!this.twoLinesLabel}" secondary="">${this.getSecondaryLabel(item.label)}</div>
+                  <span ?hidden="${this.twoLinesLabel}">${this.getLabel(item)}</span>
+                </paper-item-body>
+              </paper-icon-item>
+            `
+          )) ||
+        ''}
 
         <paper-item ?hidden="${!this.showNoSearchResultsWarning}" class="warning" disabled>
           ${getTranslation(this.language, 'NO_RESULTS_FOUND_TRY_OTHER_KEYWORDS')}

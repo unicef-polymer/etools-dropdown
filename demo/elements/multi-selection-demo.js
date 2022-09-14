@@ -59,7 +59,7 @@ class EsmmMultiSelectionDemo extends TestData(LitElement) {
     return {};
   }
 
-  firstUpdate() {
+  firstUpdated() {
     this.shadowRoot.querySelector('#demoActions').dropdownsIds = [
       this.shadowRoot.querySelector('#dropDown1'), 
       this.shadowRoot.querySelector('#dropDown2')

@@ -174,6 +174,7 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
 
     firstUpdated() {
       this.updateComplete.then(() => {
+        this._setFocusTarget();
         this._setPositionTarget();
         this._setDropdownWidth();
         this._disableScrollAction();
@@ -197,6 +198,15 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
       }
       if (changedProperties.has('fitInto')) {
         this.setFitInto();
+      }
+      if (changedProperties.has('verticalOffset')) {
+        this.setMarginTopFromVerticalOffset();
+      }
+    }
+
+    setMarginTopFromVerticalOffset(){
+      if(this._getIronDropdown()){
+        this._getIronDropdown().style.marginTop = `${this.verticalOffset || 0}px`;
       }
     }
 
@@ -453,8 +463,8 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
         return false;
       }
       return (
-        (this.options.length > 0 && this.shownOptions.length === 0) ||
-        (this.shownOptions.length === 1 && this.shownOptions[0][this.optionValue] === null)
+        (this.options && this.options.length > 0 && this.shownOptions && this.shownOptions.length === 0) ||
+        (this.shownOptions && this.shownOptions.length === 1 && this.shownOptions[0][this.optionValue] === null)
       );
     }
 
@@ -511,7 +521,7 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
           if (this.hideSearch) {
             focusTarget = this.shadowRoot?.querySelector('#optionsList')?.shadowRoot?.querySelector('paper-icon-item');
           } else {
-            focusTarget = this._getSearchox().shadowRoot?.querySelector('#searchInput');
+            focusTarget = this._getSearchbox().shadowRoot?.querySelector('#searchInput');
           }
         }
 
@@ -537,7 +547,7 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
       return this.shadowRoot?.querySelector('#optionsList')! as any;
     }
 
-    _getSearchox() {
+    _getSearchbox() {
       return this.shadowRoot?.querySelector('#searchbox')! as any;
     }
 
@@ -573,8 +583,8 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
     // if dropdown is in dialog and user scroll down to select an item, after selection the option list will be
     // scrolled up, this method will preserve option list scroll position after selection
     _preserveListScrollPosition() {
-      const paperListBox = this._getOptionsList().shadowRoot?.querySelector('paper-listbox')!;
-      const scrollTop = paperListBox.scrollTop;
+      const paperListBox = this._getOptionsList().shadowRoot?.querySelector('paper-listbox');
+      const scrollTop = paperListBox?.scrollTop || 0;
       if (scrollTop > 0) {
         setTimeout(() => {
           paperListBox.scrollTop = scrollTop;

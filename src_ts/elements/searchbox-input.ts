@@ -15,7 +15,7 @@ export class EsmmSearchboxInput extends LitElement {
 
   @property({type: String})
   language = 'en';
-
+  
   render() {
     // language=HTML
     return html`
@@ -47,7 +47,6 @@ export class EsmmSearchboxInput extends LitElement {
         type="text"
         .value="${this.search}"
         @value-changed="${this._valueChanged}"
-        auto-focus
         tabindex="0"
       >
         <iron-icon icon="search" slot="prefix"></iron-icon>
