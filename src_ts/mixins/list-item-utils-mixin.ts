@@ -32,12 +32,6 @@ export const ListItemUtilsMixin = dedupeMixin(<T extends MixinTarget<LitElement>
     @property({type: String, attribute: 'language'})
     language!: string;
 
-    firstUpdated() {
-      this.updateComplete.then(() => {
-        this.noneOptionLabel = '-- ' + getTranslation(this.language, 'NONE') + ' --';
-      });
-    }
-
     /**
      * Get option primary label. All chars until `|` .
      * @param label
@@ -46,6 +40,10 @@ export const ListItemUtilsMixin = dedupeMixin(<T extends MixinTarget<LitElement>
     getPrimaryLabel(label: string) {
       let l = '';
       if (label) {
+        if (label === '-- NONE --') {
+          label = getTranslation(this.language, 'NONE');
+        }
+
         l = label.toString().slice(0, label.toString().indexOf('|'));
         if (this.capitalize) {
           l = this._capitalizeString(l);
@@ -61,7 +59,7 @@ export const ListItemUtilsMixin = dedupeMixin(<T extends MixinTarget<LitElement>
      */
     getSecondaryLabel(label: string) {
       if (label === this.noneOptionLabel) {
-        return 'Reset selected option';
+        return getTranslation(this.language, 'RESET_SELECTED_OPTION');
       }
       let sl = '';
       if (label) {
@@ -91,6 +89,11 @@ export const ListItemUtilsMixin = dedupeMixin(<T extends MixinTarget<LitElement>
       let label = '';
       if (item) {
         label = this.twoLinesLabel ? this.getPrimaryLabel(item[this.optionLabel]) : item[this.optionLabel];
+
+        if (label === '-- NONE --') {
+          label = getTranslation(this.language, 'NONE');
+        }
+
         if (this.capitalize && !this.twoLinesLabel) {
           // capitalize label
           label = this._capitalizeString(label);

@@ -179,7 +179,6 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
         this._setDropdownWidth();
         this._disableScrollAction();
         this.notifyDropdownResize();
-
         this._setResetSizeHandler();
         this.elemAttached = true;
         this.setFitInto();
@@ -363,7 +362,6 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
       }
 
       let shownOptions = JSON.parse(JSON.stringify(this.options));
-      const initialOptionsNo = shownOptions ? shownOptions.length : 0;
 
       if (this.search) {
         shownOptions = this.options.filter(this._itemContainsSearchString.bind(this));
@@ -378,11 +376,7 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
         emptyOption[this.optionLabel] = this.noneOptionLabel;
         shownOptions.unshift(emptyOption);
       }
-      const shownOptionsNo = shownOptions ? shownOptions.length : 0;
 
-      if (initialOptionsNo !== shownOptionsNo) {
-        this._getIronDropdown()?._updateOverlayPosition();
-      }
       return shownOptions;
     }
 
@@ -412,18 +406,9 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
         if (this.searchChanged) {
           this.searchChanged = false;
           this.requestInProgress = false;
-          // eslint-disable-next-line max-len
-          // if search was changed need to update dropdown layout (options length can be different than what we had before)
-          setTimeout(() => {
-            this.notifyDropdownResize();
-          }, 200);
         } else if (this.pageChanged) {
           this.pageChanged = false;
           this.requestInProgress = false;
-          // if page was changed, options were added to the list, need to scroll up to show them
-          setTimeout(() => {
-            this._getIronDropdown()._updateOverlayPosition();
-          }, 200);
         }
         return this._trimByShownOptionsCount(options);
       }

@@ -413,7 +413,6 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
 
   _searchChanged(e: CustomEvent) {
     this.search = e.detail.value;
-    this.notifyDropdownResize();
   }
 
   _selectedValuesChanged(e: CustomEvent) {
