@@ -38,8 +38,8 @@ export const esmmSharedStyles = html` <style>
     display: flex;
     flex-direction: column;
     z-index: var(--esmm-dropdown-menu-z-index, initial);
-    top: 0 !important;
-    left: 0 !important;
+    top: initial !important;
+    left: initial !important;
   }
 
   #ironDrContent {
