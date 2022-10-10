@@ -186,8 +186,8 @@ For documentation details see component demo (`npm i`, `polymer serve`)
 
 ## Internationalization
 
-`language` property available to be set.
-`assets/translations/all.js` contains the translations file.
+- The component listens to the `language-changed` event and self translates by setting the `language` property.
+  `assets/translations.js` contains the translations file.
 
 ## Usage
 

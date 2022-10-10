@@ -5,6 +5,8 @@
 /.vscode
 /demo
 /test
+/src_ts
+polymer.json
 .prettierrc
 analysis.json
 .eslintrc.json
