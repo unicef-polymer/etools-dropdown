@@ -125,6 +125,9 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
         iron-input > input {
           @apply --paper-input-container-shared-input-style;
         }
+        iron-input > input::placeholder {
+          @apply --paper-input-container-shared-input-style;
+        }
         #label-container {
           overflow: visible;
           max-width: 133%;
