@@ -23,7 +23,6 @@ export const esmmSharedStyles = html` <style>
   }
 
   :host {
-    position: relative;
     width: 242px;
     @apply --layout-horizontal;
     @apply --esmm-external-wrapper;
@@ -38,8 +37,6 @@ export const esmmSharedStyles = html` <style>
     display: flex;
     flex-direction: column;
     z-index: var(--esmm-dropdown-menu-z-index, initial);
-    top: initial !important;
-    left: initial !important;
   }
 
   #ironDrContent {
