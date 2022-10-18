@@ -2,7 +2,14 @@ import {html} from 'lit-element';
 
 // language=HTML
 export const esmmSharedStyles = html` <style>
-  html {
+  *[hidden] {
+    display: none !important;
+  }
+
+  :host {
+    width: 242px;
+    @apply --layout-horizontal;
+    @apply --esmm-external-wrapper;
     --esmm-icons: {
       color: var(--secondary-text-color);
       cursor: pointer;
@@ -16,16 +23,6 @@ export const esmmSharedStyles = html` <style>
     --paper-item-focused-after: {
       opacity: 0.06;
     }
-  }
-
-  *[hidden] {
-    display: none !important;
-  }
-
-  :host {
-    width: 242px;
-    @apply --layout-horizontal;
-    @apply --esmm-external-wrapper;
   }
 
   :host(:not([readonly]):not([disabled])) {
