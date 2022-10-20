@@ -2,7 +2,14 @@ import {html} from 'lit-element';
 
 // language=HTML
 export const esmmSharedStyles = html` <style>
-  html {
+  *[hidden] {
+    display: none !important;
+  }
+
+  :host {
+    width: 242px;
+    @apply --layout-horizontal;
+    @apply --esmm-external-wrapper;
     --esmm-icons: {
       color: var(--secondary-text-color);
       cursor: pointer;
@@ -18,17 +25,6 @@ export const esmmSharedStyles = html` <style>
     }
   }
 
-  *[hidden] {
-    display: none !important;
-  }
-
-  :host {
-    position: relative;
-    width: 242px;
-    @apply --layout-horizontal;
-    @apply --esmm-external-wrapper;
-  }
-
   :host(:not([readonly]):not([disabled])) {
     cursor: var(--esmm-select-cursor);
   }
@@ -38,8 +34,6 @@ export const esmmSharedStyles = html` <style>
     display: flex;
     flex-direction: column;
     z-index: var(--esmm-dropdown-menu-z-index, initial);
-    top: initial !important;
-    left: initial !important;
   }
 
   #ironDrContent {
