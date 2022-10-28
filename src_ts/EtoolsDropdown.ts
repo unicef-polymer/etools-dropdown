@@ -57,8 +57,6 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
   @property({type: String})
   allowedPattern: any;
   @property({type: String})
-  validator: any;
-  @property({type: String})
   _ariaLabelledBy: any;
   @property({type: String})
   _ariaDescribedBy: any;
@@ -86,8 +84,7 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
   size: any;
   @property({type: String})
   autocorrect: any;
-  @property({type: String})
-  _onChange: any;
+
   @property({type: String})
   autosave: any;
   @property({type: String})
@@ -122,10 +119,10 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
         #main iron-icon {
           @apply --esmm-icons;
         }
-        iron-input > input {
+        input {
           @apply --paper-input-container-shared-input-style;
         }
-        iron-input > input::placeholder {
+        input::placeholder {
           @apply --paper-input-container-shared-input-style;
         }
         #label-container {
@@ -181,50 +178,39 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
         </div>
 
         <!-- Need to bind maxlength so that the paper-input-char-counter works correctly -->
-        <iron-input
-          bind-value="${this.getLabel(this.selectedItem)}"
+        <input
           slot="input"
-          class="paper-input-input"
-          id="${this._inputId}"
-          max-length="${this.maxlength}"
-          .allowedPattern="${this.allowedPattern}"
-          .invalid="${this.invalid}"
-          @invalid-changed="${this._invalidInputChanged}"
-          .validator="${this.validator}"
-        >
-          <input
-            readonly
-            aria-labelledby="${this._ariaLabelledBy}"
-            aria-describedby="${this._ariaDescribedBy}"
-            ?disabled="${this.disabled}"
-            title="${this.title}"
-            type="${this.type}"
-            pattern="${this.pattern}"
-            ?required="${this.required}"
-            ?autocomplete="${this.autocomplete}"
-            ?autofocus="${this.autofocus}"
-            inputmode="${this.inputmode}"
-            minlength="${this.minlength}"
-            maxlength="${this.maxlength}"
-            min="${this.min}"
-            max="${this.max}"
-            step="${this.step}"
-            name="${this.name}"
-            placeholder="${this.placeholder}"
-            list="${this.list}"
-            size="${this.size}"
-            ?autocapitalize="${this.autocapitalize}"
-            ?autocorrect="${this.autocorrect}"
-            @input="${this._onChange}"
-            tabindex="${this.tabIndex}"
-            ?autosave="${this.autosave}"
-            results="${this.results}"
-            accept="${this.accept}"
-            ?multiple="${this.multiple}"
-            role="${this.inputRole}"
-            aria-haspopup="${this.inputAriaHaspopup}"
-          />
-        </iron-input>
+          readonly
+          .value="${this.getLabel(this.selectedItem)}"
+          aria-labelledby="${this._ariaLabelledBy}"
+          aria-describedby="${this._ariaDescribedBy}"
+          ?disabled="${this.disabled}"
+          title="${this.title}"
+          type="${this.type}"
+          pattern="${this.pattern}"
+          ?required="${this.required}"
+          ?autocomplete="${this.autocomplete}"
+          ?autofocus="${this.autofocus}"
+          inputmode="${this.inputmode}"
+          minlength="${this.minlength}"
+          maxlength="${this.maxlength}"
+          min="${this.min}"
+          max="${this.max}"
+          step="${this.step}"
+          name="${this.name}"
+          placeholder="${this.placeholder}"
+          list="${this.list}"
+          size="${this.size}"
+          ?autocapitalize="${this.autocapitalize}"
+          ?autocorrect="${this.autocorrect}"
+          tabindex="${this.tabIndex}"
+          ?autosave="${this.autosave}"
+          results="${this.results}"
+          accept="${this.accept}"
+          ?multiple="${this.multiple}"
+          role="${this.inputRole}"
+          aria-haspopup="${this.inputAriaHaspopup}"
+        />
 
         <iron-icon icon="arrow-drop-down" slot="suffix" ?hidden="${this.readonly}"></iron-icon>
         <paper-input-error aria-live="assertive" slot="add-on" ?hidden="${!this.errorMessage}"
