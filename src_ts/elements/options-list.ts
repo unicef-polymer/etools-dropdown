@@ -144,6 +144,7 @@ export class EsmmOptionsList extends ListItemUtilsMixin(LitElement) {
         .multi="${this.multi}"
         attr-for-selected="internal-id"
         .selected="${this.selected}"
+        .activateEvent="click"
         .selectedValues="${this.selectedValues}"
         @selected-values-changed=${this._selectedValuesChanged}
       >
@@ -154,7 +155,7 @@ export class EsmmOptionsList extends ListItemUtilsMixin(LitElement) {
               <paper-icon-item
                 ?disabled="${item.disableSelection}"
                 internal-id="${this.getValue(item)}"
-                @tap="${(e: CustomEvent) => this._itemSelected(e, item)}"
+                @click="${(e: CustomEvent) => this._itemSelected(e, item)}"
                 class="${this._getSelectedClass(item)}"
                 title="${this._getItemTitle(item)}"
               >
