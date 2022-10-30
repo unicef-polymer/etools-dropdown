@@ -143,7 +143,7 @@ export class EsmmSelectedOptions extends ListItemUtilsMixin(LitElement) {
         id="container"
         tabindex="1"
         ?no-label-float="${this.noLabelFloat}"
-        @tap="${this.openMenu}"
+        @click="${this.openMenu}"
         @focus="${this.onInputFocus}"
         ?always-float-label="${this._computeAlwaysFloatLabel(this.alwaysFloatLabel, this.placeholder)}"
         ?auto-validate="${this.autoValidate}"
@@ -160,7 +160,7 @@ export class EsmmSelectedOptions extends ListItemUtilsMixin(LitElement) {
             for="selected-items-wrapper"
             >${this.label}
           </label>
-          <div class="label-slot-container" part="esmm-label-suffix" @tap="${this._stopEvent}">
+          <div class="label-slot-container" part="esmm-label-suffix" @click="${this._stopEvent}">
             <slot name="input-label-suffix"></slot>
           </div>
         </div>
@@ -180,7 +180,7 @@ export class EsmmSelectedOptions extends ListItemUtilsMixin(LitElement) {
                     ?disabled="${this.disabled}"
                     ?hidden="${this.readonly}"
                     icon="close"
-                    @tap="${(e: CustomEvent) => this._removeItem(e, item)}"
+                    @click="${(e: CustomEvent) => this._removeItem(e, item)}"
                     @focus="${this._onXFocus}"
                   ></paper-icon-button>
                 </span>

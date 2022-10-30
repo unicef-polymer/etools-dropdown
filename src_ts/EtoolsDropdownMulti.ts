@@ -153,7 +153,7 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
             class="close-btn"
             part="esmm-close-btn"
             ?hidden="${this.hideClose}"
-            @tap="${this._closeMenu}"
+            @click="${this._closeMenu}"
           >
             ${this._getCloseBtnText(this.closeText, this.language)}
           </span>

@@ -34,31 +34,33 @@ class EsmmDemoActions extends LitElement {
       </style>
 
       <div>
-        <paper-button raised @tap="${this.validateDropdowns}">Validate</paper-button>
-        <paper-button raised class="${this.autoValidateActiveClass}" @tap="${this.activateAutoValidation}"
+        <paper-button raised @click="${this.validateDropdowns}">Validate</paper-button>
+        <paper-button raised class="${this.autoValidateActiveClass}" @click="${this.activateAutoValidation}"
           >Enable auto validation
         </paper-button>
-        <paper-button raised @tap="${this.deactivateAutoValidation}">Disable auto validation</paper-button>
+        <paper-button raised @click="${this.deactivateAutoValidation}">Disable auto validation</paper-button>
       </div>
       <div>
-        <paper-button raised @tap="${this.makeDropdownsRequired}" class="${this.requiredActiveClass}">
+        <paper-button raised @click="${this.makeDropdownsRequired}" class="${this.requiredActiveClass}">
           Make dropdowns required
         </paper-button>
-        <paper-button raised @tap="${this.makeDropdownsNotRequired}">Make dropdowns NOT required</paper-button>
+        <paper-button raised @click="${this.makeDropdownsNotRequired}">Make dropdowns NOT required</paper-button>
       </div>
       <div>
-        <paper-button raised @tap="${this.makeDropdownsReadonly}" class="${this.readonlyActiveClass}"
+        <paper-button raised @click="${this.makeDropdownsReadonly}" class="${this.readonlyActiveClass}"
           >Make dropdowns readonly
         </paper-button>
-        <paper-button raised @tap="${this.removeReadonlyState}">Make dropdowns editable</paper-button>
+        <paper-button raised @click="${this.removeReadonlyState}">Make dropdowns editable</paper-button>
       </div>
       <div>
-        <paper-button raised @tap="${this.activateInvalidState}">Activate invalid state</paper-button>
-        <paper-button raised @tap="${this.deactivateInvalidState}">Hide invalid state</paper-button>
+        <paper-button raised @click="${this.activateInvalidState}">Activate invalid state</paper-button>
+        <paper-button raised @click="${this.deactivateInvalidState}">Hide invalid state</paper-button>
       </div>
       <div>
-        <paper-button raised @tap="${this.disableDropdowns}" class="${this.disabledActiveClass}">Disable</paper-button>
-        <paper-button raised @tap="${this.enableDropdowns}">Enable</paper-button>
+        <paper-button raised @click="${this.disableDropdowns}" class="${this.disabledActiveClass}"
+          >Disable</paper-button
+        >
+        <paper-button raised @click="${this.enableDropdowns}">Enable</paper-button>
       </div>
     `;
   }
