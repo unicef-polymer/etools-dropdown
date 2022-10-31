@@ -3,6 +3,7 @@ import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-input/paper-input-container.js';
 import {getTranslation} from '../utils/translate';
+import {ifDefined} from 'lit-html/directives/if-defined.js';
 
 /**
  * @customElement
@@ -40,7 +41,7 @@ export class EsmmSearchboxInput extends LitElement {
         }
       </style>
 
-      <paper-input-container id="searchInputContainer" no-label-float type="text" tabindex="0" focused>
+      <paper-input-container id="searchInputContainer" no-label-float type="text" tabindex="${ifDefined(undefined)}">
         <iron-icon icon="search" slot="prefix"></iron-icon>
         <input
           slot="input"
