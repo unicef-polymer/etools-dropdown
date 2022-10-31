@@ -1,7 +1,7 @@
 {
   "name": "@unicef-polymer/etools-dropdown",
   "description": "Polymer 3 dropdown element with searchable options, single and multiple selection",
-  "version": "4.0.0-rc.19",
+  "version": "4.0.0-rc.21",
   "homepage": "https://github.com/unicef-polymer/etools-dropdown",
   "repository": {
     "type": "git",
@@ -17,7 +17,6 @@
     "format:eslint": "eslint --ext .ts . --fix --ignore-path .gitignore",
     "format:prettier": "prettier \"src_ts/**/*.ts\" --write --ignore-path .gitignore",
     "gen-typings": "gen-typescript-declarations --deleteExisting --outDir './'",
-    "prepublishOnly": "npm run lint",
     "publish": "npm run tsToJs && npm publish"
   },
   "dependencies": {
