@@ -17,6 +17,7 @@
     "format:eslint": "eslint --ext .ts . --fix --ignore-path .gitignore",
     "format:prettier": "prettier \"src_ts/**/*.ts\" --write --ignore-path .gitignore",
     "gen-typings": "gen-typescript-declarations --deleteExisting --outDir './'",
+    "prepublishOnly": "npm run lint",
     "publish": "npm run tsToJs && npm publish"
   },
   "dependencies": {
