@@ -158,7 +158,7 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
         ?disabled="${this.disabled}"
         ?invalid="${this.invalid}"
         @keydown="${this._onKeyDown}"
-        @tap="${this._openMenu}"
+        @click="${this._openMenu}"
       >
         <slot name="prefix" slot="prefix"></slot>
 
