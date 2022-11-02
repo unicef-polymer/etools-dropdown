@@ -1,7 +1,7 @@
 import {LitElement, html, customElement, property} from 'lit-element';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import '@polymer/iron-icons/iron-icons.js';
-import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-input/paper-input-container.js';
 import {getTranslation} from '../utils/translate';
 
 /**
@@ -31,7 +31,7 @@ export class EsmmSearchboxInput extends LitElement {
           margin-right: 5px;
         }
 
-        paper-input {
+        #searchInput {
           width: 100%;
 
           --paper-input-container-label: {
@@ -40,25 +40,18 @@ export class EsmmSearchboxInput extends LitElement {
         }
       </style>
 
-      <paper-input
-        id="searchInput"
-        no-label-float
-        placeholder="${getTranslation(this.language, 'SEARCH')}"
-        type="text"
-        .value="${this.search}"
-        @value-changed="${this._valueChanged}"
-        tabindex="0"
-      >
+      <paper-input-container id="searchInput" no-label-float type="text" tabindex="0">
         <iron-icon icon="search" slot="prefix"></iron-icon>
-      </paper-input>
+        <input slot="input" placeholder="${getTranslation(this.language, 'SEARCH')}" @input="${this._valueChanged}" />
+      </paper-input-container>
     `;
   }
 
   _valueChanged(e: CustomEvent) {
-    this.search = e.detail.value;
+    this.search = (e.target as HTMLInputElement).value;
     this.dispatchEvent(
       new CustomEvent('search-changed', {
-        detail: e.detail,
+        detail: {value: (e.target as HTMLInputElement).value},
         bubbles: true,
         composed: true
       })
