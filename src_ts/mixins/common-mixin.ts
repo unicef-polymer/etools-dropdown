@@ -174,7 +174,6 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
 
     firstUpdated() {
       this.updateComplete.then(() => {
-        this._setFocusTarget();
         this._setPositionTarget();
         this._setDropdownWidth();
         this._disableScrollAction();
@@ -191,9 +190,6 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
       }
       if (changedProperties.has('readonly')) {
         this._readonlyChanged(this.readonly, changedProperties.get('readonly'));
-      }
-      if (changedProperties.has('shownOptions')) {
-        this._setFocusTarget();
       }
       if (changedProperties.has('fitInto')) {
         this.setFitInto();
@@ -376,7 +372,6 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
         emptyOption[this.optionLabel] = this.noneOptionLabel;
         shownOptions.unshift(emptyOption);
       }
-
       return shownOptions;
     }
 
@@ -489,10 +484,18 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
       }
     }
 
+    onShownOptions() {
+      this.debounce(this._onShownOptions.bind(this), 200)();
+    }
+
+    _onShownOptions() {
+      this._setFocusTarget();
+    }
+
     /**
      * Set focus target after showOptions is set,
      * and after the paper-icon-items have gotten the chance to be added to the DOM,
-     * but before the dropdown is openned , otherwise ironDropdown will ignore focusTarget
+     * but before the dropdown is opened , otherwise ironDropdown will ignore focusTarget
      *
      * Setting the focus on a paper-listbox item
      * enables the 'Go to item that starts with pressed letter' functionality
@@ -504,12 +507,11 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
           focusTarget = this.shadowRoot?.querySelector('#optionsList')?.shadowRoot?.querySelector('#noOptions');
         } else {
           if (this.hideSearch) {
-            focusTarget = this.shadowRoot?.querySelector('#optionsList')?.shadowRoot?.querySelector('paper-icon-item');
+            focusTarget = this.shadowRoot?.querySelector('#optionsList')?.shadowRoot?.querySelector('paper-listbox');
           } else {
             focusTarget = this._getSearchbox().shadowRoot?.querySelector('#searchInput');
           }
         }
-
         this._getIronDropdown().focusTarget = focusTarget;
       }, 10);
     }

@@ -261,6 +261,7 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
             ?capitalize="${this.capitalize}"
             @close-etools-dropdown="${this._closeMenu}"
             @show-more="${this.onShowMore}"
+            @shown-options="${this.onShownOptions}"
             .language="${this.language}"
           ></esmm-options-list>
         </div>
