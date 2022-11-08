@@ -485,10 +485,6 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
     }
 
     onShownOptions() {
-      this.debounce(this._onShownOptions.bind(this), 200)();
-    }
-
-    _onShownOptions() {
       this._setFocusTarget();
     }
 
