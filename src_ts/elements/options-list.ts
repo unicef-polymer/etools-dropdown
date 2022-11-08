@@ -212,10 +212,11 @@ export class EsmmOptionsList extends ListItemUtilsMixin(LitElement) {
   onShownOptionsChanged() {
     this._debouncerShownOptions = Debouncer.debounce(this._debouncerShownOptions, timeOut.after(200), () => {
       this.dispatchEvent(
-      new CustomEvent('shown-options', {
-        bubbles: true,
-        composed: true
-      }));
+        new CustomEvent('shown-options', {
+          bubbles: true,
+          composed: true
+        })
+      );
     });
   }
 
