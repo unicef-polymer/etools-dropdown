@@ -2,6 +2,8 @@ import {property, LitElement} from 'lit-element';
 import {IronDropdownElement} from '@polymer/iron-dropdown';
 import {ListItemUtilsMixin} from './list-item-utils-mixin';
 import {MixinTarget} from '../utils/types';
+import {Debouncer} from '@polymer/polymer/lib/utils/debounce';
+import {timeOut} from '@polymer/polymer/lib/utils/async';
 /*
  * Common functionality for single selection and multiple selection dropdown
  * @polymer
@@ -145,6 +147,8 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
 
     @property({type: Boolean})
     requestInProgress = false;
+
+    _debouncerResize: Debouncer | null = null;
 
     constructor(...args: any[]) {
       super(args);
@@ -373,15 +377,19 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
         shownOptions.unshift(emptyOption);
       }
 
+      this._resizeOptionsList();
+
+      return shownOptions;
+    }
+
+    _resizeOptionsList() {
       const dr = this._getIronDropdown();
       // because available options length can vary, options list position must be updated
       if (dr && dr.opened) {
-        setTimeout(() => {
+        this._debouncerResize = Debouncer.debounce(this._debouncerResize, timeOut.after(100), () => {
           dr.notifyResize();
-        }, 50);
+        });
       }
-
-      return shownOptions;
     }
 
     _loadOptionsData(options: any[], search: string, shownOptionsCount: number, loadDataMethod: any): any {
