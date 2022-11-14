@@ -372,6 +372,15 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
         emptyOption[this.optionLabel] = this.noneOptionLabel;
         shownOptions.unshift(emptyOption);
       }
+
+      const dr = this._getIronDropdown();
+      // because available options length can vary, options list position must be updated
+      if (dr && dr.opened) {
+        setTimeout(() => {
+          dr.notifyResize();
+        }, 50);
+      }
+
       return shownOptions;
     }
 
