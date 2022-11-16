@@ -164,9 +164,7 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
       this._shownOptionsCount = this.shownOptionsLimit;
       this.disableOnFocusHandling = this.disableOnFocusHandling || this.isIEBrowser();
       document.addEventListener('language-changed', this._handleLanguageChange as any);
-      // focusout is used because blur acts weirdly on IE
       this._onFocusOut = this._onFocusOut.bind(this);
-      this.addEventListener('focusout', this._onFocusOut);
     }
 
     // @ts-ignore
@@ -503,6 +501,7 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
 
     onShownOptions() {
       this._setFocusTarget();
+      this.addEventListener('focusout', this._onFocusOut);
     }
 
     /**
