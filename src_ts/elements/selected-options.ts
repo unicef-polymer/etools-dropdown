@@ -117,12 +117,11 @@ export class EsmmSelectedOptions extends ListItemUtilsMixin(LitElement) {
           overflow: visible;
           max-width: 133%;
           display: flex;
-          flex-wrap: nowrap;
+          flex-wrap: wrap;
         }
         .label-slot-container {
           position: relative;
           display: inline;
-          overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
           flex-shrink: 0;
