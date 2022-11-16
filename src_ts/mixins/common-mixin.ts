@@ -2,6 +2,8 @@ import {property, LitElement} from 'lit-element';
 import {IronDropdownElement} from '@polymer/iron-dropdown';
 import {ListItemUtilsMixin} from './list-item-utils-mixin';
 import {MixinTarget} from '../utils/types';
+import {Debouncer} from '@polymer/polymer/lib/utils/debounce';
+import {timeOut} from '@polymer/polymer/lib/utils/async';
 /*
  * Common functionality for single selection and multiple selection dropdown
  * @polymer
@@ -146,6 +148,8 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
     @property({type: Boolean})
     requestInProgress = false;
 
+    _debouncerResize: Debouncer | null = null;
+
     constructor(...args: any[]) {
       super(args);
       if (!this.language) {
@@ -160,9 +164,7 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
       this._shownOptionsCount = this.shownOptionsLimit;
       this.disableOnFocusHandling = this.disableOnFocusHandling || this.isIEBrowser();
       document.addEventListener('language-changed', this._handleLanguageChange as any);
-      // focusout is used because blur acts weirdly on IE
       this._onFocusOut = this._onFocusOut.bind(this);
-      this.addEventListener('focusout', this._onFocusOut);
     }
 
     // @ts-ignore
@@ -372,7 +374,20 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
         emptyOption[this.optionLabel] = this.noneOptionLabel;
         shownOptions.unshift(emptyOption);
       }
+
+      this._resizeOptionsList();
+
       return shownOptions;
+    }
+
+    _resizeOptionsList() {
+      const dr = this._getIronDropdown();
+      // because available options length can vary, options list position must be updated
+      if (dr && dr.opened) {
+        this._debouncerResize = Debouncer.debounce(this._debouncerResize, timeOut.after(100), () => {
+          dr.notifyResize();
+        });
+      }
     }
 
     _loadOptionsData(options: any[], search: string, shownOptionsCount: number, loadDataMethod: any): any {
@@ -486,6 +501,7 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
 
     onShownOptions() {
       this._setFocusTarget();
+      this.addEventListener('focusout', this._onFocusOut);
     }
 
     /**
