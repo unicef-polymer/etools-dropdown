@@ -58,6 +58,7 @@ export class EsmmOptionsList extends ListItemUtilsMixin(LitElement) {
   shownOptionsLimit = 0;
 
   private _debouncer: Debouncer | null = null;
+  private _debouncerShownOptions: Debouncer | null = null;
 
   render() {
     // language=HTML
@@ -203,6 +204,20 @@ export class EsmmOptionsList extends ListItemUtilsMixin(LitElement) {
     if (changedProperties.has('showLimitWarning')) {
       this._enableInfiniteScroll();
     }
+    if (changedProperties.has('shownOptions')) {
+      this.onShownOptionsChanged();
+    }
+  }
+
+  onShownOptionsChanged() {
+    this._debouncerShownOptions = Debouncer.debounce(this._debouncerShownOptions, timeOut.after(200), () => {
+      this.dispatchEvent(
+        new CustomEvent('shown-options', {
+          bubbles: true,
+          composed: true
+        })
+      );
+    });
   }
 
   _enableInfiniteScroll() {

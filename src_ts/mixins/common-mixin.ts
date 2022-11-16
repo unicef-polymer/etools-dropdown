@@ -2,6 +2,8 @@ import {property, LitElement} from 'lit-element';
 import {IronDropdownElement} from '@polymer/iron-dropdown';
 import {ListItemUtilsMixin} from './list-item-utils-mixin';
 import {MixinTarget} from '../utils/types';
+import {Debouncer} from '@polymer/polymer/lib/utils/debounce';
+import {timeOut} from '@polymer/polymer/lib/utils/async';
 /*
  * Common functionality for single selection and multiple selection dropdown
  * @polymer
@@ -146,6 +148,8 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
     @property({type: Boolean})
     requestInProgress = false;
 
+    _debouncerResize: Debouncer | null = null;
+
     constructor(...args: any[]) {
       super(args);
       if (!this.language) {
@@ -160,9 +164,7 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
       this._shownOptionsCount = this.shownOptionsLimit;
       this.disableOnFocusHandling = this.disableOnFocusHandling || this.isIEBrowser();
       document.addEventListener('language-changed', this._handleLanguageChange as any);
-      // focusout is used because blur acts weirdly on IE
       this._onFocusOut = this._onFocusOut.bind(this);
-      this.addEventListener('focusout', this._onFocusOut);
     }
 
     // @ts-ignore
@@ -174,7 +176,6 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
 
     firstUpdated() {
       this.updateComplete.then(() => {
-        this._setFocusTarget();
         this._setPositionTarget();
         this._setDropdownWidth();
         this._disableScrollAction();
@@ -191,9 +192,6 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
       }
       if (changedProperties.has('readonly')) {
         this._readonlyChanged(this.readonly, changedProperties.get('readonly'));
-      }
-      if (changedProperties.has('shownOptions')) {
-        this._setFocusTarget();
       }
       if (changedProperties.has('fitInto')) {
         this.setFitInto();
@@ -377,7 +375,19 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
         shownOptions.unshift(emptyOption);
       }
 
+      this._resizeOptionsList();
+
       return shownOptions;
+    }
+
+    _resizeOptionsList() {
+      const dr = this._getIronDropdown();
+      // because available options length can vary, options list position must be updated
+      if (dr && dr.opened) {
+        this._debouncerResize = Debouncer.debounce(this._debouncerResize, timeOut.after(100), () => {
+          dr.notifyResize();
+        });
+      }
     }
 
     _loadOptionsData(options: any[], search: string, shownOptionsCount: number, loadDataMethod: any): any {
@@ -489,10 +499,15 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
       }
     }
 
+    onShownOptions() {
+      this._setFocusTarget();
+      this.addEventListener('focusout', this._onFocusOut);
+    }
+
     /**
      * Set focus target after showOptions is set,
      * and after the paper-icon-items have gotten the chance to be added to the DOM,
-     * but before the dropdown is openned , otherwise ironDropdown will ignore focusTarget
+     * but before the dropdown is opened , otherwise ironDropdown will ignore focusTarget
      *
      * Setting the focus on a paper-listbox item
      * enables the 'Go to item that starts with pressed letter' functionality
@@ -504,12 +519,11 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
           focusTarget = this.shadowRoot?.querySelector('#optionsList')?.shadowRoot?.querySelector('#noOptions');
         } else {
           if (this.hideSearch) {
-            focusTarget = this.shadowRoot?.querySelector('#optionsList')?.shadowRoot?.querySelector('paper-icon-item');
+            focusTarget = this.shadowRoot?.querySelector('#optionsList')?.shadowRoot?.querySelector('paper-listbox');
           } else {
             focusTarget = this._getSearchbox().shadowRoot?.querySelector('#searchInput');
           }
         }
-
         this._getIronDropdown().focusTarget = focusTarget;
       }, 10);
     }
