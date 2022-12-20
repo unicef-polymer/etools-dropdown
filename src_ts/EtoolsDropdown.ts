@@ -11,7 +11,7 @@ import '@polymer/paper-styles/element-styles/paper-material-styles.js';
 import './scripts/es6-polyfills.js';
 import './elements/searchbox-input.js';
 import './elements/options-list.js';
-import {esmmSharedStyles} from './styles/esmm-shared-styles.js';
+import {esmmSharedStyles, tomSelectStyles} from './styles/esmm-shared-styles.js';
 
 /**
  * `etools-dropdown`
@@ -92,8 +92,6 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
   @property({type: String})
   accept: any;
   @property({type: String})
-  multiple: any;
-  @property({type: String})
   inputRole: any;
   @property({type: String})
   inputAriaHaspopup: any;
@@ -101,7 +99,7 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
   render() {
     // language=HTML
     return html`
-      ${esmmSharedStyles}
+      ${esmmSharedStyles} ${tomSelectStyles}
       <style>
         :host {
           --paper-input-container: {
@@ -112,9 +110,8 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
             right: auto;
             position: static;
           }
-        }
-        #main {
-          width: 133%;
+          display: block;
+          box-sizing: border-box;
         }
         #main iron-icon {
           @apply --esmm-icons;
@@ -149,122 +146,52 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
           float: left;
         }
       </style>
+
       <paper-input-container
-        id="main"
-        ?no-label-float="${this.noLabelFloat}"
-        ?always-float-label="${this.alwaysFloatLabel}"
-        ?auto-alidate="${this._getAutoValidate()}"
+      id="main"
+      ?no-label-float="${this.noLabelFloat}"
+      ?always-float-label="${this.alwaysFloatLabel}"
+      ?auto-alidate="${this._getAutoValidate()}"
+      ?invalid="${this.invalid}"
+    >
+      <div id="label-container" part="esmm-label-container" class="paper-input-label" slot="label">
+        <label
+          ?hidden="${!this.label}"
+          title="${this.label}"
+          aria-hidden="true"
+          part="esmm-label"
+          class="paper-input-label"
+          for="selected-items-wrapper"
+          >${this.label}
+        </label>
+        <div class="label-slot-container" part="esmm-label-suffix">
+          <slot name="input-label-suffix"></slot>
+        </div>
+      </div>
+      <div slot="input" class="paper-input-input">
+      <select
+        select-node
+        autocomplete="off" 
         ?disabled="${this.disabled}"
-        ?invalid="${this.invalid}"
-        @keydown="${this._onKeyDown}"
-        @click="${this._openMenu}"
+        title="${this.title}"
+        ?required="${this.required}"
+        ?autofocus="${this.autofocus}"
+        name="${this.name}"
+        placeholder="${this.placeholder}"
+        list="${this.list}"
+        size="${this.size}"
+        ?autocapitalize="${this.autocapitalize}"
+        ?autocorrect="${this.autocorrect}"
+        tabindex="${this.tabIndex}"
+        @change="${(e: any) => {
+         this.selected = e.currentTarget.value;
+        }}"
       >
-        <slot name="prefix" slot="prefix"></slot>
-
-        <div id="label-container" part="esmm-label-container" class="paper-input-label" slot="label">
-          <label
-            ?hidden="${!this.label}"
-            title="${this.label}"
-            aria-hidden="true"
-            part="esmm-label"
-            class="paper-input-label"
-            for="${this._inputId}"
-            >${this.label}</label
-          >
-          <div class="label-slot-container" part="esmm-label-suffix">
-            <slot name="label-suffix"></slot>
-          </div>
+        <option value="">${this.placeholder}</option>
+      </select>
+      </div>
         </div>
-
-        <!-- Need to bind maxlength so that the paper-input-char-counter works correctly -->
-        <input
-          slot="input"
-          readonly
-          .value="${this.getLabel(this.selectedItem)}"
-          aria-labelledby="${this._ariaLabelledBy}"
-          aria-describedby="${this._ariaDescribedBy}"
-          ?disabled="${this.disabled}"
-          title="${this.title}"
-          type="${this.type}"
-          pattern="${this.pattern}"
-          ?required="${this.required}"
-          ?autocomplete="${this.autocomplete}"
-          ?autofocus="${this.autofocus}"
-          inputmode="${this.inputmode}"
-          minlength="${this.minlength}"
-          maxlength="${this.maxlength}"
-          min="${this.min}"
-          max="${this.max}"
-          step="${this.step}"
-          name="${this.name}"
-          placeholder="${this.placeholder}"
-          list="${this.list}"
-          size="${this.size}"
-          ?autocapitalize="${this.autocapitalize}"
-          ?autocorrect="${this.autocorrect}"
-          tabindex="${this.tabIndex}"
-          ?autosave="${this.autosave}"
-          results="${this.results}"
-          accept="${this.accept}"
-          ?multiple="${this.multiple}"
-          role="${this.inputRole}"
-          aria-haspopup="${this.inputAriaHaspopup}"
-        />
-
-        <iron-icon icon="arrow-drop-down" slot="suffix" ?hidden="${this.readonly}"></iron-icon>
-        <paper-input-error aria-live="assertive" slot="add-on" ?hidden="${!this.errorMessage}"
-          >${this.errorMessage}</paper-input-error
-        >
       </paper-input-container>
-      <iron-dropdown
-        id="dropdownMenu"
-        part="esmm-dropdownmenu"
-        horizontal-align="${this.horizontalAlign}"
-        ?dynamic-align="${!this.noDynamicAlign}"
-        @iron-overlay-opened="${this._onDropdownOpen}"
-        @iron-overlay-closed="${this._onDropdownClose}"
-        ?disabled="${this._menuBtnIsDisabled(this.disabled, this.readonly)}"
-        no-cancel-on-outside-click
-        allow-click-through
-        ?with-backdrop="${this.withBackdrop}"
-      >
-        <div
-          id="ironDrContent"
-          class="paper-material rounded"
-          elevation="1"
-          slot="dropdown-content"
-          part="esmm-dropdown-content"
-        >
-          <esmm-searchbox-input
-            id="searchbox"
-            .search="${this.search}"
-            @search-changed="${this._searchChanged}"
-            .language="${this.language}"
-            ?hidden="${this.hideSearch}"
-          ></esmm-searchbox-input>
-          <esmm-options-list
-            id="optionsList"
-            .shownOptions="${this.shownOptions}"
-            .selected="${this.selected}"
-            @selected-changed="${this._selectedValueChanged}"
-            ?two-lines-label="${this.twoLinesLabel}"
-            .optionValue="${this.optionValue}"
-            .optionLabel="${this.optionLabel}"
-            .showNoSearchResultsWarning="${this.showNoSearchResultsWarning}"
-            .showLimitWarning="${this.showLimitWarning}"
-            .requestInProgress="${this.requestInProgress}"
-            .shownOptionsLimit="${this.shownOptionsLimit}"
-            .shownOptionsCount="${this.shownOptionsLimit}"
-            .noOptionsAvailable="${this.noOptionsAvailable}"
-            .noneOptionLabel="${this.noneOptionLabel}"
-            ?capitalize="${this.capitalize}"
-            @close-etools-dropdown="${this._closeMenu}"
-            @show-more="${this.onShowMore}"
-            @shown-options="${this.onShownOptions}"
-            .language="${this.language}"
-          ></esmm-options-list>
-        </div>
-      </iron-dropdown>
     `;
   }
 

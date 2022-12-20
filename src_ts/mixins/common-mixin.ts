@@ -1,9 +1,14 @@
+window.process = { env: { NODE_ENV: 'production' } } as any;
 import {property, LitElement} from 'lit-element';
 import {IronDropdownElement} from '@polymer/iron-dropdown';
 import {ListItemUtilsMixin} from './list-item-utils-mixin';
 import {MixinTarget} from '../utils/types';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce';
 import {timeOut} from '@polymer/polymer/lib/utils/async';
+import TomSelect from 'tom-select';
+import { createPopper } from '@popperjs/core';
+import { tomSelectStyles } from '../styles/esmm-shared-styles';
+
 /*
  * Common functionality for single selection and multiple selection dropdown
  * @polymer
@@ -149,6 +154,7 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
     requestInProgress = false;
 
     _debouncerResize: Debouncer | null = null;
+    selector!: TomSelect;
 
     constructor(...args: any[]) {
       super(args);
@@ -156,6 +162,7 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
         this.language = window.localStorage.defaultLanguage || 'en';
       }
       this._handleLanguageChange = this._handleLanguageChange.bind(this);
+      document.head.insertAdjacentHTML("beforeend", tomSelectStyles.getHTML());
     }
 
     // @ts-ignore
@@ -164,40 +171,114 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
       this._shownOptionsCount = this.shownOptionsLimit;
       this.disableOnFocusHandling = this.disableOnFocusHandling || this.isIEBrowser();
       document.addEventListener('language-changed', this._handleLanguageChange as any);
-      this._onFocusOut = this._onFocusOut.bind(this);
+      // this._onFocusOut = this._onFocusOut.bind(this);
+     
     }
 
     // @ts-ignore
     disconnectedCallback() {
       super.disconnectedCallback();
-      this.removeEventListener('focusout', this._onFocusOut);
+      // this.removeEventListener('focusout', this._onFocusOut);
       document.removeEventListener('language-changed', this._handleLanguageChange as any);
     }
 
     firstUpdated() {
+
       this.updateComplete.then(() => {
-        this._setPositionTarget();
-        this._setDropdownWidth();
-        this._disableScrollAction();
-        this.notifyDropdownResize();
-        this._setResetSizeHandler();
-        this.elemAttached = true;
-        this.setFitInto();
+      
+        const sameWidth = {
+          name: "sameWidth",
+          enabled: true,
+          phase: "beforeWrite",
+          requires: ["computeStyles"],
+          fn: ({ state }: any) => {
+            state.styles.popper.width = `${state.rects.reference.width}px`;
+          },
+          effect: ({ state }: any) => {
+            state.elements.popper.style.width = `${
+              state.elements.reference.offsetWidth
+            }px`;
+          }
+        };
+
+        // this.setFitInto();
+        let ii = 0;
+        const pageSize = 10;
+        const node = this.shadowRoot!.querySelector('[select-node]')! as any;
+        if(node){
+          this.selector = new TomSelect(node, {
+            valueField: this.optionValue || 'value',
+            labelField: this.optionLabel || 'label',
+            searchField: this.optionLabel || 'label',
+            dropdownParent: 'body',
+            preload: true,
+            allowEmptyOption: true,
+            plugins: {
+              dropdown_input: true,
+              caret_position: true,
+              virtual_scroll: true,
+              ...(node.hasAttribute('multiple') ?{
+                remove_button: true,
+                checkbox_options:  true,
+              } : {})
+            },
+            maxOptions: null,
+            firstUrl: (query: any) => {
+              return 'http://localhost/?s='+ encodeURIComponent(query);
+            },
+            loadThrottle: 300,
+            render: {
+              loading_more: () => {
+                return this.selector.settings.shouldLoadMore() ? `<div class="loading-more-results py-2 d-flex align-items-center"><div class="spinner"></div> Loading... </div>` : '';
+              }
+            },
+            shouldLoadMore: () => {
+              return this.shownOptions && this.shownOptions.length > ii * pageSize;
+            },
+            load: (query: any, callback: (items?: any) => void) => {
+              ii++;
+              if(this.shownOptions.length > (ii-1) * pageSize){
+                const options = this.shownOptions.slice((ii - 1) * pageSize, ii * pageSize);
+                this.selector.setNextUrl(query, 'http://localhost/?s='+ encodeURIComponent(query)+'&i='+ii);
+                callback(options);
+              }
+            },
+            onInitialize: function(){
+              // This should be set only SHOULD BE ONLY IF dropdown_input plugin is enabled
+              this.control_input.placeholder = 'Search';
+              this.popper = createPopper(this.control,this.dropdown, {
+                modifiers: [
+                  sameWidth as any,
+                  {
+                    name: 'offset',
+                    options: {
+                      offset: [0, 2],
+                    },
+                  },
+                ],
+              }); 
+            },
+            onDropdownOpen:function(){
+              this.popper.update();
+            }        
+          } as any);
+          this._readonlyChanged(this.readonly);
+          this._disabledChanged(this.disabled);
+          this._requiredChanged(this.required);
+          this.elemAttached = true;
+        }
       });
     }
 
     updated(changedProperties: any) {
       if (changedProperties.has('required')) {
-        this._requiredChanged(this.required, changedProperties.get('required'));
+        this._requiredChanged(this.required);
       }
       if (changedProperties.has('readonly')) {
-        this._readonlyChanged(this.readonly, changedProperties.get('readonly'));
+        this._readonlyChanged(this.readonly);
       }
-      if (changedProperties.has('fitInto')) {
-        this.setFitInto();
-      }
-      if (changedProperties.has('verticalOffset')) {
-        this.setMarginTopFromVerticalOffset();
+      if (changedProperties.has('disabled')) {
+        this._disabledChanged(this.disabled);
       }
     }
 
@@ -321,32 +402,33 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
       return !Array.isArray(this.options) || !this.options.length;
     }
 
-    _readonlyChanged(newValue: any, oldValue: any) {
-      if (this._isUndefined(newValue)) {
+    _readonlyChanged(newValue: any) {
+      if(!this.selector) {
         return;
       }
+
       if (newValue) {
         this.invalid = false;
+        this.selector.lock();
+        return;
       }
-      this._attributeRepaintNeeded(newValue, oldValue);
+
+      this.selector.unlock();
     }
 
-    _requiredChanged(newValue: any, oldValue: any) {
+    _disabledChanged(newValue: any) {
+      if(!this.selector) {
+        return;
+      }
+      this.selector.isDisabled = newValue
+    }
+
+    _requiredChanged(newValue: any) {
       if (this._isUndefined(newValue)) {
         return;
       }
       if (!newValue) {
         this.invalid = false;
-      }
-      this._attributeRepaintNeeded(newValue, oldValue);
-    }
-
-    /**
-     * Force styles update
-     */
-    _attributeRepaintNeeded(newValue: any, oldValue: any) {
-      if (newValue !== undefined && newValue !== oldValue) {
-        // this.updateStyles(); // TODO
       }
     }
 
@@ -500,8 +582,8 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
     }
 
     onShownOptions() {
-      this._setFocusTarget();
-      this.addEventListener('focusout', this._onFocusOut);
+      // this._setFocusTarget();
+      // this.addEventListener('focusout', this._onFocusOut);
     }
 
     /**
