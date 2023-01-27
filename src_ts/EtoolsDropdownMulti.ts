@@ -1,29 +1,18 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {LitElement, html, property} from 'lit-element';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
-import {CommonFunctionality} from './mixins/common-mixin.js';
-import {MissingOptions} from './mixins/missing-options-mixin.js';
+import {CommonFunctionalityMixin} from './mixins/common-mixin.js';
+import {MissingOptionsMixin} from './mixins/missing-options-mixin.js';
 import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-dropdown/iron-dropdown.js';
 import '@polymer/neon-animation/neon-animations.js';
 import '@polymer/paper-styles/element-styles/paper-material-styles.js';
-import EtoolsLogsMixin from '@unicef-polymer/etools-behaviors/etools-logs-mixin.js';
-import '@unicef-polymer/etools-ajax/etools-ajax.js';
 import './scripts/es6-polyfills.js';
 import './elements/selected-options.js';
 import './elements/searchbox-input.js';
 import './elements/options-list.js';
-import './styles/esmm-shared-styles.js';
-import {getTranslation} from './utils/translate.js';
-
-/**
- * @polymer
- * @mixinFunction
- * @appliesMixin EsmmMixins.MissingOptions
- * @appliesMixin EsmmMixins.CommonFunctionality
- * @appliesMixin EtoolsLogsMixin
- */
-const MultiDropdownRequiredMixins = MissingOptions(CommonFunctionality(EtoolsLogsMixin(PolymerElement)));
+import {esmmSharedStyles} from './styles/esmm-shared-styles.js';
+import {getTranslation} from './utils/translate';
 
 /**
  * `etools-dropdown-multi`
@@ -33,11 +22,39 @@ const MultiDropdownRequiredMixins = MissingOptions(CommonFunctionality(EtoolsLog
  * @appliesMixin MultiDropdownRequiredMixins
  * @demo demo/index-multi.html
  */
-export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
-  static get template() {
+export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptionsMixin(LitElement)) {
+  /** Dropdown selected values */
+  @property({type: Array}) // notify: true
+  selectedValues: any[] = [];
+
+  /** Selected options objects */
+  @property({type: Array}) // notify: true
+  selectedItems: any[] = [];
+
+  @property({type: Array})
+  prevSelectedItems: any[] = [];
+
+  /** Array of not found values (in options list) */
+  @property({type: Array})
+  notFoundOptions: any[] = [];
+
+  /** Element title attribute */
+  @property({type: String, attribute: 'title', reflect: true})
+  title = '';
+
+  @property({type: String, attribute: 'close-text', reflect: true})
+  closeText!: string;
+
+  @property({type: String})
+  language!: string;
+
+  private _debouncer: Debouncer | null = null;
+
+  render() {
     // language=HTML
     return html`
-      <style include="paper-material-styles esmm-shared-styles">
+      ${esmmSharedStyles}
+      <style>
         :host([hide-search]) #dropdown-controls {
           padding-top: 20px;
         }
@@ -53,33 +70,28 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
           color: var(--primary-color);
           font-weight: 500;
           border-top: solid 1px lightgray;
+          text-transform: uppercase;
+          cursor: pointer;
         }
       </style>
 
-      <etools-ajax
-        id="missingOptionsAjax"
-        params="[[ajaxParams]]"
-        on-success="handleMissingOptionsReqResponse"
-        on-fail="handleMissingOptionsReqError"
-      ></etools-ajax>
-
       <esmm-selected-options
         id="main"
-        selected-items="[[selectedItems]]"
-        label="[[label]]"
-        placeholder="[[placeholder]]"
-        always-float-label="[[alwaysFloatLabel]]"
-        no-label-float="[[noLabelFloat]]"
-        two-lines-label="[[twoLinesLabel]]"
-        capitalize="[[capitalize]]"
-        readonly="[[readonly]]"
-        disabled="[[disabled]]"
-        invalid="[[invalid]]"
-        option-value="[[optionValue]]"
-        option-label="[[optionLabel]]"
-        error-message="[[_getErrorMessage(errorMessage, invalid)]]"
-        open-menu="[[_openMenu]]"
-        on-input-focus="[[onInputFocus]]"
+        .selectedItems="${this.selectedItems}"
+        .label="${this.label}"
+        .placeholder="${this.placeholder}"
+        ?always-float-label="${this.alwaysFloatLabel}"
+        ?no-label-float="${this.noLabelFloat}"
+        ?two-lines-label="${this.twoLinesLabel}"
+        ?capitalize="${this.capitalize}"
+        ?readonly="${this.readonly}"
+        ?disabled="${this.disabled}"
+        ?invalid="${this.invalid}"
+        .optionValue="${this.optionValue}"
+        .optionLabel="${this.optionLabel}"
+        .errorMessage="${this._getErrorMessage(this.errorMessage, this.invalid)}"
+        .openMenu="${this._openMenu}"
+        .onInputFocus="${this.onInputFocus}"
         exportparts="esmm-label-container, esmm-label, esmm-label-suffix"
       >
         <span slot="input-label-suffix">
@@ -90,115 +102,81 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       <iron-dropdown
         id="dropdownMenu"
         part="esmm-dropdownmenu"
-        horizontal-align="[[horizontalAlign]]"
-        vertical-offset="[[verticalOffset]]"
-        dynamic-align="[[!noDynamicAlign]]"
-        on-iron-overlay-opened="_onDropdownOpen"
-        on-iron-overlay-closed="_onDropdownClose"
-        disabled="[[_menuBtnIsDisabled(disabled, readonly)]]"
+        horizontal-align="${this.horizontalAlign}"
+        ?dynamic-align="${!this.noDynamicAlign}"
+        @iron-overlay-opened="${this._onDropdownOpen}"
+        @iron-overlay-closed="${this._onDropdownClose}"
+        ?disabled="${this._menuBtnIsDisabled(this.disabled, this.readonly)}"
         no-cancel-on-outside-click
         allow-click-through
-        with-backdrop="[[withBackdrop]]"
+        ?with-backdrop="${this.withBackdrop}"
       >
-        <div id="ironDrContent" class="paper-material rounded" elevation="1" slot="dropdown-content">
+        <div
+          id="ironDrContent"
+          class="paper-material rounded"
+          elevation="1"
+          slot="dropdown-content"
+          part="esmm-dropdown-content"
+        >
           <div id="dropdown-controls">
             <esmm-searchbox-input
               id="searchbox"
-              search="[[search]]"
-              on-search-changed="_searchChanged"
-              language="[[language]]"
-              hidden$="{{hideSearch}}"
+              .search="${this.search}"
+              @search-changed="${this._searchChanged}"
+              .language="${this.language}"
+              ?hidden="${this.hideSearch}"
             ></esmm-searchbox-input>
           </div>
 
           <esmm-options-list
             id="optionsList"
-            shown-options="[[shownOptions]]"
-            multi=""
-            selected-values="[[selectedValues]]"
-            on-selected-values-changed="_selectedValuesChanged"
-            two-lines-label="[[twoLinesLabel]]"
-            option-value="[[optionValue]]"
-            option-label="[[optionLabel]]"
-            request-in-progress="[[requestInProgress]]"
-            show-no-search-results-warning="[[showNoSearchResultsWarning]]"
-            show-limit-warning="[[showLimitWarning]]"
-            shown-options-limit="[[shownOptionsLimit]]"
-            shown-options-count="[[shownOptionsLimit]]"
-            no-options-available="[[noOptionsAvailable]]"
-            capitalize="[[capitalize]]"
-            on-show-more="onShowMore"
-            language="[[language]]"
+            .shownOptions="${this.shownOptions}"
+            multi
+            .selectedValues="${this.selectedValues}"
+            @selected-values-changed="${this._selectedValuesChanged}"
+            ?two-lines-label="${this.twoLinesLabel}"
+            .optionValue="${this.optionValue}"
+            .optionLabel="${this.optionLabel}"
+            .requestInProgress="${this.requestInProgress}"
+            .showNoSearchResultsWarning="${this.showNoSearchResultsWarning}"
+            .showLimitWarning="${this.showLimitWarning}"
+            .shownOptionsLimit="${this.shownOptionsLimit}"
+            .shownOptionsCount="${this.shownOptionsLimit}"
+            .noOptionsAvailable="${this.noOptionsAvailable}"
+            ?capitalize="${this.capitalize}"
+            @show-more="${this.onShowMore}"
+            @shown-options="${this.onShownOptions}"
+            .language="${this.language}"
           >
           </esmm-options-list>
           <span
-            title="[[closeText]]"
+            title="${this._getCloseBtnText(this.closeText, this.language)}"
             class="close-btn"
             part="esmm-close-btn"
-            hidden$="[[hideClose]]"
-            on-tap="_closeMenu"
+            ?hidden="${this.hideClose}"
+            @click="${this._closeMenu}"
           >
-            [[_getCloseBtnText(closeText, language)]]
+            ${this._getCloseBtnText(this.closeText, this.language)}
           </span>
         </div>
       </iron-dropdown>
     `;
   }
 
-  static get is() {
-    return 'etools-dropdown-multi';
+  updated(changedProperties: any) {
+    super.updated(changedProperties);
+    if (changedProperties.has('selectedValues') || changedProperties.has('options')) {
+      this._selectedValuesOrOptionsChanged(this.selectedValues, this.options);
+    }
+    if (changedProperties.has('notFoundOptions') || changedProperties.has('url')) {
+      this._notFoundOptionsAndUrlChanged(this.notFoundOptions, this.url);
+    }
+    if (changedProperties.has('selectedItems')) {
+      this._selectedItemsChanged(this.selectedItems);
+    }
   }
 
-  static get properties() {
-    return {
-      /** Dropdown selected values */
-      selectedValues: {
-        type: Array,
-        value: [],
-        notify: true
-      },
-      /** Selected options objects */
-      selectedItems: {
-        type: Array,
-        value: [],
-        notify: true
-      },
-      prevSelectedItems: {
-        type: Array,
-        value: []
-      },
-      /** Array of not found values (in options list) */
-      notFoundOptions: {
-        type: Array,
-        value: []
-      },
-      /** Element title attribute */
-      title: {
-        type: String,
-        computed: '_getElementTitle(selectedItems)',
-        reflectToAttribute: true
-      },
-      closeText: {
-        type: String,
-        reflectToAttribute: true,
-        value: 'CLOSE'
-      },
-      language: {
-        type: String,
-        value: 'en'
-      }
-    };
-  }
-
-  static get observers() {
-    return [
-      '_selectedValuesOrOptionsChanged(selectedValues, options)',
-      '_selectedValuesOrOptionsChanged(selectedValues.length, options)',
-      '_notFoundOptionsAndUrlChanged(notFoundOptions, url)',
-      '_selectedItemsChanged(selectedItems, selectedItems.length)'
-    ];
-  }
-
+  // @ts-ignore
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('remove-selected-item', this._removeSelectedItem.bind(this));
@@ -206,7 +184,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     this.onInputFocus = this.onInputFocus.bind(this);
   }
 
-  _selectedValuesOrOptionsChanged(selectedValuesOrLength, options) {
+  _selectedValuesOrOptionsChanged(selectedValuesOrLength: any, options: any[]) {
     if (this._isUndefined(selectedValuesOrLength) || this._isUndefined(options)) {
       return;
     }
@@ -224,7 +202,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     // when using dynamic data load, in case we load options data, must preserve selected item
     if (typeof this.loadDataMethod === 'function' && this.selectedItems.length) {
       const selectedItemsMissingInOptions = this.selectedItems.filter(
-        (s) => !this.options.some((o) => String(o[this.optionValue]) === String(s[this.optionValue]))
+        (s) => !this.options.some((o: any) => String(o[this.optionValue]) === String(s[this.optionValue]))
       );
 
       if (selectedItemsMissingInOptions.length) {
@@ -245,30 +223,31 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
    *
    * @param {Array} selectedValues
    */
-  _setSelectedItems(selectedValues) {
-    this.notFoundOptions = null;
+  _setSelectedItems(selectedValues: any[]) {
+    this.notFoundOptions = [];
     if (typeof selectedValues === 'undefined') {
       selectedValues = this.selectedValues;
     }
     if (this._noSelectedValues(selectedValues) && this._noOptions()) {
-      this.set('selectedItems', []);
+      this.selectedItems = [];
       return;
     }
     if (!this._noSelectedValues(selectedValues) && this._noOptions()) {
       this._setAnyNotFoundOptions(this.selectedItems, selectedValues);
       return;
     }
-    const selectedItems = this.options.filter((item) => {
+
+    const selectedItems = this.options.filter((item: any) => {
       return selectedValues instanceof Array && item[this.optionValue]
         ? selectedValues.includes(item[this.optionValue].toString())
         : false;
     });
 
     this._setAnyNotFoundOptions(selectedItems, selectedValues);
-    this.set('selectedItems', selectedItems);
+    this.selectedItems = selectedItems;
   }
 
-  _selectedItemsChanged(selectedItems) {
+  _selectedItemsChanged(selectedItems: any[]) {
     if (JSON.stringify(this.prevSelectedItems) !== JSON.stringify(selectedItems)) {
       this.prevSelectedItems = selectedItems;
       setTimeout(() => {
@@ -279,6 +258,9 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     if (this._isUndefined(selectedItems)) {
       return;
     }
+
+    this.title = this._getElementTitle(this.selectedItems);
+
     // trigger items change event check
     if (!this.triggerValueChangeEvent) {
       return;
@@ -302,7 +284,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     );
   }
 
-  _setAnyNotFoundOptions(selectedItems, selectedValues) {
+  _setAnyNotFoundOptions(selectedItems: any[], selectedValues: any[]) {
     // prevent using non array variables
     selectedItems = selectedItems instanceof Array ? selectedItems : [];
     selectedValues = selectedValues instanceof Array ? selectedValues : [];
@@ -310,13 +292,13 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       this.notFoundOptions = selectedValues;
     } else if (selectedItems.length < selectedValues.length) {
       const selectedItemsValues = this._getValuesFromItems(selectedItems);
-      this.notFoundOptions = selectedValues.filter((value) => {
+      this.notFoundOptions = selectedValues.filter((value: any) => {
         return !selectedItemsValues.includes(value);
       });
     }
   }
 
-  _removeSelectedItem(e) {
+  _removeSelectedItem(e: any) {
     // Compute selectedItems without the removed item
     const selectedItems = this.selectedItems.filter((item) => {
       return item[this.optionValue] !== e.detail;
@@ -324,10 +306,10 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
 
     if (this._noSelectedItems(selectedItems)) {
       this.selectedValues = [];
-      this.set('selectedItems', []);
+      this.selectedItems = [];
     } else {
       this.selectedValues = this._getValuesFromItems(selectedItems);
-      this.set('selectedItems', selectedItems);
+      this.selectedItems = selectedItems;
     }
 
     if (this.autoValidate) {
@@ -339,20 +321,20 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
    * This observer makes sure request for missing option is triggered only after the url is set also.
    * notFoundOption is actually this.selected
    */
-  _notFoundOptionsAndUrlChanged(notFoundOptions, url) {
+  _notFoundOptionsAndUrlChanged(notFoundOptions: any[], url: string) {
     if (url && this.arrayIsNotEmpty(notFoundOptions)) {
       this._handleSelectedNotFoundInOptions(this.notFoundOptions);
     }
   }
 
-  _handleSelectedNotFoundInOptions(notFoundSelectedValues) {
+  _handleSelectedNotFoundInOptions(notFoundSelectedValues: any[]) {
     this.requestMissingOptions(notFoundSelectedValues);
     // show warning
     let warnMsg = 'Selected value ';
     const notFoundValues =
       notFoundSelectedValues instanceof Array ? notFoundSelectedValues.join(', ') : notFoundSelectedValues;
     warnMsg += notFoundValues + " not found in dropdown's options!";
-    this.logWarn(warnMsg, 'etools-esmm ' + this.label, null, true);
+    console.log('etools-esmm ' + this.label + ': ' + warnMsg);
   }
 
   _onDropdownClose() {
@@ -368,9 +350,9 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
    * @param selectedValues
    * @returns {boolean}
    */
-  validate(selectedValues) {
+  validate(selectedValues?: any[]) {
     if (!this.hasAttribute('required') || this.readonly) {
-      this.set('invalid', false);
+      this.invalid = false;
       return true;
     }
 
@@ -378,26 +360,26 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
       selectedValues = this.selectedValues;
     }
     const invalid = !selectedValues || !selectedValues.length;
-    this.set('invalid', invalid);
+    this.invalid = invalid;
     return !invalid;
   }
 
-  _getValuesFromItems(selectedItems) {
+  _getValuesFromItems(selectedItems?: any[]) {
     return selectedItems && selectedItems.length > 0
-      ? selectedItems.map((item) => {
+      ? selectedItems.map((item: any) => {
           return item[this.optionValue].toString();
         })
-      : null;
+      : [];
   }
 
-  _noSelectedValues(selectedValues) {
+  _noSelectedValues(selectedValues?: any[]) {
     if (typeof selectedValues === 'undefined') {
       selectedValues = this.selectedValues;
     }
     return !selectedValues || !selectedValues.length;
   }
 
-  _noSelectedItems(selectedItems) {
+  _noSelectedItems(selectedItems?: any[]) {
     if (typeof selectedItems === 'undefined') {
       selectedItems = this.selectedItems;
     }
@@ -415,7 +397,7 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     });
   }
 
-  _getElementTitle(selectedItems) {
+  _getElementTitle(selectedItems: any[]) {
     const labels = selectedItems.map((item) => {
       return this.getLabel(item);
     });
@@ -423,18 +405,18 @@ export class EtoolsDropdownMulti extends MultiDropdownRequiredMixins {
     return labels.join(' | ');
   }
 
-  _getCloseBtnText(closeText, language) {
-    if (closeText && closeText.toLowerCase() != 'close') {
+  _getCloseBtnText(closeText: string, language: string) {
+    if (closeText) {
       return closeText;
     }
     return getTranslation(language, 'CLOSE');
   }
 
-  _searchChanged(e) {
+  _searchChanged(e: CustomEvent) {
     this.search = e.detail.value;
   }
 
-  _selectedValuesChanged(e) {
+  _selectedValuesChanged(e: CustomEvent) {
     this.selectedValues = e.detail.value;
     this._selectedValuesOrOptionsChanged(this.selectedValues, this.options);
   }

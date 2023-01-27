@@ -1,3 +1,2 @@
-import {EtoolsDropdown} from './EtoolsDropdown.js';
-
-window.customElements.define(EtoolsDropdown.is, EtoolsDropdown);
+import { EtoolsDropdown } from './src/EtoolsDropdown';
+window.customElements.define('etools-dropdown', EtoolsDropdown);

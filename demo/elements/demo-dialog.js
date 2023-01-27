@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {LitElement, html} from 'lit-element';
 import '@unicef-polymer/etools-dialog/etools-dialog.js';
 import './multi-selection-demo.js';
 import './single-selection-demo.js';
@@ -9,8 +9,8 @@ import './single-selection-demo.js';
  * @polymer
  * @demo demo/index-dialog.html
  */
-class DropdownDialogDemo extends PolymerElement {
-  static get template() {
+class DropdownDialogDemo extends LitElement {
+  render() {
     // language=HTML
     return html`
       <style>
@@ -23,7 +23,7 @@ class DropdownDialogDemo extends PolymerElement {
         }
       </style>
 
-      <etools-dialog id="demoDialog" size="lg" opened="[[opened]]">
+      <etools-dialog id="demoDialog" size="lg" .opened="${this.opened}">
         <div class="vertical-section-container centered">
           <h3>etools-dropdown: single selection demo</h3>
           <esmm-single-selection-demo></esmm-single-selection-demo>
@@ -50,11 +50,10 @@ class DropdownDialogDemo extends PolymerElement {
   }
 
   open() {
-    this.$.demoDialog.opened = true;
+    this.shadowRoot.querySelector('#demoDialog').opened = true;
   }
 
-  connectedCallback() {
-    super.connectedCallback();
+  firstUpdated() {
     this.open();
   }
 }

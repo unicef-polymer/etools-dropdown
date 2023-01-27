@@ -1,7 +1,7 @@
 {
   "name": "@unicef-polymer/etools-dropdown",
   "description": "Polymer 3 dropdown element with searchable options, single and multiple selection",
-  "version": "3.8.0-rc.5",
+  "version": "4.0.5",
   "homepage": "https://github.com/unicef-polymer/etools-dropdown",
   "repository": {
     "type": "git",
@@ -11,14 +11,16 @@
   "main": "index.js",
   "module": "index.js",
   "scripts": {
-    "lint": "eslint . --ext js,html --ignore-path .gitignore",
-    "format:eslint": "eslint --ext .js . --fix --ignore-path .gitignore",
-    "format:prettier": "prettier \"**/*.js\" --write --ignore-path .gitignore",
-    "prepublishOnly": "npm run lint",
+    "tsToJs": "tsc",
+    "watch": "tsc --watch",
+    "lint": "eslint . --ext ts,html --ignore-path .gitignore",
+    "format:eslint": "eslint --ext .ts . --fix --ignore-path .gitignore",
+    "format:prettier": "prettier \"src_ts/**/*.ts\" --write --ignore-path .gitignore",
     "gen-typings": "gen-typescript-declarations --deleteExisting --outDir './'",
-    "publish": "git push --tags && npm publish"
+    "publishPackage": "npm run tsToJs && npm publish"
   },
   "dependencies": {
+    "@open-wc/dedupe-mixin": "^1.3.1",
     "@polymer/iron-dropdown": "^3.0.1",
     "@polymer/iron-flex-layout": "^3.0.1",
     "@polymer/iron-icon": "^3.0.1",
@@ -31,10 +33,12 @@
     "@polymer/paper-spinner": "^3.0.2",
     "@polymer/paper-styles": "^3.0.1",
     "@polymer/polymer": "^3.4.1",
-    "@unicef-polymer/etools-ajax": "^4.3.4",
+    "@unicef-polymer/etools-ajax": "^4.3.5",
     "@unicef-polymer/etools-behaviors": "^3.1.1",
-    "lodash-es": ">=4.17.21",
+    "lit-element": "^2.5.1",
+    "lit-translate": "^2.0.1",
     "lodash": ">=4.17.21",
+    "lodash-es": ">=4.17.21",
     "web-animations-js": "^2.3.2"
   },
   "devDependencies": {
@@ -42,21 +46,27 @@
     "@polymer/iron-component-page": "^4.0.1",
     "@polymer/iron-demo-helpers": "^3.0.0",
     "@polymer/paper-button": "^3.0.1",
-    "@unicef-polymer/etools-dialog": "^3.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.7.0",
+    "@typescript-eslint/parser": "^5.7.0",
+    "@typescript-eslint/typescript-estree": "^5.7.0",
+    "@unicef-polymer/etools-dialog": "^6.0.5",
     "@webcomponents/webcomponentsjs": "^2.5.0",
-    "eslint": "^8.1.0",
-    "prettier": "^2.3.2",
+    "acorn": ">=8.0.5",
+    "diff": ">=5.0.0",
+    "eslint": "^7.32.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-html": "^6.2.0",
+    "eslint-plugin-lit": "^1.6.1",
+    "eslint-plugin-lit-a11y": "^2.2.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "wct-browser-legacy": "^1.0.2",
-    "acorn": ">=8.0.5",
-    "diff": ">=5.0.0",
     "growl": ">=1.10.0",
     "minimist": ">=0.2.1",
+    "path-parse": ">=1.0.7",
+    "prettier": "^2.3.2",
     "prismjs": ">=1.25.0",
-    "path-parse": ">=1.0.7"
+    "typescript": "^4.5.4",
+    "wct-browser-legacy": "^1.0.2"
   },
   "engines": {
     "yarn": ">= 1.0.0"
