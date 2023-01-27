@@ -150,12 +150,16 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
 
     _debouncerResize: Debouncer | null = null;
 
+    @property({type: Number, attribute: 'tabindex', reflect: true})
+    tabIndex = 0;
+
     constructor(...args: any[]) {
       super(args);
       if (!this.language) {
         this.language = window.localStorage.defaultLanguage || 'en';
       }
       this._handleLanguageChange = this._handleLanguageChange.bind(this);
+      this._handleParentFocus = this._handleParentFocus.bind(this);
     }
 
     // @ts-ignore
@@ -164,6 +168,7 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
       this._shownOptionsCount = this.shownOptionsLimit;
       this.disableOnFocusHandling = this.disableOnFocusHandling || this.isIEBrowser();
       document.addEventListener('language-changed', this._handleLanguageChange as any);
+      this.addEventListener('focusin', this._handleParentFocus as any);
       this._onFocusOut = this._onFocusOut.bind(this);
     }
 
@@ -209,6 +214,14 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
 
     _handleLanguageChange(e: CustomEvent) {
       this.language = e.detail.language;
+    }
+
+    _handleParentFocus(e: CustomEvent) {
+      if (e.target === this) {
+        e.preventDefault();
+        const shadowRoot = this.shadowRoot?.querySelector('esmm-selected-options')?.shadowRoot || this.shadowRoot;
+        shadowRoot?.querySelector<HTMLElement>('[tabindex="1"]')?.focus();
+      }
     }
 
     _onFocusOut(e: FocusEvent) {
