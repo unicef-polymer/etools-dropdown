@@ -150,6 +150,9 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
 
     _debouncerResize: Debouncer | null = null;
 
+    @property({type: Number, attribute: 'tabindex', reflect: true})
+    tabIndex = 0;
+
     constructor(...args: any[]) {
       super(args);
       if (!this.language) {

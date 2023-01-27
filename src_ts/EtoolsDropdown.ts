@@ -97,8 +97,6 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
   inputRole: any;
   @property({type: String})
   inputAriaHaspopup: any;
-  @property({type: Number, attribute: 'tabindex', reflect: true})
-  tabIndex = 0;
 
   render() {
     // language=HTML
@@ -153,7 +151,6 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
       </style>
       <paper-input-container
         id="main"
-        tabindex="1"
         ?no-label-float="${this.noLabelFloat}"
         ?always-float-label="${this.alwaysFloatLabel}"
         ?auto-alidate="${this._getAutoValidate()}"
