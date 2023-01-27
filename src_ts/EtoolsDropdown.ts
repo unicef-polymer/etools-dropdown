@@ -151,6 +151,7 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
       </style>
       <paper-input-container
         id="main"
+        tabindex="1"
         ?no-label-float="${this.noLabelFloat}"
         ?always-float-label="${this.alwaysFloatLabel}"
         ?auto-alidate="${this._getAutoValidate()}"
