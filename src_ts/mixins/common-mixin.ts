@@ -498,7 +498,10 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
       const ironDropdown = this._getIronDropdown();
       ironDropdown.style.left = this.offsetLeft + 'px'; // TODO: why is style.left set here?
       if (!this.autoWidth) {
-        ironDropdown.style.width = this.offsetWidth + 'px';
+        const wrapperComputedStyle = window.getComputedStyle(this);
+        const paddingLeft = parseFloat(wrapperComputedStyle.paddingLeft) || 0;
+        const paddingRight = parseFloat(wrapperComputedStyle.paddingRight) || 0;
+        ironDropdown.style.width = (this.clientWidth - paddingLeft - paddingRight) + 'px';
       }
 
       if (this.minWidth && this.minWidth !== '') {
