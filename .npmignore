@@ -3,10 +3,9 @@
 /.idea
 /.circleci
 /.vscode
+/src_ts
 /demo
 /test
-/src_ts
-polymer.json
 .prettierrc
 analysis.json
 .eslintrc.json

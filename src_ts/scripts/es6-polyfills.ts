@@ -2,7 +2,7 @@
 // ES6 Array find polyfil
 if (!Array.prototype.find) {
   Object.defineProperty(Array.prototype, 'find', {
-    value: function (predicate) {
+    value: function (predicate: any) {
       // 1. Let O be ? ToObject(this value).
       if (this == null) {
         throw new TypeError('"this" is null or not defined');
@@ -46,7 +46,7 @@ if (!Array.prototype.find) {
 
 if (!Array.prototype.includes) {
   Object.defineProperty(Array.prototype, 'includes', {
-    value: function (searchElement, fromIndex) {
+    value: function (searchElement: any, fromIndex: any) {
       // 1. Let O be ? ToObject(this value).
       if (this == null) {
         throw new TypeError('"this" is null or not defined');
@@ -73,7 +73,7 @@ if (!Array.prototype.includes) {
       //  b. If k < 0, let k be 0.
       var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
 
-      function sameValueZero(x, y) {
+      function sameValueZero(x: any, y: any) {
         return x === y || (typeof x === 'number' && typeof y === 'number' && isNaN(x) && isNaN(y));
       }
 
