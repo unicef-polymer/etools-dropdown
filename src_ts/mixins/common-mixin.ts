@@ -250,44 +250,50 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
     }
 
     _setFitInto() {
-      const ironDropdown = this._getIronDropdown();
       // fitInto element will not let the dropdown to overlap it's margins
-      if (!this.fitInto && (window as any).EtoolsEsmmFitIntoEl) {
-        ironDropdown.fitInto = (window as any).EtoolsEsmmFitIntoEl;
-      }
-      let calculatedFitInto: any = null;
-      if (this.fitInto === 'etools-dialog') {
-        try {
-          let rootNodeHost = (this.getRootNode() as any).host;
-          let dialogContent = null;
-          while (dialogContent === null && rootNodeHost) {
-            const hostTagName = rootNodeHost.tagName.toLowerCase();
-            // case 1: rootNodeHost is etools-dialog (unlikely, but...)
-            if (hostTagName === 'etools-dialog') {
-              dialogContent = this._getDialogContent(rootNodeHost);
+      try {
+        const ironDropdown = this._getIronDropdown();
+        let rootNodeHost = (this.getRootNode() as any).host;
+        let dialogContent = null;
+        while (dialogContent === null && rootNodeHost) {
+          const hostTagName = rootNodeHost.tagName.toLowerCase();
+          // case 1: rootNodeHost is etools-dialog (unlikely, but...)
+          if (hostTagName === 'etools-dialog') {
+            dialogContent = this._getDialogContent(rootNodeHost);
+          } else {
+            // case 2: rootNodeHost is not etools-dialog, but it might contain it
+            const d = rootNodeHost.shadowRoot.querySelector('etools-dialog');
+            if (d instanceof Element) {
+              // etools-dialog found
+              dialogContent = this._getDialogContent(d);
             } else {
-              // case 2: rootNodeHost is not etools-dialog, but it might contain it
-              const d = rootNodeHost.shadowRoot.querySelector('etools-dialog');
-              if (d instanceof Element) {
-                // etools-dialog found
-                dialogContent = this._getDialogContent(d);
-              } else {
-                // etools-dialog not found, repeat
-                rootNodeHost = rootNodeHost.getRootNode().host;
-              }
+              // etools-dialog not found, repeat
+              rootNodeHost = rootNodeHost.getRootNode().host;
             }
           }
-          calculatedFitInto = dialogContent;
-        } catch (e) {
-          console.log('Cannot find etools-dialog content element.');
-          calculatedFitInto = null;
         }
-      }
-      if (calculatedFitInto && calculatedFitInto instanceof Element) {
-        (calculatedFitInto as any).style.position = 'relative';
-        ironDropdown.fitInto = calculatedFitInto;
+
+        // If we find dialog container it means we are inside an etools-dialog
+        if (dialogContent) {
+          // If we want to fit inside dialog
+          if (this.fitInto === 'etools-dialog') {
+            dialogContent.style.position = 'relative';
+            ironDropdown.fitInto = dialogContent;
+          } else {
+            // else we always want to fit dropdowns at window level when part of the etools-dialog
+            ironDropdown.fitInto = window;
+          }
+        } else {
+          // fitInto element will not let the dropdown to overlap it's margins
+          if (!this.fitInto && (window as any).EtoolsEsmmFitIntoEl) {
+            ironDropdown.fitInto = (window as any).EtoolsEsmmFitIntoEl;
+          }
+        }
+      } catch (e) {
+        console.log(e);
       }
     }
+
     setFitInto() {
       this.debounce(this._setFitInto.bind(this), 500)();
     }
@@ -498,7 +504,10 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
       const ironDropdown = this._getIronDropdown();
       ironDropdown.style.left = this.offsetLeft + 'px'; // TODO: why is style.left set here?
       if (!this.autoWidth) {
-        ironDropdown.style.width = this.offsetWidth + 'px';
+        const wrapperComputedStyle = window.getComputedStyle(this);
+        const paddingLeft = parseFloat(wrapperComputedStyle.paddingLeft) || 0;
+        const paddingRight = parseFloat(wrapperComputedStyle.paddingRight) || 0;
+        ironDropdown.style.width = this.clientWidth - paddingLeft - paddingRight + 'px';
       }
 
       if (this.minWidth && this.minWidth !== '') {
