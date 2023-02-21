@@ -217,7 +217,7 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
     }
 
     _handleParentFocus(e: CustomEvent) {
-      if (e.target === this) {
+      if (e.target === this && e.composedPath()[0].id !== 'iconRemoveSelected') {
         e.preventDefault();
         const shadowRoot = this.shadowRoot?.querySelector('esmm-selected-options')?.shadowRoot || this.shadowRoot;
         shadowRoot?.querySelector<HTMLElement>('[tabindex="1"]')?.focus();
