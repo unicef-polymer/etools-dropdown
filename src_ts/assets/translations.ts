@@ -48,6 +48,26 @@ const translations = {
     REQUEST_IN_PROGRESS: 'Выполняется запрос.',
     NO_RESULTS_FOUND_TRY_OTHER_KEYWORDS: 'Результатов не найдено. Попробуйте другие ключевые слова.',
     RESET_SELECTED_OPTION: 'Сбросить выбранный параметр'
+  },
+  es: {
+    SEARCH: 'Buscar',
+    CLOSE: 'Cerrar',
+    NONE: 'Ninguna',
+    NO_OPTIONS_AVAILABLE: 'No hay opciones disponibles.',
+    SCROLL_DOWN_TO_REVEAL_MORE_ITEMS: 'Desplácese hacia abajo para revelar más elementos.',
+    REQUEST_IN_PROGRESS: 'Solicitud en curso.',
+    NO_RESULTS_FOUND_TRY_OTHER_KEYWORDS: 'No se han encontrado resultados. Pruebe otras palabras clave.',
+    RESET_SELECTED_OPTION: 'Restablecer opción seleccionada'
+  },
+  ar: {
+    SEARCH: 'يبحث',
+    CLOSE: 'غلق',
+    NONE: 'لا أحد',
+    NO_OPTIONS_AVAILABLE: '.لا توجد خيارات متاحة',
+    SCROLL_DOWN_TO_REVEAL_MORE_ITEMS: '.قم بالتمرير لأسفل للكشف عن المزيد من العناصر',
+    REQUEST_IN_PROGRESS: '.طلب قيد التقدم',
+    NO_RESULTS_FOUND_TRY_OTHER_KEYWORDS: 'لم يتم العثور على نتائج. جربكلمات رئيسية أخرى',
+    RESET_SELECTED_OPTION: 'إعادة تعيين الخيار المحدد'
   }
 };
 export default translations;
