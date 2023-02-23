@@ -221,7 +221,7 @@ export class EsmmOptionsList extends ListItemUtilsMixin(LitElement) {
 
   _enableInfiniteScroll() {
     var options = {
-      root: this.shadowRoot?.querySelector('#options-listbox'),
+      root: this,
       treshold: 1.0
     };
 
