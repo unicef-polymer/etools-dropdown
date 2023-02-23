@@ -79,7 +79,6 @@ export class EsmmOptionsList extends ListItemUtilsMixin(LitElement) {
 
         paper-listbox {
           flex-grow: 1;
-          overflow: auto;
           min-height: 0;
           width: 100%;
           padding: 0;
