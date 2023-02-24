@@ -79,7 +79,6 @@ export class EsmmOptionsList extends ListItemUtilsMixin(LitElement) {
 
         paper-listbox {
           flex-grow: 1;
-          overflow: auto;
           min-height: 0;
           width: 100%;
           padding: 0;
@@ -222,7 +221,7 @@ export class EsmmOptionsList extends ListItemUtilsMixin(LitElement) {
 
   _enableInfiniteScroll() {
     var options = {
-      root: this.shadowRoot?.querySelector('#options-listbox'),
+      root: this,
       treshold: 1.0
     };
 
