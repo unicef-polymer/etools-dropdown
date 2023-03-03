@@ -248,10 +248,10 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
   }
 
   _selectedItemsChanged(selectedItems: any[]) {
-    let triggeredFromPropInitInContructor = false;
+    let triggeredByPropInitInContructor = false;
     if (JSON.stringify(this.prevSelectedItems) !== JSON.stringify(selectedItems)) {
       if (this.prevSelectedItems == undefined) {
-        triggeredFromPropInitInContructor = true;
+        triggeredByPropInitInContructor = true;
       }
       this.prevSelectedItems = selectedItems;
       setTimeout(() => {
@@ -270,8 +270,8 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
       return;
     }
 
-    // Avoid change event reseting the values on the entity connected to the dropdown
-    if (!triggeredFromPropInitInContructor) {
+    // Avoid change event reseting the values on the entity model connected to the dropdown, on first page access
+    if (!triggeredByPropInitInContructor) {
       this._debouncer = Debouncer.debounce(this._debouncer, timeOut.after(10), () => {
         this._fireChangeEvent();
       });
