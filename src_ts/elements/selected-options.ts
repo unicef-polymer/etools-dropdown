@@ -99,6 +99,7 @@ export class EsmmSelectedOptions extends ListItemUtilsMixin(LitElement) {
         .readonly-separator {
           display: inline-block;
           padding: 0 5px 0 8px;
+          padding-inline: 8px 5px;
           margin: 0;
         }
 
