@@ -16,7 +16,7 @@ class EsmmSingleSelectionDemo extends TestData(LitElement) {
     return html`
       <style>
         .demo-field + .demo-field {
-          margin-left: 24px;
+          margin-inline-start: 24px;
         }
       </style>
 

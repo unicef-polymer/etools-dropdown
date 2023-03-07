@@ -24,7 +24,7 @@ class EsmmDemoActions extends LitElement {
         }
 
         paper-button:first-child {
-          margin-left: 0;
+          margin-inline-start: 0;
         }
 
         paper-button.active {
