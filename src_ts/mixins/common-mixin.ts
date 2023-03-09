@@ -101,6 +101,9 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
     /** Vertical offset for dropdownMenu */
     @property({type: Number, attribute: 'vertical-offset'})
     verticalOffset = 0;
+
+    @property({type: Number, attribute: 'default-vertical-offset'})
+    defaultVerticalOffset = 60;
     /**
      * By default the search string is reset when the dropdown closes
      * This flag allows the search value to persist after the dropdown is closed
@@ -593,14 +596,30 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
     }
 
     _setDropdownMenuVerticalOffset() {
-      // substract 8px which represents paper-input-container top-bottom padding
       const ironOverlay = document.body.querySelector('iron-overlay-backdrop');
       const dialogOpened = ironOverlay && ironOverlay.hasAttribute('opened');
+      const inputBounding = this._getPaperInputContainer().getBoundingClientRect();
+      // substract 8px which represents paper-input-container top-bottom padding
+      let verticalOffset = inputBounding.height - 8;
       if (dialogOpened) {
         // only if control is in dialog
-        const verticalOffset = this._getPaperInputContainer().getBoundingClientRect().height - 8;
         if (verticalOffset !== this.verticalOffset) {
           this._preserveListScrollPosition();
+          this.verticalOffset = verticalOffset;
+        }
+      } else {
+        const elCenter = inputBounding.top + inputBounding.height / 2;
+        const windowCenter = document.body.clientHeight / 2;
+        if (elCenter > windowCenter) {
+          // dropdown menu it's opening on top
+          // defaultVerticalOffset it's 60px so header will not cover dropdownMenu
+          this.verticalOffset = this.defaultVerticalOffset;
+        } else {
+          // dropdown menu it's opening bellow
+          // make sure dropdownMenu has enough height so user is able to select options
+          if (document.body.clientHeight - verticalOffset < 400 && windowCenter < verticalOffset) {
+            verticalOffset = windowCenter;
+          }
           this.verticalOffset = verticalOffset;
         }
       }
