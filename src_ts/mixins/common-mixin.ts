@@ -594,10 +594,15 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
 
     _setDropdownMenuVerticalOffset() {
       // substract 8px which represents paper-input-container top-bottom padding
-      const verticalOffset = this._getPaperInputContainer().getBoundingClientRect().height - 8;
-      if (verticalOffset !== this.verticalOffset) {
-        this._preserveListScrollPosition();
-        this.verticalOffset = verticalOffset;
+      const ironOverlay = document.body.querySelector('iron-overlay-backdrop');
+      const dialogOpened = ironOverlay && ironOverlay.hasAttribute('opened');
+      if (dialogOpened) {
+        // only if control is in dialog
+        const verticalOffset = this._getPaperInputContainer().getBoundingClientRect().height - 8;
+        if (verticalOffset !== this.verticalOffset) {
+          this._preserveListScrollPosition();
+          this.verticalOffset = verticalOffset;
+        }
       }
     }
 

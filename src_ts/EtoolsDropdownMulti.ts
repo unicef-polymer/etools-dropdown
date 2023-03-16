@@ -32,7 +32,7 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
   selectedItems: any[] = [];
 
   @property({type: Array})
-  prevSelectedItems: any[] = [];
+  prevSelectedItems: any[] | undefined = undefined;
 
   /** Array of not found values (in options list) */
   @property({type: Array})
@@ -248,7 +248,11 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
   }
 
   _selectedItemsChanged(selectedItems: any[]) {
+    let triggeredByPropInitInContructor = false;
     if (JSON.stringify(this.prevSelectedItems) !== JSON.stringify(selectedItems)) {
+      if (this.prevSelectedItems == undefined) {
+        triggeredByPropInitInContructor = true;
+      }
       this.prevSelectedItems = selectedItems;
       setTimeout(() => {
         this._setDropdownMenuVerticalOffset();
@@ -266,9 +270,12 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
       return;
     }
 
-    this._debouncer = Debouncer.debounce(this._debouncer, timeOut.after(10), () => {
-      this._fireChangeEvent();
-    });
+    // Avoid change event reseting the values on the entity model connected to the dropdown, on first page access
+    if (!triggeredByPropInitInContructor) {
+      this._debouncer = Debouncer.debounce(this._debouncer, timeOut.after(10), () => {
+        this._fireChangeEvent();
+      });
+    }
   }
 
   /**
