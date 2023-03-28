@@ -29,7 +29,7 @@ export class EsmmSearchboxInput extends LitElement {
         }
 
         iron-icon {
-          margin-right: 5px;
+          margin-inline-end: 5px;
         }
 
         #searchInputContainer {

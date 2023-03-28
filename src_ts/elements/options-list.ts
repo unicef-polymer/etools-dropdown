@@ -73,7 +73,7 @@ export class EsmmOptionsList extends ListItemUtilsMixin(LitElement) {
 
           --paper-item-icon: {
             width: auto;
-            margin-right: 8px;
+            margin-inline-end: 8px;
           }
         }
 
@@ -131,7 +131,7 @@ export class EsmmOptionsList extends ListItemUtilsMixin(LitElement) {
           min-height: 20px;
           width: 20px;
           height: 20px;
-          margin-left: auto;
+          margin-inline-start: auto;
         }
 
         paper-icon-item.esmm-none-option {

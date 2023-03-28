@@ -78,12 +78,12 @@ export class EsmmSelectedOptions extends ListItemUtilsMixin(LitElement) {
         .selected-item {
           width: auto;
           height: auto;
-          margin-right: 8px;
+          margin-inline-end: 8px;
           line-height: 24px;
         }
 
         :host([readonly]) .selected-item {
-          margin-right: 0;
+          margin-inline-end: 0;
         }
 
         :host([readonly]) .selected-item paper-icon-button,
@@ -99,6 +99,7 @@ export class EsmmSelectedOptions extends ListItemUtilsMixin(LitElement) {
         .readonly-separator {
           display: inline-block;
           padding: 0 5px 0 8px;
+          padding-inline: 8px 5px;
           margin: 0;
         }
 
