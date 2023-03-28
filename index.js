@@ -1,2 +1,2 @@
-export {EtoolsDropdown} from './EtoolsDropdown.js';
-export {EtoolsDropdownMulti} from './EtoolsDropdownMulti.js';
+export {EtoolsDropdown} from './src/EtoolsDropdown.js';
+export {EtoolsDropdownMulti} from './src/EtoolsDropdownMulti.js';
