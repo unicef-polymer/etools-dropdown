@@ -13,6 +13,8 @@ import './elements/searchbox-input.js';
 import './elements/options-list.js';
 import {esmmSharedStyles} from './styles/esmm-shared-styles.js';
 import {getTranslation} from './utils/translate';
+import '@shoelace-style/shoelace/dist/components/select/select.js';
+import '@shoelace-style/shoelace/dist/components/option/option.js';
 
 /**
  * `etools-dropdown-multi`
@@ -75,91 +77,21 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
         }
       </style>
 
-      <esmm-selected-options
-        id="main"
-        .selectedItems="${this.selectedItems}"
-        .label="${this.label}"
-        .placeholder="${this.placeholder}"
-        ?always-float-label="${this.alwaysFloatLabel}"
-        ?no-label-float="${this.noLabelFloat}"
-        ?two-lines-label="${this.twoLinesLabel}"
-        ?capitalize="${this.capitalize}"
-        ?readonly="${this.readonly}"
-        ?disabled="${this.disabled}"
-        ?invalid="${this.invalid}"
-        .optionValue="${this.optionValue}"
-        .optionLabel="${this.optionLabel}"
-        .errorMessage="${this._getErrorMessage(this.errorMessage, this.invalid)}"
-        .openMenu="${this._openMenu}"
-        .onInputFocus="${this.onInputFocus}"
-        exportparts="esmm-label-container, esmm-label, esmm-label-suffix"
-      >
-        <span slot="input-label-suffix">
-          <slot name="label-suffix"></slot>
-        </span>
-      </esmm-selected-options>
-
-      <iron-dropdown
-        id="dropdownMenu"
-        part="esmm-dropdownmenu"
-        horizontal-align="${this.horizontalAlign}"
-        ?dynamic-align="${!this.noDynamicAlign}"
-        @iron-overlay-opened="${this._onDropdownOpen}"
-        @iron-overlay-closed="${this._onDropdownClose}"
-        ?disabled="${this._menuBtnIsDisabled(this.disabled, this.readonly)}"
-        no-cancel-on-outside-click
-        allow-click-through
-        ?with-backdrop="${this.withBackdrop}"
-      >
-        <div
-          id="ironDrContent"
-          class="paper-material rounded"
-          elevation="1"
-          slot="dropdown-content"
-          part="esmm-dropdown-content"
-        >
-          <div id="dropdown-controls">
-            <esmm-searchbox-input
-              id="searchbox"
-              .search="${this.search}"
-              @search-changed="${this._searchChanged}"
-              .language="${this.language}"
-              ?hidden="${this.hideSearch}"
-            ></esmm-searchbox-input>
-          </div>
-
-          <esmm-options-list
-            id="optionsList"
-            .shownOptions="${this.shownOptions}"
-            multi
-            .selectedValues="${this.selectedValues}"
-            @selected-values-changed="${this._selectedValuesChanged}"
-            ?two-lines-label="${this.twoLinesLabel}"
-            .optionValue="${this.optionValue}"
-            .optionLabel="${this.optionLabel}"
-            .requestInProgress="${this.requestInProgress}"
-            .showNoSearchResultsWarning="${this.showNoSearchResultsWarning}"
-            .showLimitWarning="${this.showLimitWarning}"
-            .shownOptionsLimit="${this.shownOptionsLimit}"
-            .shownOptionsCount="${this.shownOptionsLimit}"
-            .noOptionsAvailable="${this.noOptionsAvailable}"
-            ?capitalize="${this.capitalize}"
-            @show-more="${this.onShowMore}"
-            @shown-options="${this.onShownOptions}"
-            .language="${this.language}"
-          >
-          </esmm-options-list>
-          <span
-            title="${this._getCloseBtnText(this.closeText, this.language)}"
-            class="close-btn"
-            part="esmm-close-btn"
-            ?hidden="${this.hideClose}"
-            @click="${this._closeMenu}"
-          >
-            ${this._getCloseBtnText(this.closeText, this.language)}
-          </span>
-        </div>
-      </iron-dropdown>
+      <sl-select>
+        <esmm-searchbox-input
+          id="searchbox"
+          .search="${this.search}"
+          @search-changed="${this._searchChanged}"
+          .language="${this.language}"
+          ?hidden="${this.hideSearch}"
+        ></esmm-searchbox-input>
+        ${(this.shownOptions &&
+          this.shownOptions.length > 0 &&
+          this.shownOptions.map((item) => {
+            return html` <sl-option .value="${this.optionValue}">${this.getLabel(item)}</sl-option> `;
+          })) ||
+        ''}
+      </sl-select>
     `;
   }
 
