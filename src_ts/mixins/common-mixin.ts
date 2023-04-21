@@ -159,7 +159,10 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
     constructor(...args: any[]) {
       super(args);
       if (!this.language) {
-        this.language = window.localStorage.defaultLanguage || 'en';
+        this.language =
+          window.EtoolsApp && window.EtoolsApp.TheOnlyAvailableLanguage
+            ? window.EtoolsApp.TheOnlyAvailableLanguage
+            : window.localStorage.defaultLanguage || 'en';
       }
       this._handleLanguageChange = this._handleLanguageChange.bind(this);
       this._handleParentFocus = this._handleParentFocus.bind(this);
