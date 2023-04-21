@@ -160,8 +160,8 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
       super(args);
       if (!this.language) {
         this.language =
-          window.EtoolsApp && window.EtoolsApp.TheOnlyAvailableLanguage
-            ? window.EtoolsApp.TheOnlyAvailableLanguage
+          window.Internationalization && window.Internationalization.TheOnlyAvailableLanguage
+            ? window.Internationalization.TheOnlyAvailableLanguage
             : window.localStorage.defaultLanguage || 'en';
       }
       this._handleLanguageChange = this._handleLanguageChange.bind(this);
