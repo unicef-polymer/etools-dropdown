@@ -158,6 +158,7 @@ export function CommonFunctionalityMixin<T extends MixinTarget<LitElement>>(supe
 
     constructor(...args: any[]) {
       super(args);
+      // @ts-ignore
       this.language = window.EtoolsLanguage || 'en';
       this._handleLanguageChange = this._handleLanguageChange.bind(this);
       this._handleParentFocus = this._handleParentFocus.bind(this);
