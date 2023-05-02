@@ -186,7 +186,7 @@ For documentation details see component demo (`npm i`, `polymer serve`)
 
 ## Internationalization
 
-- `language` property available to be set.
+- `language` property is initialized from window.EtoolsLAnguage || 'en'.
 - The component handles the `language-changed` event fired by the parent app
 - `assets/translations.js` contains the translations file.
 
