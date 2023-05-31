@@ -147,6 +147,7 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
             @show-more="${this.onShowMore}"
             @shown-options="${this.onShownOptions}"
             .language="${this.language}"
+            ?unprefixName="${this.unprefixName}"
           >
           </esmm-options-list>
           <span
