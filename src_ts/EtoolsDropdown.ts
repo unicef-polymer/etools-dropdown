@@ -264,6 +264,7 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
             @show-more="${this.onShowMore}"
             @shown-options="${this.onShownOptions}"
             .language="${this.language}"
+            ?unprefix-name="${this.unprefixName}"
           ></esmm-options-list>
         </div>
       </iron-dropdown>

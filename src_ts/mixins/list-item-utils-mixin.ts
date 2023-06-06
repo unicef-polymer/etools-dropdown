@@ -32,6 +32,9 @@ export const ListItemUtilsMixin = dedupeMixin(<T extends MixinTarget<LitElement>
     @property({type: String, attribute: 'language'})
     language!: string;
 
+    @property({type: Boolean, attribute: 'unprefix-name'})
+    unprefixName = false;
+
     /**
      * Get option primary label. All chars until `|` .
      * @param label
@@ -47,6 +50,10 @@ export const ListItemUtilsMixin = dedupeMixin(<T extends MixinTarget<LitElement>
         l = label.toString().slice(0, label.toString().indexOf('|'));
         if (this.capitalize) {
           l = this._capitalizeString(l);
+        }
+
+        if (this.unprefixName && label && label.lastIndexOf(']') > 0) {
+          label = label.substring(label.lastIndexOf(']') + 1);
         }
       }
       return l;
@@ -97,6 +104,10 @@ export const ListItemUtilsMixin = dedupeMixin(<T extends MixinTarget<LitElement>
         if (this.capitalize && !this.twoLinesLabel) {
           // capitalize label
           label = this._capitalizeString(label);
+        }
+
+        if (this.unprefixName && label && label.lastIndexOf(']') > 0) {
+          label = label.substring(label.lastIndexOf(']') + 1);
         }
       }
       return label;

@@ -93,6 +93,7 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
         .openMenu="${this._openMenu}"
         .onInputFocus="${this.onInputFocus}"
         exportparts="esmm-label-container, esmm-label, esmm-label-suffix"
+        ?unprefix-name="${this.unprefixName}"
       >
         <span slot="input-label-suffix">
           <slot name="label-suffix"></slot>
@@ -147,6 +148,7 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
             @show-more="${this.onShowMore}"
             @shown-options="${this.onShownOptions}"
             .language="${this.language}"
+            ?unprefix-name="${this.unprefixName}"
           >
           </esmm-options-list>
           <span
