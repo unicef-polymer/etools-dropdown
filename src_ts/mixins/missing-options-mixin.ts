@@ -23,7 +23,7 @@ export const MissingOptionsMixin = dedupeMixin(<T extends MixinTarget<LitElement
     _missingOptionsDebouncer: Debouncer | null = null;
 
     updated(changedProperties: any) {
-      super.updated(changedProperties);
+      // super.updated(changedProperties);
       if (changedProperties.has('ajaxParams') || changedProperties.has('url')) {
         this.fetchMissingOptions(this.url, this.ajaxParams);
       }
