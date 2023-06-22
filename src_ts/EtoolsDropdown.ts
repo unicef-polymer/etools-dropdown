@@ -1,4 +1,4 @@
-import {LitElement, html, property} from 'lit-element';
+import {LitElement, PropertyValues, html, property} from 'lit-element';
 import {CommonFunctionalityMixin} from './mixins/common-mixin.js';
 import {MissingOptionsMixin} from './mixins/missing-options-mixin.js';
 import './SlAutocomplete.js';
@@ -115,12 +115,18 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
     `;
   }
 
+  updated(changedProperties: PropertyValues) {
+    if (changedProperties.has('options') || changedProperties.has('selected')) {
+      this.selectedItem = this.options.find((o: any) => o[this.optionValue] == this.selected);
+    }
+  }
+
   // This will not be required when we drop this ts files
   _searchChanged({detail}: CustomEvent) {
     this.search = detail.value;
   }
 
-  _selectionChanged({detail}: CustomEvent){
+  _selectionChanged({detail}: CustomEvent) {
     this.dispatchEvent(
       new CustomEvent('etools-selected-item-changed', {
         detail: {selectedItem: detail?.value},
@@ -130,7 +136,7 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
     );
   }
 
-  validate(){
+  validate() {
     this.invalid = (this.shadowRoot?.querySelector('sl-autocomplete') as SlAutocomplete)?.validate();
     return this.invalid;
   }
