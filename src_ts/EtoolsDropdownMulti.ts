@@ -4,10 +4,6 @@ import {CommonFunctionalityMixin} from './mixins/common-mixin.js';
 import {MissingOptionsMixin} from './mixins/missing-options-mixin.js';
 // import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import '@polymer/iron-icons/iron-icons.js';
-import '@polymer/iron-dropdown/iron-dropdown.js';
-import '@polymer/neon-animation/neon-animations.js';
-import '@polymer/paper-styles/element-styles/paper-material-styles.js';
-
 import './SlAutocomplete.js';
 import SlAutocomplete from './SlAutocomplete.js';
 
@@ -47,6 +43,13 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
 
   render() {
     return html`
+      <style>
+        sl-autocomplete::part(tag__base) {
+          height: auto;
+          white-space: normal;
+          line-height: 1.7;
+        }
+      </style>
       <sl-autocomplete
         multiple
         clearable
