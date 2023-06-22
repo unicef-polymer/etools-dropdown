@@ -117,7 +117,7 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
 
   updated(changedProperties: PropertyValues) {
     if (changedProperties.has('options') || changedProperties.has('selected')) {
-      this.selectedItem = this.options.find((o: any) => o[this.optionValue] == this.selected);
+      this.selectedItem = this.options?.find((o: any) => String(o[this.optionValue]) == String(this.selected));
     }
   }
 

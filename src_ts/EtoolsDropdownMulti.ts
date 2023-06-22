@@ -74,7 +74,8 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
 
   updated(changedProperties: PropertyValues) {
     if (changedProperties.has('options') || changedProperties.has('selectedValues')) {
-      this.selectedItems = this.options.filter((o: any) => this.selectedValues.includes(String(o[this.optionValue])));
+      const strSelectedVals = this.selectedValues ? this.selectedValues.map((v) => String(v)) : this.selectedValues;
+      this.selectedItems = this.options?.filter((o: any) => strSelectedVals.includes(String(o[this.optionValue])));
     }
   }
 
