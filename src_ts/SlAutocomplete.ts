@@ -14,6 +14,7 @@ import {styleMap} from 'lit/directives/style-map.js';
 import {SlInput, SlInputEvent} from '@shoelace-style/shoelace';
 import {classMap} from 'lit/directives/class-map.js';
 import {property, query, state} from 'lit-element/lib/decorators';
+import {PropertyValues} from 'lit-element';
 /**
  * @summary Autocompletes displays suggestions as you type.
  *
@@ -373,6 +374,14 @@ export default class SlAutocomplete extends LitElement {
     this.handleDocumentMouseDown = this.handleDocumentMouseDown.bind(this);
     this.handleDocumentFocusIn = this.handleDocumentFocusIn.bind(this);
     this.totalItemsToShow = this.shownOptionsLimit;
+  }
+
+  updated(changedProperties: PropertyValues) {
+    // TODO rename items to options
+    if (changedProperties.has('items') || changedProperties.has('selectedValues')) {
+      const strSelectedVals = this.selectedValues ? this.selectedValues.map((v) => String(v)) : this.selectedValues;
+      this.selectedItems = this.items?.filter((o: any) => strSelectedVals.includes(String(o[this.optionValue])));
+    }
   }
 
   /**

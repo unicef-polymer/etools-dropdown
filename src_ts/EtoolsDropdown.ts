@@ -1,4 +1,4 @@
-import {LitElement, PropertyValues, html, property} from 'lit-element';
+import {LitElement, html, property} from 'lit-element';
 import {CommonFunctionalityMixin} from './mixins/common-mixin.js';
 import {MissingOptionsMixin} from './mixins/missing-options-mixin.js';
 import './SlAutocomplete.js';
@@ -113,12 +113,6 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
       >
       </sl-autocomplete>
     `;
-  }
-
-  updated(changedProperties: PropertyValues) {
-    if (changedProperties.has('options') || changedProperties.has('selected')) {
-      this.selectedItem = this.options?.find((o: any) => String(o[this.optionValue]) == String(this.selected));
-    }
   }
 
   // This will not be required when we drop this ts files

@@ -1,4 +1,4 @@
-import {LitElement, PropertyValues, html, property} from 'lit-element';
+import {LitElement, html, property} from 'lit-element';
 // import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 import {CommonFunctionalityMixin} from './mixins/common-mixin.js';
 import {MissingOptionsMixin} from './mixins/missing-options-mixin.js';
@@ -43,13 +43,6 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
 
   render() {
     return html`
-      <style>
-        sl-autocomplete::part(tag__base) {
-          height: auto;
-          white-space: normal;
-          line-height: 1.7;
-        }
-      </style>
       <sl-autocomplete
         multiple
         clearable
@@ -73,13 +66,6 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
       >
       </sl-autocomplete>
     `;
-  }
-
-  updated(changedProperties: PropertyValues) {
-    if (changedProperties.has('options') || changedProperties.has('selectedValues')) {
-      const strSelectedVals = this.selectedValues ? this.selectedValues.map((v) => String(v)) : this.selectedValues;
-      this.selectedItems = this.options?.filter((o: any) => strSelectedVals.includes(String(o[this.optionValue])));
-    }
   }
 
   // This will not be required when we drop this ts files
