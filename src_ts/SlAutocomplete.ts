@@ -1,5 +1,5 @@
 // import {styleMap} from 'lit/directives/style-map.js';
-import {LitElement, html} from 'lit';
+import {LitElement, html, PropertyValues} from 'lit';
 import {customElement} from 'lit/decorators.js';
 import '@shoelace-style/shoelace/dist/components/menu-item/menu-item.js';
 import '@shoelace-style/shoelace/dist/components/menu/menu.js';
@@ -14,7 +14,6 @@ import {styleMap} from 'lit/directives/style-map.js';
 import {SlInput, SlInputEvent} from '@shoelace-style/shoelace';
 import {classMap} from 'lit/directives/class-map.js';
 import {property, query, state} from 'lit-element/lib/decorators';
-import {PropertyValues} from 'lit-element';
 /**
  * @summary Autocompletes displays suggestions as you type.
  *
