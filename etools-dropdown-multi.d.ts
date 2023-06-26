@@ -1,9 +1,9 @@
-import {EtoolsDropdownMulti} from './src/EtoolsDropdownMulti.d';
+import {SlAutocomplete} from './src/SlAutocomplete.d';
 
-export {EtoolsDropdownMulti as EtoolsDropdownMultiEl};
+export {SlAutocomplete as EtoolsDropdownMultiEl};
 
 declare global {
   interface HTMLElementTagNameMap {
-    'etools-dropdown-multi': EtoolsDropdownMulti;
+    'etools-dropdown-multi': SlAutocomplete;
   }
 }

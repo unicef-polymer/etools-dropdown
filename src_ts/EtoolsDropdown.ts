@@ -89,6 +89,23 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
   @property({type: String})
   inputAriaHaspopup: any;
 
+  // set selectedItem(value){
+  //     this.selectedItems = [value]
+  // }
+
+  // set selected(value){
+  //     this.selectedValues = [value]
+  // }
+
+  // get selectedItem(){
+  //   return this.selectedItems?.[0];
+  // }
+
+  // get selected(value){
+  //   return this.selectedValues?.[0];
+  // }
+
+
   render() {
     // language=HTML
     return html`

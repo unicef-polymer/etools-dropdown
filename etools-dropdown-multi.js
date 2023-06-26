@@ -1,2 +1,3 @@
 import { EtoolsDropdownMulti } from './src/EtoolsDropdownMulti';
-window.customElements.define('etools-dropdown-multi', EtoolsDropdownMulti);
+import SlAutocomplete from './src/SlAutocomplete';
+window.customElements.define('etools-dropdown-multi', SlAutocomplete);

@@ -1,2 +1,2 @@
-import { EtoolsDropdown } from './src/EtoolsDropdown';
-window.customElements.define('etools-dropdown', EtoolsDropdown);
+import SlAutocomplete from './src/SlAutocomplete';
+window.customElements.define('etools-dropdown', SlAutocomplete);

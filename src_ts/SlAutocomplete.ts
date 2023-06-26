@@ -321,7 +321,7 @@ export default class SlAutocomplete extends LitElement {
                 class="select__list"
                 tabindex="-1"
               >
-                <sl-menu>
+                <sl-menu> 
                   ${items?.map((option: any) => html `
                     <sl-menu-item
                     type="checkbox"
@@ -558,6 +558,20 @@ export default class SlAutocomplete extends LitElement {
         composed: true
       })
     );
+    this.dispatchEvent(
+      new CustomEvent('etools-selected-item-changed', {
+        detail: {selectedItem: this.selectedItems?.[0] || undefined},
+        bubbles: true,
+        composed: true
+      })
+    );
+    this.dispatchEvent(
+      new CustomEvent('etools-selected-items-changed', {
+        detail: {selectedItems: this.selectedItems},
+        bubbles: true,
+        composed: true
+      })
+    );
     console.log( {value: this.multiple ? this.selectedItems : this.selectedItems?.[0] || undefined});
   }
 
@@ -602,6 +616,13 @@ export default class SlAutocomplete extends LitElement {
     this.invalid = !this.selectedValueCommaList.length;
     console.log(this.invalid,this.selectedValueCommaList, this.selectedItems, this.selectedValues);
     return this.invalid;
+  }
+
+  /**
+   * Reset invalid state
+   */
+  resetInvalidState() {
+    this.invalid = false;
   }
 
   /**
