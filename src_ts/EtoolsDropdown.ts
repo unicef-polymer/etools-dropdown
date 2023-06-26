@@ -137,7 +137,7 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
     this.search = detail.value;
   }
 
-  _selectionChanged({detail}: CustomEvent){
+  _selectionChanged({detail}: CustomEvent) {
     this.dispatchEvent(
       new CustomEvent('etools-selected-item-changed', {
         detail: {selectedItem: detail?.value},
@@ -147,7 +147,7 @@ export class EtoolsDropdown extends CommonFunctionalityMixin(MissingOptionsMixin
     );
   }
 
-  validate(){
+  validate() {
     this.invalid = (this.shadowRoot?.querySelector('sl-autocomplete') as SlAutocomplete)?.validate();
     return this.invalid;
   }

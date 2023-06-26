@@ -1,5 +1,5 @@
 // import {styleMap} from 'lit/directives/style-map.js';
-import {LitElement, html} from 'lit';
+import {LitElement, html, PropertyValues} from 'lit';
 import {customElement} from 'lit/decorators.js';
 import '@shoelace-style/shoelace/dist/components/menu-item/menu-item.js';
 import '@shoelace-style/shoelace/dist/components/menu/menu.js';
@@ -13,7 +13,7 @@ import type SlMenuItem from '@shoelace-style/shoelace/dist/components/menu-item/
 import {styleMap} from 'lit/directives/style-map.js';
 import {SlInput, SlInputEvent} from '@shoelace-style/shoelace';
 import {classMap} from 'lit/directives/class-map.js';
-import { property, query, state } from 'lit-element/lib/decorators';
+import {property, query, state} from 'lit-element/lib/decorators';
 /**
  * @summary Autocompletes displays suggestions as you type.
  *
@@ -42,7 +42,7 @@ export default class SlAutocomplete extends LitElement {
   @state() private hasFocus = false;
   @state() private loading = false;
   @state() private _open: boolean = false;
-  
+
   private totalItemsToShow: number = 0;
   private observerInfiniteScroll: IntersectionObserver | undefined;
   private page: number = 0;
@@ -131,7 +131,7 @@ export default class SlAutocomplete extends LitElement {
   hideSearch: boolean = false;
 
   @property({type: Number, attribute: 'shown-options-limit'})
-  shownOptionsLimit: number =  10;
+  shownOptionsLimit: number = 10;
 
   @property({type: Boolean})
   get open() {
@@ -160,7 +160,7 @@ export default class SlAutocomplete extends LitElement {
     const hasHelpText = this.helpText ? true : false;
     const hasClearIcon = this.clearable && !this.disabled && !this.readonly && this.selectedValueCommaList.length > 0;
     const isPlaceholderVisible = this.placeholder && this.selectedValueCommaList.length === 0;
-    const items = this.filteredItems.slice(0, this.totalItemsToShow);
+    const items = this.filteredItems?.slice(0, this.totalItemsToShow);
 
     return html`
       <div
@@ -304,12 +304,12 @@ export default class SlAutocomplete extends LitElement {
             <div class="dropdown">
               <div part="search" id="search" class="search" ?hidden="${this.hideSearch}">
                 <sl-input
-                    role="presentation"
-                    placeholder=${this.searchPlaceholder}
-                    .value="${this.search}"
-                    @sl-input=${this.handleSearchChanged}
-                    autocomplete="off"
-                  ></sl-input>
+                  role="presentation"
+                  placeholder=${this.searchPlaceholder}
+                  .value="${this.search}"
+                  @sl-input=${this.handleSearchChanged}
+                  autocomplete="off"
+                ></sl-input>
               </div>
               <div
                 class="list"
@@ -321,17 +321,20 @@ export default class SlAutocomplete extends LitElement {
                 class="select__list"
                 tabindex="-1"
               >
-                <sl-menu> 
-                  ${items?.map((option: any) => html `
-                    <sl-menu-item
-                    type="checkbox"
-                    ?checked=${this.isSelected(option)}
-                    value="${option[this.optionValue]}"
-                    >${option[this.optionLabel]}</sl-menu-item>
-                  `)}
+                <sl-menu>
+                  ${items?.map(
+                    (option: any) => html`
+                      <sl-menu-item
+                        type="checkbox"
+                        ?checked=${this.isSelected(option)}
+                        value="${option[this.optionValue]}"
+                        >${option[this.optionLabel]}</sl-menu-item
+                      >
+                    `
+                  )}
                   <div id="infinite-scroll-trigger"></div>
                 </sl-menu>
-               
+
                 <div
                   part="loading-text"
                   id="loading-text"
@@ -372,9 +375,17 @@ export default class SlAutocomplete extends LitElement {
     this.totalItemsToShow = this.shownOptionsLimit;
   }
 
+  updated(changedProperties: PropertyValues) {
+    // TODO rename items to options
+    if (changedProperties.has('items') || changedProperties.has('selectedValues')) {
+      const strSelectedVals = this.selectedValues ? this.selectedValues.map((v) => String(v)) : this.selectedValues;
+      this.selectedItems = this.items?.filter((o: any) => strSelectedVals.includes(String(o[this.optionValue])));
+    }
+  }
+
   /**
    * Register document event listeners
-  */ 
+   */
   private addOpenListeners() {
     document.addEventListener('focusin', this.handleDocumentFocusIn);
     document.addEventListener('mousedown', this.handleDocumentMouseDown);
@@ -400,7 +411,7 @@ export default class SlAutocomplete extends LitElement {
     this.open = !this.open;
   }
 
-   /**
+  /**
    * Document Mouse Down handler function. On document mouse down it is hiding the dropdown popup
    * @param event MouseEvent
    */
@@ -423,7 +434,7 @@ export default class SlAutocomplete extends LitElement {
     }
   }
 
-   /**
+  /**
    * Clear all click handler function.Will clear entire selection
    * @param event MouseEvent
    */
@@ -490,7 +501,7 @@ export default class SlAutocomplete extends LitElement {
 
   /**
    * Getter to return the list of items to show in the dropdown.
-   * It is responsible to make loadDataMethod function call if defined and 
+   * It is responsible to make loadDataMethod function call if defined and
    * to filter the items based on the search value
    */
   get filteredItems() {
@@ -545,7 +556,7 @@ export default class SlAutocomplete extends LitElement {
   }
 
   /**
-   * Set selected values using 'optionValue' from selectedItems and 
+   * Set selected values using 'optionValue' from selectedItems and
    * triggers and also selection-changed event
    */
   setSelectedValues() {
@@ -572,7 +583,6 @@ export default class SlAutocomplete extends LitElement {
         composed: true
       })
     );
-    console.log( {value: this.multiple ? this.selectedItems : this.selectedItems?.[0] || undefined});
   }
 
   /**
@@ -589,32 +599,32 @@ export default class SlAutocomplete extends LitElement {
     this.open = false;
   }
 
-
   /**
-   * Function to check if a specific option has been selected. 
+   * Function to check if a specific option has been selected.
    * It is checking if it is available in selectedItems by matching 'optionValue'
    * @param option - The option to check if it has been selected
-   * @returns 
+   * @returns
    */
   isSelected(option: any) {
     return (
-      this.selectedItems.findIndex((x) => x?.[this.optionValue]?.toString() === option[this.optionValue]?.toString()) > -1
+      this.selectedItems?.findIndex((x) => x?.[this.optionValue]?.toString() === option[this.optionValue]?.toString()) >
+      -1
     );
   }
 
-   /**
+  /**
    * Validate dropdown selection
    * @param selected
    * @returns {boolean}
    */
-   validate() {
+  validate() {
     if (!this.hasAttribute('required') || this.hasAttribute('readonly')) {
       this.invalid = false;
       return true;
     }
-   
+
     this.invalid = !this.selectedValueCommaList.length;
-    console.log(this.invalid,this.selectedValueCommaList, this.selectedItems, this.selectedValues);
+    console.log(this.invalid, this.selectedValueCommaList, this.selectedItems, this.selectedValues);
     return this.invalid;
   }
 
@@ -640,10 +650,10 @@ export default class SlAutocomplete extends LitElement {
       return [];
     }
 
-    this.page = (this.totalItemsToShow / this.shownOptionsLimit) || 1;
+    this.page = this.totalItemsToShow / this.shownOptionsLimit || 1;
     if (search != this.prevSearch || this.page !== this.prevPage) {
       this.loading = true;
-    
+
       this.searchHasChanged = this.prevSearch !== search;
       this.pageHasChanged = this.page !== this.prevPage;
       this.prevSearch = search;
@@ -657,7 +667,7 @@ export default class SlAutocomplete extends LitElement {
         return [];
       }
 
-      if(this.pageHasChanged){
+      if (this.pageHasChanged) {
         // if page changed return current items so we don't have an empty list until request finishes
         return items;
       }
@@ -667,7 +677,7 @@ export default class SlAutocomplete extends LitElement {
       if (this.searchHasChanged) {
         this.searchHasChanged = false;
         this.loading = false;
-      } else if ( this.pageHasChanged) {
+      } else if (this.pageHasChanged) {
         this.pageHasChanged = false;
         this.loading = false;
       }
@@ -692,8 +702,8 @@ export default class SlAutocomplete extends LitElement {
   /**
    * Function to disable infinite scroll functionality
    */
-  _disableInfiniteScroll(){
-    if(this.observerInfiniteScroll){
+  _disableInfiniteScroll() {
+    if (this.observerInfiniteScroll) {
       this.observerInfiniteScroll.disconnect();
       this.observerInfiniteScroll = undefined;
     }
@@ -711,7 +721,6 @@ export default class SlAutocomplete extends LitElement {
     };
 
     this.observerInfiniteScroll = new IntersectionObserver((entries) => {
-
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           this.showMoreOptions();
@@ -724,7 +733,7 @@ export default class SlAutocomplete extends LitElement {
   /**
    * Function to set the number of items to show in dropdown based on the shown options limit and by
    * the infinite scroll trigger. Total items to show will increase when the list reaches the end of list
-   * @returns 
+   * @returns
    */
   showMoreOptions() {
     if (!this.items || !this.items.length) {

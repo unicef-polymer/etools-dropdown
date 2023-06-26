@@ -14,6 +14,12 @@ export default css`
     box-sizing: inherit;
   }
 
+  :host-context([multiple]) sl-tag::part(base) {
+    height: auto;
+    white-space: normal;
+    line-height: 1.8;
+  }
+
   [hidden] {
     display: none !important;
   }
@@ -478,4 +484,4 @@ export default css`
   [invalid] label {
     color: red;
   }
-`; 
+`;

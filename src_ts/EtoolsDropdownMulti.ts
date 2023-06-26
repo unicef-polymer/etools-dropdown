@@ -4,15 +4,6 @@ import {CommonFunctionalityMixin} from './mixins/common-mixin.js';
 import {MissingOptionsMixin} from './mixins/missing-options-mixin.js';
 // import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 import '@polymer/iron-icons/iron-icons.js';
-import '@polymer/iron-dropdown/iron-dropdown.js';
-import '@polymer/neon-animation/neon-animations.js';
-import '@polymer/paper-styles/element-styles/paper-material-styles.js';
-import './scripts/es6-polyfills.js';
-import './elements/selected-options.js';
-import './elements/searchbox-input.js';
-import './elements/options-list.js';
-// import {esmmSharedStyles} from './styles/esmm-shared-styles.js';
-
 import './SlAutocomplete.js';
 import SlAutocomplete from './SlAutocomplete.js';
 
@@ -82,7 +73,7 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
     this.search = detail.value;
   }
 
-  _selectionChanged({detail}: CustomEvent){
+  _selectionChanged({detail}: CustomEvent) {
     this.dispatchEvent(
       new CustomEvent('etools-selected-items-changed', {
         detail: {selectedItems: detail?.value},
@@ -92,7 +83,7 @@ export class EtoolsDropdownMulti extends CommonFunctionalityMixin(MissingOptions
     );
   }
 
-  validate(){
+  validate() {
     this.invalid = (this.shadowRoot?.querySelector('sl-autocomplete') as SlAutocomplete)?.validate();
     return this.invalid;
   }
