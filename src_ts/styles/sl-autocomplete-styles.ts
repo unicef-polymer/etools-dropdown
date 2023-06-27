@@ -1,6 +1,7 @@
 import {css} from 'lit';
 // @ts-ignore
 import shoelaceStyles from '@shoelace-style/shoelace/dist/themes/light.styles.js';
+
 export default css`
   ${shoelaceStyles}
 
@@ -483,5 +484,11 @@ export default css`
 
   [invalid] label {
     color: red;
+  }
+
+  .infinite-scroll-trigger {
+    width: 100%;
+    height: 1px;
+    display: block;
   }
 `;

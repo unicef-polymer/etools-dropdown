@@ -1,6 +1,5 @@
 // import {styleMap} from 'lit/directives/style-map.js';
 import {LitElement, html, PropertyValues} from 'lit';
-import {customElement} from 'lit/decorators.js';
 import '@shoelace-style/shoelace/dist/components/menu-item/menu-item.js';
 import '@shoelace-style/shoelace/dist/components/menu/menu.js';
 import '@shoelace-style/shoelace/dist/components/select/select.js';
@@ -13,7 +12,7 @@ import type SlMenuItem from '@shoelace-style/shoelace/dist/components/menu-item/
 import {styleMap} from 'lit/directives/style-map.js';
 import {SlInput, SlInputEvent} from '@shoelace-style/shoelace';
 import {classMap} from 'lit/directives/class-map.js';
-import {property, query, state} from 'lit-element/lib/decorators';
+import {property, query, state} from 'lit/decorators';
 /**
  * @summary Autocompletes displays suggestions as you type.
  *
@@ -33,24 +32,24 @@ import {property, query, state} from 'lit-element/lib/decorators';
  * @csspart loading-test - The loading text's wrapper.
  *
  */
-@customElement('sl-autocomplete')
-export default class SlAutocomplete extends LitElement {
-  static styles = styles;
+export class SlAutocomplete extends LitElement {
+  static styles = [styles];
 
   @query('sl-input') searchInput!: SlInput;
 
   @state() private hasFocus = false;
   @state() private loading = false;
   @state() private _open: boolean = false;
+  @state() private search: string = '';
+  @state() private totalOptionsToShow: number = 0;
 
-  private totalItemsToShow: number = 0;
   private observerInfiniteScroll: IntersectionObserver | undefined;
   private page: number = 0;
   private prevPage: number = 0;
   private prevSearch: string = '';
   private searchHasChanged: boolean = false;
   private pageHasChanged: boolean = false;
-  private search: string = '';
+  private noMoreItemsToLoad: boolean = false;
 
   @property({type: String, attribute: 'label'})
   label: string | undefined;
@@ -89,7 +88,7 @@ export default class SlAutocomplete extends LitElement {
   loadingText: string = 'Loading...';
 
   @property({type: Number})
-  items: any[] = [];
+  options: any[] = [];
 
   @property({type: String, attribute: 'load-data-method'})
   loadDataMethod: string | undefined;
@@ -99,6 +98,24 @@ export default class SlAutocomplete extends LitElement {
 
   @property({type: Array})
   selectedValues: string[] = [];
+
+  @property({type: String})
+  get selected() {
+    return this.selectedValues?.[0];
+  }
+
+  set selected(value: any | null) {
+    this.selectedValues = value ? [value] : [];
+  }
+
+  @property({type: String})
+  get selectedItem() {
+    return this.selectedItems?.[0];
+  }
+
+  set selectedItem(value: any | null) {
+    this.selectedItems = value ? [value] : [];
+  }
 
   @property({type: Boolean, reflect: true, attribute: 'multiple'})
   multiple = false;
@@ -131,7 +148,7 @@ export default class SlAutocomplete extends LitElement {
   hideSearch: boolean = false;
 
   @property({type: Number, attribute: 'shown-options-limit'})
-  shownOptionsLimit: number = 10;
+  shownOptionsLimit: number = 30;
 
   @property({type: Boolean})
   get open() {
@@ -160,7 +177,7 @@ export default class SlAutocomplete extends LitElement {
     const hasHelpText = this.helpText ? true : false;
     const hasClearIcon = this.clearable && !this.disabled && !this.readonly && this.selectedValueCommaList.length > 0;
     const isPlaceholderVisible = this.placeholder && this.selectedValueCommaList.length === 0;
-    const items = this.filteredItems?.slice(0, this.totalItemsToShow);
+    const options = this.filteredOptions?.slice(0, this.totalOptionsToShow);
 
     return html`
       <div
@@ -322,7 +339,7 @@ export default class SlAutocomplete extends LitElement {
                 tabindex="-1"
               >
                 <sl-menu>
-                  ${items?.map(
+                  ${options?.map(
                     (option: any) => html`
                       <sl-menu-item
                         type="checkbox"
@@ -332,7 +349,7 @@ export default class SlAutocomplete extends LitElement {
                       >
                     `
                   )}
-                  <div id="infinite-scroll-trigger"></div>
+                  <div class="infinite-scroll-trigger" ?hidden=${this.loading || this.noMoreItemsToLoad}></div>
                 </sl-menu>
 
                 <div
@@ -348,8 +365,8 @@ export default class SlAutocomplete extends LitElement {
                   part="empty-text"
                   id="empty-text"
                   class="empty-text"
-                  aria-hidden=${!this.loading && !items?.length ? 'false' : 'true'}
-                  style="${styleMap({display: !this.loading && !items?.length ? 'block' : 'none'})}"
+                  aria-hidden=${!this.loading && !options?.length ? 'false' : 'true'}
+                  style="${styleMap({display: !this.loading && !options?.length ? 'block' : 'none'})}"
                 >
                   <slot name="empty-text">${this.emptyText}</slot>
                 </div>
@@ -372,14 +389,13 @@ export default class SlAutocomplete extends LitElement {
     });
     this.handleDocumentMouseDown = this.handleDocumentMouseDown.bind(this);
     this.handleDocumentFocusIn = this.handleDocumentFocusIn.bind(this);
-    this.totalItemsToShow = this.shownOptionsLimit;
+    this.totalOptionsToShow = this.shownOptionsLimit;
   }
 
   updated(changedProperties: PropertyValues) {
-    // TODO rename items to options
-    if (changedProperties.has('items') || changedProperties.has('selectedValues')) {
-      const strSelectedVals = this.selectedValues ? this.selectedValues.map((v) => String(v)) : this.selectedValues;
-      this.selectedItems = this.items?.filter((o: any) => strSelectedVals.includes(String(o[this.optionValue])));
+    if (changedProperties.has('options') || changedProperties.has('selectedValues')) {
+      const strSelectedVals = this.selectedValues ? this.selectedValues?.map((v) => String(v)) : this.selectedValues;
+      this.selectedItems = this.options?.filter((o: any) => strSelectedVals?.includes(String(o[this.optionValue])));
     }
   }
 
@@ -474,7 +490,8 @@ export default class SlAutocomplete extends LitElement {
    */
   private handleSearchChanged(e: SlInputEvent) {
     this.search = (e.target as SlInput)?.value;
-    this.totalItemsToShow = this.shownOptionsLimit;
+    this.totalOptionsToShow = this.shownOptionsLimit;
+    this.noMoreItemsToLoad = false;
     this._enableInfiniteScroll();
     this.dispatchEvent(
       new CustomEvent('search-changed', {
@@ -486,34 +503,34 @@ export default class SlAutocomplete extends LitElement {
   }
 
   /**
-   * Getter used to return selected items values as a comma separated list.
+   * Getter used to return selected options values as a comma separated list.
    */
   private get selectedValueCommaList() {
     return this.selectedValues?.join(',') || '';
   }
 
   /**
-   * Getter used to return select items labels used to display in the select input display
+   * Getter used to return select options labels used to display in the select input display
    */
   private get selectedLabels() {
     return this.selectedItems?.map((x) => x?.[this.optionLabel]).join(',') || '';
   }
 
   /**
-   * Getter to return the list of items to show in the dropdown.
+   * Getter to return the list of options to show in the dropdown.
    * It is responsible to make loadDataMethod function call if defined and
-   * to filter the items based on the search value
+   * to filter the options based on the search value
    */
-  get filteredItems() {
+  get filteredOptions() {
     if (typeof this.loadDataMethod === 'function') {
-      return this._loadItemsData(this.items, this.search, this.loadDataMethod);
+      return this._loadOptionsData(this.options, this.search, this.loadDataMethod);
     }
 
     if (this.search) {
-      return this.items.filter(this.itemContainsSearchString.bind(this));
+      return this.options.filter(this.itemContainsSearchString.bind(this));
     }
 
-    return this.items;
+    return this.options;
   }
 
   /**
@@ -521,7 +538,7 @@ export default class SlAutocomplete extends LitElement {
    * @param option Option that has been selected
    */
   private setSelectedOption(option: any) {
-    const selectedItem = this.items.find((x) => x[this.optionValue].toString() === option.value.toString());
+    const selectedItem = this.options.find((x) => x[this.optionValue].toString() === option.value.toString());
     if (!this.selectedItems) {
       this.selectedItems = [];
     }
@@ -586,7 +603,7 @@ export default class SlAutocomplete extends LitElement {
   }
 
   /**
-   * Hide dropdown popup
+   * Hide dropdown popup.
    */
   show() {
     this.open = true;
@@ -624,7 +641,6 @@ export default class SlAutocomplete extends LitElement {
     }
 
     this.invalid = !this.selectedValueCommaList.length;
-    console.log(this.invalid, this.selectedValueCommaList, this.selectedItems, this.selectedValues);
     return this.invalid;
   }
 
@@ -633,24 +649,30 @@ export default class SlAutocomplete extends LitElement {
    */
   resetInvalidState() {
     this.invalid = false;
+    return this.invalid;
   }
 
   /**
    * Responsbile to call loadDataMethod function if has been provided in order to fetch data directly from server
    * and to directly filter & search via API Requests
-   * @param items - List of items currently available
+   * @param options - List of options currently available
    * @param search - Search value
    * @param loadDataMethod  - The load data method to call
-   * @returns Existing items or empty list depending on some specific cases
+   * @returns Existing options or empty list depending on some specific cases
    */
-  _loadItemsData(items: any[], search: string, loadDataMethod: any) {
-    if (search != this.prevSearch && this.totalItemsToShow !== this.shownOptionsLimit) {
+  private _loadOptionsData(options: any[], search: string, loadDataMethod: any) {
+    if (search != this.prevSearch && this.totalOptionsToShow !== this.shownOptionsLimit) {
       // if search changed reset _shownOptionsCount in order to load  the first page for the new search
-      this.totalItemsToShow = this.shownOptionsLimit;
+      this.totalOptionsToShow = this.shownOptionsLimit;
       return [];
     }
 
-    this.page = this.totalItemsToShow / this.shownOptionsLimit || 1;
+    this.page = this.totalOptionsToShow / this.shownOptionsLimit || 1;
+
+    // if (this.noMoreItemsToLoad) {
+    //   return options;
+    // }
+
     if (search != this.prevSearch || this.page !== this.prevPage) {
       this.loading = true;
 
@@ -659,7 +681,19 @@ export default class SlAutocomplete extends LitElement {
       this.prevSearch = search;
       this.prevPage = this.page;
 
-      loadDataMethod(this.search, this.page, this.shownOptionsLimit);
+      const loadDataMethodReturn = loadDataMethod(this.search, this.page, this.shownOptionsLimit);
+
+      // if it is a promise then we try to catch. If it returns error then most probably there is no more items to load (the case were total items equals exactly limit * page)
+      if (
+        loadDataMethodReturn &&
+        typeof loadDataMethodReturn === 'object' &&
+        typeof loadDataMethodReturn.then === 'function'
+      ) {
+        loadDataMethodReturn.catch(() => {
+          this.loading = false;
+          this.noMoreItemsToLoad = true;
+        });
+      }
 
       if (this.searchHasChanged) {
         // eslint-disable-next-line max-len
@@ -668,28 +702,31 @@ export default class SlAutocomplete extends LitElement {
       }
 
       if (this.pageHasChanged) {
-        // if page changed return current items so we don't have an empty list until request finishes
-        return items;
+        // if page changed return current options so we don't have an empty list until request finishes
+        return options;
       }
     }
 
-    if (this.items !== undefined) {
+    if (this.options !== undefined) {
       if (this.searchHasChanged) {
         this.searchHasChanged = false;
         this.loading = false;
       } else if (this.pageHasChanged) {
         this.pageHasChanged = false;
         this.loading = false;
+        if (options.length < this.totalOptionsToShow) {
+          this.noMoreItemsToLoad = true;
+        }
       }
 
-      return items || [];
+      return options || [];
     }
 
     return [];
   }
 
   /**
-   * Checks if an items contains a search string by first converting the 'optionLabel' and search value to lowercase
+   * Checks if an options contains a search string by first converting the 'optionLabel' and search value to lowercase
    * @param item - Item to check against
    * @returns Boolean
    */
@@ -727,20 +764,25 @@ export default class SlAutocomplete extends LitElement {
         }
       });
     }, options);
-    this.observerInfiniteScroll.observe(this.shadowRoot?.querySelector('#infinite-scroll-trigger')!);
+    this.observerInfiniteScroll.observe(this.shadowRoot?.querySelector('.infinite-scroll-trigger')!);
   }
 
   /**
-   * Function to set the number of items to show in dropdown based on the shown options limit and by
-   * the infinite scroll trigger. Total items to show will increase when the list reaches the end of list
+   * Function to set the number of options to show in dropdown based on the shown options limit and by
+   * the infinite scroll trigger. Total options to show will increase when the list reaches the end of list
    * @returns
    */
   showMoreOptions() {
-    if (!this.items || !this.items.length) {
-      this.totalItemsToShow = this.shownOptionsLimit;
+    if (!this.options || !this.options.length) {
+      this.totalOptionsToShow = this.shownOptionsLimit;
       return;
     }
 
-    this.totalItemsToShow += this.shownOptionsLimit;
+    // If we are not using loadDataMethod. we disable infinite scroll by total number options
+    if (typeof this.loadDataMethod !== 'function' && this.options.length < this.totalOptionsToShow) {
+      this.noMoreItemsToLoad = true;
+    }
+
+    this.totalOptionsToShow += this.shownOptionsLimit;
   }
 }
