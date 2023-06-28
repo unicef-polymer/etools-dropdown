@@ -7,6 +7,7 @@ export default css`
 
   :host {
     box-sizing: border-box;
+    display: block;
   }
 
   :host *,
@@ -23,6 +24,26 @@ export default css`
 
   [hidden] {
     display: none !important;
+  }
+
+  :host([invalid]) {
+    --sl-input-label-color: red;
+  }
+
+  .form-control .invalid-message {
+    color: var(--sl-input-label-color);
+  }
+
+  .form-control.form-control--small .invalid-message {
+    font-size: var(--sl-input-label-font-size-small);
+  }
+
+  .form-control.form-control--medium .invalid-message {
+    font-size: var(--sl-input-label-font-size-medium);
+  }
+
+  .form-control.form-control--large .invalid-message {
+    font-size: var(--sl-input-label-font-size-large);
   }
 
   .form-control .form-control__label {
@@ -116,6 +137,7 @@ export default css`
     letter-spacing: var(--sl-input-letter-spacing);
     vertical-align: middle;
     overflow: hidden;
+    color: var(--sl-input-color);
     cursor: pointer;
     transition: var(--sl-transition-fast) color, var(--sl-transition-fast) border, var(--sl-transition-fast) box-shadow,
       var(--sl-transition-fast) background-color;
@@ -218,6 +240,24 @@ export default css`
     background-color: var(--sl-input-background-color-focus);
     border-color: var(--sl-input-border-color-focus);
     box-shadow: 0 0 0 var(--sl-focus-ring-width) var(--sl-input-focus-ring-color);
+  }
+
+  .select--standard.select--transparent .select__combobox {
+    background: none;
+    border: 0;
+  }
+
+  .select--standard:not(.select--disabled):not(.select--readonly).select--transparent.select--open .select__combobox,
+  .select--standard:not(.select--disabled):not(.select--readonly).select--transparent.select--focused
+    .select__combobox {
+    background: none;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .select--standard.select--invalid .select__combobox {
+    color: red;
+    border-color: red;
   }
 
   /* Filled selects */
@@ -390,11 +430,9 @@ export default css`
     font-weight: var(--sl-font-weight-normal);
     box-shadow: var(--sl-shadow-large);
     background: var(--sl-panel-background-color);
-    border: solid var(--sl-panel-border-width) var(--sl-panel-border-color);
     border-radius: var(--sl-border-radius-medium);
-    padding-block: var(--sl-spacing-x-small);
     padding-inline: 0;
-    padding-bottom: 0;
+    padding-block: 0;
 
     /* Make sure it adheres to the popup's auto size */
     max-width: var(--auto-size-available-width);
@@ -472,23 +510,28 @@ export default css`
     position: relative;
   }
 
-  .loading-text,
-  .empty-text {
-    padding: 0 10px;
+  .loading-text::part(label) {
+    display: flex;
+    align-items: center;
+    gap: 5px;
   }
 
-  [invalid] .select__combobox {
-    color: red;
-    border-color: red;
-  }
-
-  [invalid] label {
-    color: red;
+  .loading-text::part(base),
+  .empty-text::part(base),
+  .no-results-text::part(base) {
+    opacity: 1;
+    cursor: default;
+    background-color: var(--sl-input-background-color-disabled);
   }
 
   .infinite-scroll-trigger {
     width: 100%;
     height: 1px;
     display: block;
+  }
+
+  :host([capitalize]) .select__tags sl-tag,
+  :host([capitalize]) sl-menu-item::part(label) {
+    text-transform: capitalize;
   }
 `;
