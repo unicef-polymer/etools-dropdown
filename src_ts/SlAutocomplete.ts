@@ -209,6 +209,10 @@ export class SlAutocomplete extends LitElement {
   }
 
   set open(value) {
+    if (this.readonly || this.disabled) {
+      return;
+    }
+
     this._open = value;
 
     if (this._open) {
@@ -315,7 +319,6 @@ export class SlAutocomplete extends LitElement {
                 type="text"
                 placeholder=${this.placeholder}
                 ?disabled=${this.disabled}
-                ?readonly=${this.readonly}
                 ?invalid=${this.invalid}
                 .value=${this.selectedLabels}
                 autocomplete="off"
@@ -330,7 +333,7 @@ export class SlAutocomplete extends LitElement {
                 aria-readonly=${this.readonly ? 'true' : 'false'}
                 aria-describedby="help-text"
                 role="combobox"
-                tabindex="0"
+                tabindex="${this.readonly ? '-1' : '0'}"
               />
 
               ${this.multiple
@@ -415,7 +418,6 @@ export class SlAutocomplete extends LitElement {
                 aria-labelledby="label"
                 part="list"
                 class="select__list"
-                tabindex="-1"
               >
                 <sl-menu>
                   <sl-menu-item
@@ -505,13 +507,25 @@ export class SlAutocomplete extends LitElement {
     this.handleDocumentFocusIn = this.handleDocumentFocusIn.bind(this);
     this.handleLanguageChange = this.handleLanguageChange.bind(this);
     this.setSelectedOption = this.setSelectedOption.bind(this);
+    this.handleParentFocus = this.handleParentFocus.bind(this);
+    this.handleFocusOut = this.handleFocusOut.bind(this);
   }
 
   connectedCallback(): void {
     super.connectedCallback();
 
     this.addEventListener('sl-select', this.setSelectedOption);
+    this.addEventListener('focusin', this.handleParentFocus as any);
+    this.addEventListener('focusout', this.handleFocusOut);
     document.addEventListener('language-changed', this.handleLanguageChange as any);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('sl-select', this.setSelectedOption);
+    this.removeEventListener('focusin', this.handleParentFocus as any);
+    this.removeEventListener('focusout', this.handleFocusOut);
+    document.removeEventListener('language-changed', this.handleLanguageChange as any);
   }
 
   updated(changedProperties: PropertyValues) {
@@ -519,6 +533,16 @@ export class SlAutocomplete extends LitElement {
       const strSelectedVals = this.selectedValues ? this.selectedValues?.map((v) => String(v)) : this.selectedValues;
       this.selectedItems = this.options?.filter((o: any) => strSelectedVals?.includes(String(o[this.optionValue])));
     }
+  }
+
+  handleParentFocus(e: CustomEvent) {
+    console.log(e);
+    this.show();
+  }
+
+  handleFocusOut(e: FocusEvent) {
+    e.stopImmediatePropagation();
+    this.hide();
   }
 
   /**
