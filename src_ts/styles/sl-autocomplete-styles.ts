@@ -443,6 +443,8 @@ export default css`
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    /* Minimum height at leat one item*/
+    min-height: 37px;
   }
 
   .dropdown .footer {
@@ -465,12 +467,10 @@ export default css`
 
   .search {
     box-sizing: border-box;
-    position: sticky;
+    position: relative;
     z-index: 1;
     background: rgb(255, 255, 255);
-    margin-top: -10px;
     padding: 10px;
-    top: -10px;
   }
 
   .select--standard sl-menu-item::part(checked-icon) {
@@ -517,7 +517,7 @@ export default css`
   }
 
   .loading-text::part(base),
-  .empty-text::part(base),
+  .no-options-available-text::part(base),
   .no-results-text::part(base) {
     opacity: 1;
     cursor: default;

@@ -14,6 +14,7 @@ import {styleMap} from 'lit/directives/style-map.js';
 import {SlInput, SlInputEvent} from '@shoelace-style/shoelace';
 import {classMap} from 'lit/directives/class-map.js';
 import {property, query, state} from 'lit/decorators.js';
+import {getTranslation} from './utils/translate';
 /**
  * @summary Autocompletes displays suggestions as you type.
  *
@@ -24,12 +25,12 @@ import {property, query, state} from 'lit/decorators.js';
  * @dependency sl-menu
  *
  * @slot - The content that includes an input.
- * @slot empty-text - The text or content that is displayed when there is no suggestion based on the input.
+ * @slot no-options-available-text - The text or content that is displayed when there is no suggestion based on the input.
  * @slot lading-text - The text or content that is displayed when the `loading` attribute evaluates to true.
  *
  * @csspart base - The component's internal wrapper.
  * @csspart trigger - The wrapper for the trigger slot.
- * @csspart empty-text - The empty text's wrapper.
+ * @csspart no-options-available-text - The empty text's wrapper.
  * @csspart loading-test - The loading text's wrapper.
  *
  */
@@ -43,6 +44,7 @@ export class SlAutocomplete extends LitElement {
   @state() private _open: boolean = false;
   @state() private search: string = '';
   @state() private totalOptionsToShow: number = 0;
+  @state() private language = '';
 
   private observerInfiniteScroll: IntersectionObserver | undefined;
   private page: number = 0;
@@ -62,7 +64,7 @@ export class SlAutocomplete extends LitElement {
   placeholder = '—';
 
   @property({type: String, attribute: 'search-placeholder'})
-  searchPlaceholder = 'Search';
+  searchPlaceholder = '';
 
   @property({type: String, attribute: 'option-value'})
   optionValue = 'value';
@@ -74,7 +76,7 @@ export class SlAutocomplete extends LitElement {
   required: boolean | undefined;
 
   @property({type: String, attribute: 'error-message'})
-  errorMessage = 'This field is required';
+  errorMessage = '';
 
   @property({type: Boolean, attribute: 'disabled', reflect: true})
   disabled = false;
@@ -85,14 +87,14 @@ export class SlAutocomplete extends LitElement {
   @property({type: Boolean, attribute: 'invalid', reflect: true})
   invalid = false;
 
-  @property({type: String, attribute: 'empty-text'})
-  emptyText: string = 'No options available';
+  @property({type: String, attribute: 'no-options-available-text'})
+  noOptionsAvailableText: string = '';
 
-  @property({type: String, attribute: 'empty-text'})
-  noResultsText: string = 'No results found try other keywords';
+  @property({type: String, attribute: 'no-results-text'})
+  noResultsText: string = '';
 
   @property({type: String, attribute: 'loading-text'})
-  loadingText: string = 'Loading...';
+  loadingText: string = '';
 
   @property({type: Number})
   options: any[] = [];
@@ -140,7 +142,7 @@ export class SlAutocomplete extends LitElement {
   enableNoneOption = false;
 
   @property({type: String, attribute: 'none-option-label'})
-  noneOptionLabel = '-- NONE --';
+  noneOptionLabel = '';
 
   @property({type: Number, attribute: 'shown-options-limit'})
   shownOptionsLimit: number = 30;
@@ -156,6 +158,23 @@ export class SlAutocomplete extends LitElement {
 
   @property({type: String, attribute: 'autosize-max-height'})
   autosizeMaxHeight = '';
+
+  /**
+   * The container relative to which the autosize clipping and shifting of the dropdown occurs.
+   * Expected value is either a DOM element reference or an array of DOM element references.
+   *
+   * EX: document
+   *   .querySelector('app-shell')
+   *   ?.shadowRoot?.querySelector('app-drawer-layout')
+   *   ?.querySelector('app-header-layout')
+   *   ?.querySelector('main')
+   *
+   * SL-POUP uses float-ui(https://floating-ui.com/) behind the scences in case we don't provide a value for this field
+   * it tries to find the clipping and boundary ancetors by it's self. This feature does not work when we are using the hoisted dropdown (position: fixed) and
+   * in this case we have to provide a boundary manually.
+   */
+  @property({type: Object, attribute: 'boundary'})
+  boundary: Element | Element[] | HTMLElement | HTMLElement[] | undefined = undefined;
 
   @property({type: Array})
   selectedItems: any[] = [];
@@ -194,13 +213,20 @@ export class SlAutocomplete extends LitElement {
 
     if (this._open) {
       this.addOpenListeners();
-      this._enableInfiniteScroll();
+      this.enableInfiniteScroll();
+      const parentDialog = this.getParentDialog();
+      if (parentDialog) {
+        if (!this.boundary) {
+          console.warn('Missing boundary for dropdown in dialog', this);
+        }
+        this.hoist = true;
+      }
       setTimeout(() => this.searchInput.focus({preventScroll: true}), 0);
     }
 
     if (!this._open) {
       this.removeOpenListeners();
-      this._disableInfiniteScroll();
+      this.disableInfiniteScroll();
       this.searchInput?.blur();
       if (!this.preserveSearchOnClose) {
         this.search = '';
@@ -276,6 +302,9 @@ export class SlAutocomplete extends LitElement {
             ?active="${this.open}"
             auto-size="vertical"
             auto-size-padding="10"
+            .autoSizeBoundary="${this.boundary}"
+            .shiftBoundary="${this.boundary}"
+            .flipBoundary="${this.boundary}"
           >
             <div part="combobox" slot="anchor" class="select__combobox" @mousedown="${this.handleComboboxMouseDown}">
               <slot part="prefix" name="prefix" class="select__prefix"></slot>
@@ -372,7 +401,7 @@ export class SlAutocomplete extends LitElement {
               <div part="search" id="search" class="search" ?hidden="${this.hideSearch}">
                 <sl-input
                   role="presentation"
-                  placeholder=${this.searchPlaceholder}
+                  placeholder=${this.searchPlaceholder || getTranslation(this.language, 'SEARCH')}
                   .value="${this.search}"
                   @sl-input=${this.handleSearchChanged}
                   autocomplete="off"
@@ -395,16 +424,18 @@ export class SlAutocomplete extends LitElement {
                     ?hidden=${!this.enableNoneOption}
                     ?checked=${!this.selectedItems?.length}
                     value=""
-                    >${this.noneOptionLabel}</sl-menu-item
                   >
+                    ${this.noneOptionLabel || getTranslation(this.language, 'NONE')}
+                  </sl-menu-item>
                   ${options?.map(
                     (option: any) => html`
                       <sl-menu-item
                         type="checkbox"
                         ?checked=${this.isSelected(option)}
                         value="${option[this.optionValue]}"
-                        >${option[this.optionLabel]}</sl-menu-item
                       >
+                        ${option[this.optionLabel]}
+                      </sl-menu-item>
                     `
                   )}
 
@@ -417,17 +448,19 @@ export class SlAutocomplete extends LitElement {
                     ?hidden=${!this.loading}
                   >
                     <sl-spinner></sl-spinner>
-                    <slot name="loading-text">${this.loadingText}</slot>
+                    <slot name="loading-text"> ${this.loadingText || getTranslation(this.language, 'LOADING')} </slot>
                   </sl-menu-item>
                   <sl-menu-item
                     disabled
-                    part="empty-text"
-                    id="empty-text"
-                    class="empty-text"
+                    part="no-options-available-text"
+                    id="no-options-available-text"
+                    class="no-options-available-text"
                     aria-hidden=${!this.noOptionsAvailable ? 'false' : 'true'}
                     ?hidden=${!this.noOptionsAvailable}
                   >
-                    <slot name="empty-text">${this.emptyText}</slot>
+                    <slot name="no-options-available-text">
+                      ${this.noOptionsAvailableText || getTranslation(this.language, 'NO_OPTIONS_AVAILABLE')}
+                    </slot>
                   </sl-menu-item>
                   <sl-menu-item
                     disabled
@@ -437,7 +470,9 @@ export class SlAutocomplete extends LitElement {
                     aria-hidden=${!this.showNoSearchResultsWarning(options.length) ? 'false' : 'true'}
                     ?hidden=${!this.showNoSearchResultsWarning(options.length)}
                   >
-                    <slot name="no-results-text">${this.noResultsText}</slot>
+                    <slot name="no-results-text">
+                      ${this.noResultsText || getTranslation(this.language, 'NO_RESULTS_FOUND_TRY_OTHER_KEYWORDS')}
+                    </slot>
                   </sl-menu-item>
                   <div class="infinite-scroll-trigger" ?hidden=${this.loading || this.noMoreItemsToLoad}></div>
                 </sl-menu>
@@ -445,25 +480,38 @@ export class SlAutocomplete extends LitElement {
                 <div aria-hidden="true" style=${styleMap({width: `${this.clientWidth}px`})}></div>
               </div>
               <div class="footer" ?hidden="${!this.multiple || this.hideClose}">
-                <sl-button size="small" variant="text" @mouseup="${() => this.hide()}">Close</sl-button>
+                <sl-button size="small" variant="text" @mouseup="${() => this.hide()}">
+                  ${getTranslation(this.language, 'CLOSE')}
+                </sl-button>
               </div>
             </div>
           </sl-popup>
         </div>
 
-        <div class="invalid-message" ?hidden=${!this.invalid}>${this.errorMessage}</div>
+        <div class="invalid-message" ?hidden=${!this.invalid && this.errorMessage}>${this.errorMessage}</div>
       </div>
     `;
   }
 
-  connectedCallback(): void {
-    super.connectedCallback();
-    this.addEventListener('sl-select', ({detail: {item}}: {detail: {item: SlMenuItem}}) => {
-      this.setSelectedOption(item);
-    });
+  constructor() {
+    super();
+
+    this.totalOptionsToShow = this.shownOptionsLimit;
+    if (!this.language) {
+      this.language = (window as any).EtoolsLanguage || 'en';
+    }
+
     this.handleDocumentMouseDown = this.handleDocumentMouseDown.bind(this);
     this.handleDocumentFocusIn = this.handleDocumentFocusIn.bind(this);
-    this.totalOptionsToShow = this.shownOptionsLimit;
+    this.handleLanguageChange = this.handleLanguageChange.bind(this);
+    this.setSelectedOption = this.setSelectedOption.bind(this);
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+
+    this.addEventListener('sl-select', this.setSelectedOption);
+    document.addEventListener('language-changed', this.handleLanguageChange as any);
   }
 
   updated(changedProperties: PropertyValues) {
@@ -471,6 +519,13 @@ export class SlAutocomplete extends LitElement {
       const strSelectedVals = this.selectedValues ? this.selectedValues?.map((v) => String(v)) : this.selectedValues;
       this.selectedItems = this.options?.filter((o: any) => strSelectedVals?.includes(String(o[this.optionValue])));
     }
+  }
+
+  /**
+   * Handle language change
+   */
+  private handleLanguageChange(e: CustomEvent) {
+    this.language = e.detail.language;
   }
 
   /**
@@ -487,7 +542,7 @@ export class SlAutocomplete extends LitElement {
   }
 
   /**
-   * Dropdown input mosue down handler. Responsible to open the dropdown popup on input click
+   * Dropdown input mouse down handler. Responsible to open the dropdown popup on input click
    */
   private handleComboboxMouseDown(event: MouseEvent) {
     const path = event.composedPath();
@@ -565,7 +620,7 @@ export class SlAutocomplete extends LitElement {
     this.search = (e.target as SlInput)?.value;
     this.totalOptionsToShow = this.shownOptionsLimit;
     this.noMoreItemsToLoad = false;
-    this._enableInfiniteScroll();
+    this.enableInfiniteScroll();
     this.dispatchEvent(
       new CustomEvent('search-changed', {
         detail: {value: this.search},
@@ -596,7 +651,7 @@ export class SlAutocomplete extends LitElement {
    */
   private get filteredOptions() {
     if (typeof this.loadDataMethod === 'function') {
-      return this._loadOptionsData(this.options, this.search, this.loadDataMethod);
+      return this.loadOptionsData(this.options, this.search, this.loadDataMethod);
     }
 
     if (this.search) {
@@ -622,7 +677,7 @@ export class SlAutocomplete extends LitElement {
    * Set selected options. Has logic to resolve multiple selections and single selection
    * @param option Option that has been selected
    */
-  private setSelectedOption(option: any) {
+  private setSelectedOption({detail: {item}}: {detail: {item: SlMenuItem}}) {
     if (!this.selectedItems) {
       this.selectedItems = [];
     }
@@ -631,10 +686,10 @@ export class SlAutocomplete extends LitElement {
       this.selectedValues = [];
     }
 
-    if (option.classList.contains('noneOption')) {
+    if (item.classList.contains('noneOption')) {
       this.selectedItems = [];
     } else {
-      const selectedItem = this.options.find((x) => x[this.optionValue].toString() === option.value.toString());
+      const selectedItem = this.options.find((x) => x[this.optionValue].toString() === item.value.toString());
       if (selectedItem) {
         const itemSelectedAtIndex = this.selectedItems.findIndex(
           (x) => x?.[this.optionValue].toString() === selectedItem[this.optionValue].toString()
@@ -714,7 +769,7 @@ export class SlAutocomplete extends LitElement {
   /**
    * Clears selected options
    */
-  private clearSelection() {
+  clearSelection() {
     this.selectedItems = [];
     this.setSelectedValues();
   }
@@ -777,7 +832,7 @@ export class SlAutocomplete extends LitElement {
    * @param loadDataMethod  - The load data method to call
    * @returns Existing options or empty list depending on some specific cases
    */
-  private _loadOptionsData(options: any[], search: string, loadDataMethod: any) {
+  private loadOptionsData(options: any[], search: string, loadDataMethod: any) {
     if (search != this.prevSearch && this.totalOptionsToShow !== this.shownOptionsLimit) {
       // if search changed reset _shownOptionsCount in order to load  the first page for the new search
       this.totalOptionsToShow = this.shownOptionsLimit;
@@ -848,7 +903,7 @@ export class SlAutocomplete extends LitElement {
    * @param item - Item to check against
    * @returns Boolean
    */
-  itemContainsSearchString(item: any) {
+  private itemContainsSearchString(item: any) {
     return (
       item[this.optionLabel] && item[this.optionLabel].toString().toLowerCase().indexOf(this.search.toLowerCase()) > -1
     );
@@ -857,7 +912,7 @@ export class SlAutocomplete extends LitElement {
   /**
    * Function to disable infinite scroll functionality
    */
-  _disableInfiniteScroll() {
+  private disableInfiniteScroll() {
     if (this.observerInfiniteScroll) {
       this.observerInfiniteScroll.disconnect();
       this.observerInfiniteScroll = undefined;
@@ -867,8 +922,8 @@ export class SlAutocomplete extends LitElement {
   /**
    * Function to enable infinite scroll functionality by adding a intersection observer.
    */
-  _enableInfiniteScroll() {
-    this._disableInfiniteScroll();
+  private enableInfiniteScroll() {
+    this.disableInfiniteScroll();
 
     var options = {
       root: this.shadowRoot?.querySelector('.listInnerWrapper'),
@@ -890,7 +945,7 @@ export class SlAutocomplete extends LitElement {
    * the infinite scroll trigger. Total options to show will increase when the list reaches the end of list
    * @returns
    */
-  showMoreOptions() {
+  private showMoreOptions() {
     if (!this.options || !this.options.length) {
       this.totalOptionsToShow = this.shownOptionsLimit;
       return;
@@ -902,5 +957,12 @@ export class SlAutocomplete extends LitElement {
     }
 
     this.totalOptionsToShow += this.shownOptionsLimit;
+  }
+
+  /**
+   * Checks if this dropdown is a child of etools-dialog and returns the etools-dialog element reference if any.
+   */
+  private getParentDialog() {
+    return ((this.shadowRoot?.getRootNode() as any).host as HTMLElement)?.closest('etools-dialog');
   }
 }
