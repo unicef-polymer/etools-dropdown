@@ -509,23 +509,26 @@ export class SlAutocomplete extends LitElement {
     this.setSelectedOption = this.setSelectedOption.bind(this);
     this.handleParentFocus = this.handleParentFocus.bind(this);
     this.handleFocusOut = this.handleFocusOut.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
   connectedCallback(): void {
     super.connectedCallback();
 
     this.addEventListener('sl-select', this.setSelectedOption);
-    this.addEventListener('focusin', this.handleParentFocus as any);
+    this.addEventListener('focusin', this.handleParentFocus);
     this.addEventListener('focusout', this.handleFocusOut);
-    document.addEventListener('language-changed', this.handleLanguageChange as any);
+    // this.addEventListener('keydown', this.handleKeyDown);
+    document.addEventListener('language-changed', this.handleLanguageChange);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('sl-select', this.setSelectedOption);
-    this.removeEventListener('focusin', this.handleParentFocus as any);
+    this.removeEventListener('focusin', this.handleParentFocus);
     this.removeEventListener('focusout', this.handleFocusOut);
-    document.removeEventListener('language-changed', this.handleLanguageChange as any);
+    // this.removeEventListener('keydown', this.handleKeyDown);
+    document.removeEventListener('language-changed', this.handleLanguageChange);
   }
 
   updated(changedProperties: PropertyValues) {
@@ -535,8 +538,23 @@ export class SlAutocomplete extends LitElement {
     }
   }
 
-  handleParentFocus(e: CustomEvent) {
-    console.log(e);
+  handleKeyDown(e: KeyboardEvent) {
+    // TO BE DEVELOPED FURTHER
+    if (e.key.match(/(\w|\s)/g) && e.key.length === 1) {
+      const foundItems = Array.from(this.shadowRoot?.querySelectorAll('sl-menu-item') || []).filter(
+        (item: SlMenuItem) => {
+          const text = item.textContent?.replace(/(\r\n|\n|\r)/gm, '').trim();
+          return text?.[0].toLowerCase() === e.key.toLowerCase();
+        }
+      );
+
+      if (foundItems?.[0]) {
+        foundItems?.[0].scrollIntoView();
+      }
+    }
+  }
+
+  handleParentFocus(_e: FocusEvent) {
     this.show();
   }
 
@@ -548,7 +566,7 @@ export class SlAutocomplete extends LitElement {
   /**
    * Handle language change
    */
-  private handleLanguageChange(e: CustomEvent) {
+  private handleLanguageChange(e: any) {
     this.language = e.detail.language;
   }
 
