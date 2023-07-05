@@ -141,6 +141,7 @@ export default css`
     cursor: pointer;
     transition: var(--sl-transition-fast) color, var(--sl-transition-fast) border, var(--sl-transition-fast) box-shadow,
       var(--sl-transition-fast) background-color;
+    outline: none;
   }
 
   .select__display-input {
@@ -508,6 +509,18 @@ export default css`
     overflow-x: hidden;
     overflow-y: auto;
     position: relative;
+  }
+
+  sl-menu-item::part(label) {
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  /* Shoelace did not implement this yet, so we disabled it */
+  /* for now because it introduces extra space to the right */
+  sl-menu-item::part(submenu-icon) {
+    display: none;
   }
 
   .loading-text::part(label) {

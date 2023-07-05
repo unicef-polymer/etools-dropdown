@@ -11,7 +11,7 @@ import styles from './styles/sl-autocomplete-styles';
 
 import type SlMenuItem from '@shoelace-style/shoelace/dist/components/menu-item/menu-item.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {SlInput, SlInputEvent} from '@shoelace-style/shoelace';
+import {SlInput, SlInputEvent, SlMenu} from '@shoelace-style/shoelace';
 import {classMap} from 'lit/directives/class-map.js';
 import {property, query, state} from 'lit/decorators.js';
 import {getTranslation} from './utils/translate';
@@ -53,6 +53,8 @@ export class SlAutocomplete extends LitElement {
   private searchHasChanged: boolean = false;
   private pageHasChanged: boolean = false;
   private noMoreItemsToLoad: boolean = false;
+  private collectingKeyboardKeysTimeout: NodeJS.Timeout | undefined = undefined;
+  private collectedKeyboardKeys: string = '';
 
   @property({type: String, attribute: 'label'})
   label: string | undefined;
@@ -225,15 +227,24 @@ export class SlAutocomplete extends LitElement {
         }
         this.hoist = true;
       }
-      setTimeout(() => this.searchInput.focus({preventScroll: true}), 0);
+      setTimeout(() => {
+        if (!this.hideSearch) {
+          this.searchInput.focus({preventScroll: true});
+        } else {
+          this.shadowRoot?.querySelector('sl-menu-item')?.focus({preventScroll: true});
+        }
+      }, 0);
     }
 
     if (!this._open) {
       this.removeOpenListeners();
       this.disableInfiniteScroll();
-      this.searchInput?.blur();
-      if (!this.preserveSearchOnClose) {
-        this.search = '';
+
+      if (!this.hideSearch) {
+        this.searchInput?.blur();
+        if (!this.preserveSearchOnClose) {
+          this.search = '';
+        }
       }
 
       if (this.autoValidate) {
@@ -310,7 +321,13 @@ export class SlAutocomplete extends LitElement {
             .shiftBoundary="${this.boundary}"
             .flipBoundary="${this.boundary}"
           >
-            <div part="combobox" slot="anchor" class="select__combobox" @mousedown="${this.handleComboboxMouseDown}">
+            <div
+              part="combobox"
+              slot="anchor"
+              tabindex="${this.readonly ? '-1' : '0'}"
+              class="select__combobox"
+              @mousedown="${this.handleComboboxMouseDown}"
+            >
               <slot part="prefix" name="prefix" class="select__prefix"></slot>
 
               <input
@@ -333,7 +350,7 @@ export class SlAutocomplete extends LitElement {
                 aria-readonly=${this.readonly ? 'true' : 'false'}
                 aria-describedby="help-text"
                 role="combobox"
-                tabindex="${this.readonly ? '-1' : '0'}"
+                tabindex="-1"
               />
 
               ${this.multiple
@@ -420,21 +437,29 @@ export class SlAutocomplete extends LitElement {
                 class="select__list"
               >
                 <sl-menu>
-                  <sl-menu-item
-                    type="checkbox"
-                    class="noneOption"
-                    ?hidden=${!this.enableNoneOption}
-                    ?checked=${!this.selectedItems?.length}
-                    value=""
-                  >
-                    ${this.noneOptionLabel || getTranslation(this.language, 'NONE')}
-                  </sl-menu-item>
+                  ${
+                    // We need to add it like this instead of hidden because sl-menu adds tabindex="0"
+                    // dynamically to first sl-menu-item and this break tab navigation if hidden
+                    this.enableNoneOption
+                      ? html`<sl-menu-item
+                          type="checkbox"
+                          class="noneOption"
+                          ?checked=${!this.selectedItems?.length}
+                          value=""
+                          title="${this.noneOptionLabel || getTranslation(this.language, 'NONE')}"
+                        >
+                          ${this.noneOptionLabel || getTranslation(this.language, 'NONE')}
+                        </sl-menu-item>`
+                      : ''
+                  }
                   ${options?.map(
                     (option: any) => html`
                       <sl-menu-item
                         type="checkbox"
                         ?checked=${this.isSelected(option)}
                         value="${option[this.optionValue]}"
+                        tabindex="0"
+                        title="${option[this.optionLabel]}"
                       >
                         ${option[this.optionLabel]}
                       </sl-menu-item>
@@ -518,7 +543,7 @@ export class SlAutocomplete extends LitElement {
     this.addEventListener('sl-select', this.setSelectedOption);
     this.addEventListener('focusin', this.handleParentFocus);
     this.addEventListener('focusout', this.handleFocusOut);
-    // this.addEventListener('keydown', this.handleKeyDown);
+    this.addEventListener('keydown', this.handleKeyDown);
     document.addEventListener('language-changed', this.handleLanguageChange);
   }
 
@@ -527,7 +552,7 @@ export class SlAutocomplete extends LitElement {
     this.removeEventListener('sl-select', this.setSelectedOption);
     this.removeEventListener('focusin', this.handleParentFocus);
     this.removeEventListener('focusout', this.handleFocusOut);
-    // this.removeEventListener('keydown', this.handleKeyDown);
+    this.removeEventListener('keydown', this.handleKeyDown);
     document.removeEventListener('language-changed', this.handleLanguageChange);
   }
 
@@ -540,18 +565,39 @@ export class SlAutocomplete extends LitElement {
 
   handleKeyDown(e: KeyboardEvent) {
     // TO BE DEVELOPED FURTHER
-    if (e.key.match(/(\w|\s)/g) && e.key.length === 1) {
-      const foundItems = Array.from(this.shadowRoot?.querySelectorAll('sl-menu-item') || []).filter(
-        (item: SlMenuItem) => {
-          const text = item.textContent?.replace(/(\r\n|\n|\r)/gm, '').trim();
-          return text?.[0].toLowerCase() === e.key.toLowerCase();
-        }
-      );
-
-      if (foundItems?.[0]) {
-        foundItems?.[0].scrollIntoView();
-      }
+    if (this.collectingKeyboardKeysTimeout) {
+      clearTimeout(this.collectingKeyboardKeysTimeout);
     }
+
+    if (e.key.match(/(\w|\s)/g) && e.key.length === 1) {
+      this.collectedKeyboardKeys += e.key;
+    }
+
+    this.collectingKeyboardKeysTimeout = setTimeout(() => {
+      if (this.collectedKeyboardKeys) {
+        const list = this.shadowRoot?.querySelector('sl-menu')! as SlMenu;
+        const foundItems = Array.from(list?.querySelectorAll('sl-menu-item') || []).filter((item: SlMenuItem) => {
+          const text = item.textContent?.replace(/(\r\n|\n|\r)/gm, '').trim();
+          return text?.toLowerCase().startsWith(this.collectedKeyboardKeys.toLowerCase());
+        });
+
+        // If already selected one with same starting letters then move to next found if any available
+        let itemToFocusIndex = 0;
+        const oneElementHasFocusIndex = foundItems.findIndex((item) => item.tabIndex === 0);
+
+        if (oneElementHasFocusIndex > -1 && oneElementHasFocusIndex < foundItems.length - 1) {
+          itemToFocusIndex = oneElementHasFocusIndex + 1;
+        }
+
+        if (foundItems?.[itemToFocusIndex]) {
+          // According to shoelace the order of calling this is important
+          list.setCurrentItem(foundItems?.[itemToFocusIndex]);
+          foundItems?.[itemToFocusIndex].focus({preventScroll: !(list.scrollHeight > list.clientHeight)});
+        }
+      }
+
+      this.collectedKeyboardKeys = '';
+    }, 250);
   }
 
   handleParentFocus(_e: FocusEvent) {
