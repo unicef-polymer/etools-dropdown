@@ -166,4 +166,9 @@ export default css`
   .select--multiple sl-menu-item:not([checked])::part(checked-icon) {
     color: transparent;
   }
+
+  /* We need to keep it here for the button because it is used to calculate the line-height*/
+  .footer {
+    --sl-input-border-width: 1px;
+  }
 `;
