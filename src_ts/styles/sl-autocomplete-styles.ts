@@ -82,6 +82,7 @@ export default css`
     content: var(--sl-input-required-content);
     margin-inline-start: var(--sl-input-required-content-offset);
     color: var(--sl-input-required-content-color);
+    margin-left: 3px;
   }
 
   :host([readonly]) .form-control--has-label .form-control__label::after {

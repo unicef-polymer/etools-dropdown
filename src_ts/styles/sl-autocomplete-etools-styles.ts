@@ -13,6 +13,7 @@ export default css`
     --sl-button-font-size-medium: 16px;
     --sl-input-border-color-focus: #0099ff;
     --sl-color-primary-600: #0099ff;
+    --sl-input-required-content-color: #ea4022;
   }
 
   sl-menu-item:focus-visible::part(base) {
