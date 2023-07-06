@@ -20,6 +20,11 @@ export default css`
     height: auto;
     white-space: normal;
     line-height: 1.8;
+    pointer-events: none;
+  }
+
+  :host-context([multiple]) sl-tag::part(remove-button) {
+    pointer-events: all;
   }
 
   [hidden] {
@@ -56,7 +61,7 @@ export default css`
 
   /* Label */
   .form-control--has-label .form-control__label {
-    display: inline-block;
+    display: block;
     color: var(--sl-input-label-color);
     margin-bottom: var(--sl-spacing-3x-small);
   }
@@ -77,6 +82,10 @@ export default css`
     content: var(--sl-input-required-content);
     margin-inline-start: var(--sl-input-required-content-offset);
     color: var(--sl-input-required-content-color);
+  }
+
+  :host([readonly]) .form-control--has-label .form-control__label::after {
+    content: unset;
   }
 
   /* Help text */
@@ -210,6 +219,11 @@ export default css`
     cursor: default !important;
     margin: 0;
   }
+
+  .select--readonly .select__tags sl-tag {
+    cursor: text !important;
+  }
+
   .select--readonly .select__tags sl-tag {
     cursor: text !important;
   }
@@ -257,8 +271,8 @@ export default css`
   }
 
   .select--standard.select--invalid .select__combobox {
-    color: red;
-    border-color: red;
+    color: #ea4022;
+    border-color: #ea4022;
   }
 
   /* Filled selects */
@@ -434,6 +448,7 @@ export default css`
     border-radius: var(--sl-border-radius-medium);
     padding-inline: 0;
     padding-block: 0;
+    overflow: hidden;
 
     /* Make sure it adheres to the popup's auto size */
     max-width: var(--auto-size-available-width);
@@ -485,18 +500,18 @@ export default css`
   }
 
   .select--multiple sl-menu-item::part(checked-icon) {
-    border: 2px solid black;
+    border: 2px solid rgba(0, 0, 0, 0.54);
     visibility: visible;
     border-radius: 4px;
     padding: 0px;
-    height: 20px;
-    width: 20px;
+    height: 18px;
+    width: 18px;
     margin: 0 8px;
     align-self: center;
   }
 
   .select--multiple sl-menu-item[checked]::part(checked-icon) {
-    color: black;
+    color: rgba(0, 0, 0, 0.54);
   }
 
   .select--multiple sl-menu-item:not([checked])::part(checked-icon) {

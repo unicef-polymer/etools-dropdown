@@ -8,6 +8,7 @@ import '@shoelace-style/shoelace/dist/components/tag/tag.js';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
 import '@shoelace-style/shoelace/dist/components/spinner/spinner.js';
 import styles from './styles/sl-autocomplete-styles';
+import etoolsStyles from './styles/sl-autocomplete-etools-styles';
 
 import type SlMenuItem from '@shoelace-style/shoelace/dist/components/menu-item/menu-item.js';
 import {styleMap} from 'lit/directives/style-map.js';
@@ -35,7 +36,7 @@ import {getTranslation} from './utils/translate';
  *
  */
 export class SlAutocomplete extends LitElement {
-  static styles = [styles];
+  static styles = [styles, etoolsStyles];
 
   @query('sl-input') searchInput!: SlInput;
 
@@ -155,11 +156,20 @@ export class SlAutocomplete extends LitElement {
   @property({type: Boolean, reflect: true, attribute: 'transparent'})
   transparent = false;
 
-  @property({type: String, attribute: 'autosize-max-width'})
-  autosizeMaxWidth = '400px';
+  @property({type: String, attribute: 'min-width'})
+  minWidth = '30px';
 
-  @property({type: String, attribute: 'autosize-max-height'})
-  autosizeMaxHeight = '';
+  @property({type: String, attribute: 'max-width'})
+  maxWidth = '400px';
+
+  @property({type: String, attribute: 'max-height'})
+  minHeight = '0px';
+
+  @property({type: String, attribute: 'max-height'})
+  maxHeight = '';
+
+  @property({type: String, attribute: 'sync-width'})
+  syncWidth: boolean = false;
 
   /**
    * The container relative to which the autosize clipping and shifting of the dropdown occurs.
@@ -187,9 +197,12 @@ export class SlAutocomplete extends LitElement {
   @property({type: Boolean, attribute: 'auto-validate'})
   autoValidate: boolean | undefined;
 
+  @property({type: Boolean, attribute: 'expand-icon'})
+  expandIcon: string = 'caret-down-fill'; // chevron-down
+
   @property({type: String})
   get selected() {
-    return this.selectedValues?.[0];
+    return this.selectedValues?.[0] || null;
   }
 
   set selected(value: any | null) {
@@ -220,6 +233,8 @@ export class SlAutocomplete extends LitElement {
     if (this._open) {
       this.addOpenListeners();
       this.enableInfiniteScroll();
+      this.shadowRoot?.querySelector('sl-menu')!.addEventListener('keydown', this.handleKeyDown);
+
       const parentDialog = this.getParentDialog();
       if (parentDialog) {
         if (!this.boundary) {
@@ -239,6 +254,7 @@ export class SlAutocomplete extends LitElement {
     if (!this._open) {
       this.removeOpenListeners();
       this.disableInfiniteScroll();
+      this.shadowRoot?.querySelector('sl-menu')!.removeEventListener('keydown', this.handleKeyDown);
 
       if (!this.hideSearch) {
         this.searchInput?.blur();
@@ -264,8 +280,13 @@ export class SlAutocomplete extends LitElement {
     return html`
       <style>
         sl-popup {
-          ${this.autosizeMaxWidth ? `--auto-size-available-width: ${this.autosizeMaxWidth}` : ''}
-          ${this.autosizeMaxHeight ? `--auto-size-available-height: ${this.autosizeMaxHeight}` : ''}
+          ${this.maxWidth ? `--auto-size-available-width: ${this.maxWidth}` : ''}
+          ${this.maxHeight ? `--auto-size-available-height: ${this.maxHeight}` : ''}
+        }
+
+        .dropdown {
+          min-width: ${this.minWidth};
+          min-height: ${this.minHeight};
         }
       </style>
       <div
@@ -313,7 +334,7 @@ export class SlAutocomplete extends LitElement {
             strategy=${this.hoist ? 'fixed' : 'absolute'}
             flip
             shift
-            sync="width"
+            ${this.syncWidth ? `sync="width"` : ''}
             ?active="${this.open}"
             auto-size="vertical"
             auto-size-padding="10"
@@ -337,7 +358,7 @@ export class SlAutocomplete extends LitElement {
                 placeholder=${this.placeholder}
                 ?disabled=${this.disabled}
                 ?invalid=${this.invalid}
-                .value=${this.selectedLabels}
+                value=${this.selectedLabels}
                 autocomplete="off"
                 spellcheck="false"
                 autocapitalize="off"
@@ -353,7 +374,7 @@ export class SlAutocomplete extends LitElement {
                 tabindex="-1"
               />
 
-              ${this.multiple
+              ${this.multiple && this.selectedItems?.length
                 ? html`
                     <div part="tags" class="select__tags">
                       ${this.selectedItems?.map((option: any, index: number) => {
@@ -403,7 +424,7 @@ export class SlAutocomplete extends LitElement {
                       <slot name="clear-icon">
                         <sl-icon
                           name="x-circle-fill"
-                          library="system"
+                          library="default"
                           @mousedown=${this.handleClearMouseDown}
                           @click=${this.handleClearClick}
                         ></sl-icon>
@@ -413,7 +434,7 @@ export class SlAutocomplete extends LitElement {
                 : ''}
 
               <slot name="expand-icon" part="expand-icon" class="select__expand-icon">
-                <sl-icon library="system" name="chevron-down"></sl-icon>
+                <sl-icon library="default" name="${this.expandIcon}"></sl-icon>
               </slot>
             </div>
 
@@ -425,7 +446,9 @@ export class SlAutocomplete extends LitElement {
                   .value="${this.search}"
                   @sl-input=${this.handleSearchChanged}
                   autocomplete="off"
-                ></sl-input>
+                >
+                  <sl-icon name="search" slot="prefix"></sl-icon>
+                </sl-input>
               </div>
               <div
                 class="list"
@@ -543,7 +566,6 @@ export class SlAutocomplete extends LitElement {
     this.addEventListener('sl-select', this.setSelectedOption);
     this.addEventListener('focusin', this.handleParentFocus);
     this.addEventListener('focusout', this.handleFocusOut);
-    this.addEventListener('keydown', this.handleKeyDown);
     document.addEventListener('language-changed', this.handleLanguageChange);
   }
 
@@ -552,7 +574,6 @@ export class SlAutocomplete extends LitElement {
     this.removeEventListener('sl-select', this.setSelectedOption);
     this.removeEventListener('focusin', this.handleParentFocus);
     this.removeEventListener('focusout', this.handleFocusOut);
-    this.removeEventListener('keydown', this.handleKeyDown);
     document.removeEventListener('language-changed', this.handleLanguageChange);
   }
 
@@ -600,13 +621,24 @@ export class SlAutocomplete extends LitElement {
     }, 250);
   }
 
-  handleParentFocus(_e: FocusEvent) {
-    this.show();
+  handleParentFocus(event: FocusEvent) {
+    const path = event.composedPath();
+    const isIconButton = path.some((el) => el instanceof Element && el.tagName.toLowerCase() === 'sl-icon-button');
+
+    if (this.disabled || this.readonly || isIconButton) {
+      return;
+    }
+
+    if (!this.open) {
+      this.show();
+    }
   }
 
   handleFocusOut(e: FocusEvent) {
-    e.stopImmediatePropagation();
-    this.hide();
+    if (this.open) {
+      e.stopImmediatePropagation();
+      this.hide();
+    }
   }
 
   /**
@@ -743,10 +775,10 @@ export class SlAutocomplete extends LitElement {
     }
 
     if (this.search) {
-      return this.options.filter(this.itemContainsSearchString.bind(this));
+      return this.options.filter(this.itemContainsSearchString.bind(this)) || [];
     }
 
-    return this.options;
+    return this.options || [];
   }
 
   private get noOptionsAvailable() {
@@ -930,7 +962,7 @@ export class SlAutocomplete extends LitElement {
     this.page = this.totalOptionsToShow / this.shownOptionsLimit || 1;
 
     if (this.noMoreItemsToLoad) {
-      return options;
+      return options || [];
     }
 
     if (search != this.prevSearch || this.page !== this.prevPage) {
@@ -964,7 +996,7 @@ export class SlAutocomplete extends LitElement {
 
       if (this.pageHasChanged) {
         // if page changed return current options so we don't have an empty list until request finishes
-        return options;
+        return options || [];
       }
     }
 
