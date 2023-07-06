@@ -74,6 +74,10 @@ export default css`
     border-bottom: 1px solid rgba(0, 0, 0, 0.54);
   }
 
+  .select--standard.select--transparent .select__combobox:after {
+    display: none;
+  }
+
   .select__clear {
     padding-left: 10px;
   }
