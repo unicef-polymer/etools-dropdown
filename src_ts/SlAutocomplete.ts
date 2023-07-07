@@ -538,7 +538,7 @@ export class SlAutocomplete extends LitElement {
           </sl-popup>
         </div>
 
-        <div class="invalid-message" ?visible=${!this.invalid && this.errorMessage}>${this.errorMessage}</div>
+        <div class="invalid-message" ?visible=${this.invalid && this.errorMessage}>${this.errorMessage}</div>
       </div>
     `;
   }
