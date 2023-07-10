@@ -2,7 +2,6 @@
 import {LitElement, html, PropertyValues} from 'lit';
 import '@shoelace-style/shoelace/dist/components/menu-item/menu-item.js';
 import '@shoelace-style/shoelace/dist/components/menu/menu.js';
-import '@shoelace-style/shoelace/dist/components/select/select.js';
 import '@shoelace-style/shoelace/dist/components/input/input.js';
 import '@shoelace-style/shoelace/dist/components/tag/tag.js';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
@@ -17,22 +16,19 @@ import {classMap} from 'lit/directives/class-map.js';
 import {property, query, state} from 'lit/decorators.js';
 import {getTranslation} from './utils/translate';
 /**
- * @summary Autocompletes displays suggestions as you type.
+ * @summary Advanced dropdown capable of searching and filtering options,
+ * get data dynamically, scroll by key typing etc.
  *
  * @since unreleased
  * @status unknown
  *
- * @dependency sl-dropdown
  * @dependency sl-menu
+ * @dependency sl-menu-item
+ * @dependency sl-input
+ * @dependency sl-tag
+ * @dependency sl-button
+ * @dependency sl-spinner
  *
- * @slot - The content that includes an input.
- * @slot no-options-available-text - The text or content that is displayed when there is no suggestion based on the input.
- * @slot lading-text - The text or content that is displayed when the `loading` attribute evaluates to true.
- *
- * @csspart base - The component's internal wrapper.
- * @csspart trigger - The wrapper for the trigger slot.
- * @csspart no-options-available-text - The empty text's wrapper.
- * @csspart loading-test - The loading text's wrapper.
  *
  */
 export class SlAutocomplete extends LitElement {
@@ -42,20 +38,20 @@ export class SlAutocomplete extends LitElement {
 
   @state() private hasFocus = false;
   @state() private loading = false;
-  @state() private _open: boolean = false;
-  @state() private search: string = '';
-  @state() private totalOptionsToShow: number = 0;
+  @state() private _open = false;
+  @state() private search = '';
+  @state() private totalOptionsToShow = 0;
   @state() private language = '';
 
   private observerInfiniteScroll: IntersectionObserver | undefined;
-  private page: number = 0;
-  private prevPage: number = 0;
-  private prevSearch: string = '';
-  private searchHasChanged: boolean = false;
-  private pageHasChanged: boolean = false;
-  private noMoreItemsToLoad: boolean = false;
+  private page = 0;
+  private prevPage = 0;
+  private prevSearch = '';
+  private searchHasChanged = false;
+  private pageHasChanged = false;
+  private noMoreItemsToLoad = false;
   private collectingKeyboardKeysTimeout: NodeJS.Timeout | undefined = undefined;
-  private collectedKeyboardKeys: string = '';
+  private collectedKeyboardKeys = '';
 
   @property({type: String, attribute: 'label'})
   label: string | undefined;
@@ -91,13 +87,13 @@ export class SlAutocomplete extends LitElement {
   invalid = false;
 
   @property({type: String, attribute: 'no-options-available-text'})
-  noOptionsAvailableText: string = '';
+  noOptionsAvailableText = '';
 
   @property({type: String, attribute: 'no-results-text'})
-  noResultsText: string = '';
+  noResultsText = '';
 
   @property({type: String, attribute: 'loading-text'})
-  loadingText: string = '';
+  loadingText = '';
 
   @property({type: Number})
   options: any[] = [];
@@ -109,37 +105,37 @@ export class SlAutocomplete extends LitElement {
   multiple = false;
 
   @property({type: Boolean, attribute: 'max-options-available'})
-  maxOptionsVisible: number = 0;
+  maxOptionsVisible = 0;
 
   @property({type: Boolean, reflect: true, attribute: 'pill'})
-  pill: boolean = false;
+  pill = false;
 
   @property({type: String, reflect: true, attribute: 'size'})
-  size: string = 'medium';
+  size = 'medium';
 
   @property({type: Boolean, reflect: true, attribute: 'filled'})
-  filled: boolean = false;
+  filled = false;
 
   @property({type: String, reflect: true, attribute: 'placement'})
-  placement: string = 'bottom-start';
+  placement = 'bottom-start';
 
   @property({type: String, reflect: true, attribute: 'help-text'})
   helpText: any;
 
   @property({type: Boolean, reflect: true, attribute: 'clearable'})
-  clearable: boolean = true;
+  clearable = true;
 
   @property({type: Boolean, reflect: true, attribute: 'hoist'})
-  hoist: boolean = false;
+  hoist = false;
 
   @property({type: Boolean, reflect: true, attribute: 'hide-search'})
-  hideSearch: boolean = false;
+  hideSearch = false;
 
   @property({type: Boolean, reflect: true, attribute: 'preserve-search-on-close'})
   preserveSearchOnClose = true;
 
   @property({type: Boolean, reflect: true, attribute: 'hide-close'})
-  hideClose: boolean = false;
+  hideClose = false;
 
   @property({type: Boolean, reflect: true, attribute: 'enable-none-option'})
   enableNoneOption = false;
@@ -148,7 +144,7 @@ export class SlAutocomplete extends LitElement {
   noneOptionLabel = '';
 
   @property({type: Number, attribute: 'shown-options-limit'})
-  shownOptionsLimit: number = 30;
+  shownOptionsLimit = 30;
 
   @property({type: Boolean, reflect: true, attribute: 'capitalize'})
   capitalize = false;
@@ -169,7 +165,7 @@ export class SlAutocomplete extends LitElement {
   maxHeight = '';
 
   @property({type: String, attribute: 'sync-width'})
-  syncWidth: boolean = false;
+  syncWidth = false;
 
   /**
    * The container relative to which the autosize clipping and shifting of the dropdown occurs.
@@ -181,8 +177,9 @@ export class SlAutocomplete extends LitElement {
    *   ?.querySelector('app-header-layout')
    *   ?.querySelector('main')
    *
-   * SL-POUP uses float-ui(https://floating-ui.com/) behind the scences in case we don't provide a value for this field
-   * it tries to find the clipping and boundary ancetors by it's self. This feature does not work when we are using the hoisted dropdown (position: fixed) and
+   * SL-POUP uses float-ui(https://floating-ui.com/) behind the scences in case we don't provide
+   * a value for this field it tries to find the clipping and boundary ancetors by it's self.
+   * This feature does not work when we are using the hoisted dropdown (position: fixed) and
    * in this case we have to provide a boundary manually.
    */
   @property({type: Object, attribute: 'boundary'})
@@ -198,7 +195,7 @@ export class SlAutocomplete extends LitElement {
   autoValidate: boolean | undefined;
 
   @property({type: Boolean, attribute: 'expand-icon'})
-  expandIcon: string = 'caret-down-fill'; // chevron-down
+  expandIcon = 'caret-down-fill'; // chevron-down
 
   @property({type: String})
   get selected() {
@@ -451,13 +448,12 @@ export class SlAutocomplete extends LitElement {
                 </sl-input>
               </div>
               <div
-                class="list"
                 role="list"
                 aria-expanded=${this.open ? 'true' : 'false'}
                 aria-multiselectable=${this.multiple ? 'true' : 'false'}
                 aria-labelledby="label"
                 part="list"
-                class="select__list"
+                class="list select__list"
               >
                 <sl-menu>
                   ${
@@ -785,7 +781,7 @@ export class SlAutocomplete extends LitElement {
     return !this.loading && !this.options?.length;
   }
 
-  private showNoSearchResultsWarning(totalFilteredItems: number = 0) {
+  private showNoSearchResultsWarning(totalFilteredItems = 0) {
     if (this.noOptionsAvailable) {
       return false;
     }

@@ -1,10 +1,6 @@
 import {css} from 'lit';
-// @ts-ignore
-import shoelaceStyles from '@shoelace-style/shoelace/dist/themes/light.styles.js';
 
 export default css`
-  ${shoelaceStyles}
-
   :host {
     box-sizing: border-box;
     display: block;
@@ -493,6 +489,12 @@ export default css`
   .select--standard sl-menu-item::part(checked-icon) {
     visibility: hidden;
     width: 10px;
+  }
+
+  .select--standard:not(.select--multiple) sl-menu-item[checked]::part(checked-icon) {
+    color: var(--sl-color-primary-600);
+    width: 24px;
+    visibility: visible;
   }
 
   .select--standard:not(.select--multiple) sl-menu-item[checked]::part(base) {

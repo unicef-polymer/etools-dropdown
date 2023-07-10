@@ -114,12 +114,17 @@ export default css`
     border: 0;
   }
 
-  :host([disabled]) .form-control-input {
-    border-bottom-style: dashed;
+  :host([transparent]) {
+    --sl-input-color: rgba(255, 255, 255, 0.7);
+    --sl-input-color-hover: rgba(255, 255, 255, 0.7);
   }
 
   :host([transparent]) .select__expand-icon {
     color: rgba(255, 255, 255, 0.7);
+  }
+
+  :host([disabled]) .form-control-input {
+    border-bottom-style: dashed;
   }
 
   .select--standard.select--invalid .select__combobox:after {
