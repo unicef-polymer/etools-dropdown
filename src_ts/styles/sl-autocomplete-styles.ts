@@ -46,6 +46,18 @@ export default css`
   .form-control.form-control--large .invalid-message {
     font-size: var(--sl-input-label-font-size-large);
   }
+  .invalid-message[visible] {
+    visibility: visible;
+    height: 15px;
+    overflow: visible;
+  }
+
+  .invalid-message {
+    visibility: hidden;
+    height: 15px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 
   .form-control .form-control__label {
     display: none;
