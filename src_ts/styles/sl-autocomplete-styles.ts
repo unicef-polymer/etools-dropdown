@@ -48,13 +48,13 @@ export default css`
   }
   .invalid-message[visible] {
     visibility: visible;
-    height: 15px;
+    height: 0;
     overflow: visible;
   }
 
   .invalid-message {
     visibility: hidden;
-    height: 15px;
+    height: 0;
     overflow: hidden;
     white-space: nowrap;
   }
