@@ -277,6 +277,9 @@ export class SlAutocomplete extends LitElement {
 
     return html`
       <style>
+        :host {
+          width: 100%;
+        }
         sl-popup {
           ${this.maxWidth ? `--auto-size-available-width: ${this.maxWidth}` : ''}
           ${this.maxHeight ? `--auto-size-available-height: ${this.maxHeight}` : ''}
