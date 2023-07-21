@@ -63,6 +63,7 @@ export default css`
     padding-bottom: 3px;
     box-shadow: none !important;
     position: relative;
+    background: inherit;
   }
 
   .select--standard .select__combobox:after {
