@@ -130,6 +130,7 @@ export default css`
 
   :host([disabled]) .form-control-input {
     border-bottom-style: dashed;
+    border-bottom-width: 1px;
   }
 
   .select--standard.select--invalid .select__combobox:after {
