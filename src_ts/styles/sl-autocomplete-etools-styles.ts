@@ -74,6 +74,10 @@ export default css`
     border-bottom: 1px solid rgba(0, 0, 0, 0.54);
   }
 
+  :host-context([readonly]) .select--standard .select__combobox:after {
+    border-bottom: none;
+  }
+
   .select--standard.select--transparent .select__combobox:after {
     display: none;
   }
