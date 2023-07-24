@@ -89,7 +89,7 @@ export default css`
 
   .select__tags {
     margin: 0;
-    height: 24px;
+    height: 100%;
   }
 
   .select__expand-icon {

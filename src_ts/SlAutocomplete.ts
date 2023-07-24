@@ -157,7 +157,7 @@ export class SlAutocomplete extends LitElement {
   minWidth = '30px';
 
   @property({type: String, attribute: 'max-width'})
-  maxWidth = '400px';
+  maxWidth = '';
 
   @property({type: String, attribute: 'max-height'})
   minHeight = '0px';
