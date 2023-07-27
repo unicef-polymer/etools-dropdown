@@ -63,6 +63,7 @@ export default css`
     padding-bottom: 3px;
     box-shadow: none !important;
     position: relative;
+    background: inherit;
   }
 
   .select--standard .select__combobox:after {
@@ -72,6 +73,10 @@ export default css`
     display: block;
     bottom: 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.54);
+  }
+
+  :host-context([readonly]) .select--standard .select__combobox:after {
+    border-bottom: none;
   }
 
   .select--standard.select--transparent .select__combobox:after {
@@ -84,7 +89,7 @@ export default css`
 
   .select__tags {
     margin: 0;
-    height: 24px;
+    height: 100%;
   }
 
   .select__expand-icon {
@@ -125,6 +130,7 @@ export default css`
 
   :host([disabled]) .form-control-input {
     border-bottom-style: dashed;
+    border-bottom-width: 1px;
   }
 
   .select--standard.select--invalid .select__combobox:after {

@@ -566,6 +566,12 @@ export default css`
     cursor: default;
     background-color: var(--sl-input-background-color-disabled);
   }
+  .no-options-available-text::part(checked-icon) {
+    display: none;
+  }
+  .no-options-available-text::part(base) {
+    padding-inline-start: 10px;
+  }
 
   .infinite-scroll-trigger {
     width: 100%;

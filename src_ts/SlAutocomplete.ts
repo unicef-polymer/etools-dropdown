@@ -157,7 +157,7 @@ export class SlAutocomplete extends LitElement {
   minWidth = '30px';
 
   @property({type: String, attribute: 'max-width'})
-  maxWidth = '400px';
+  maxWidth = '';
 
   @property({type: String, attribute: 'max-height'})
   minHeight = '0px';
@@ -277,6 +277,9 @@ export class SlAutocomplete extends LitElement {
 
     return html`
       <style>
+        :host {
+          width: 100%;
+        }
         sl-popup {
           ${this.maxWidth ? `--auto-size-available-width: ${this.maxWidth}` : ''}
           ${this.maxHeight ? `--auto-size-available-height: ${this.maxHeight}` : ''}
